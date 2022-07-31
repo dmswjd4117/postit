@@ -1,0 +1,19 @@
+spring:
+  profiles: test
+  datasource:
+    url:  jdbc:mysql://localhost:3306/sns?useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+#    initialization-mode: always
+#    platform: mysql
+
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+

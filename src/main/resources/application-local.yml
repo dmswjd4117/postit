@@ -1,0 +1,23 @@
+spring:
+  profiles: local
+  datasource:
+    url: ENC(y8v/7sR/g0r9jc+c+FM21iG5tugdOTwlcGpVDAPh75FDrdzsrdEnG/UyvQZHz/1S9wFUp6GKYK+QrHu/bjX+LTphgI9R3YtFhMcPi/xb6AxwYmAQSJW+EA==)
+    username: ENC(ajrWBCyleyMpVyz+XZYGyA==)
+    password: ENC(C02+ILFckAkvgHUxGQyjfqRZVUx/LQK0)
+
+  jpa:
+    open-in-view: false
+    hibernate:
+       ddl-auto: create
+
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        show_sql: true
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
