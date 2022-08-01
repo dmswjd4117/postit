@@ -4,34 +4,39 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-public class Role {
+public class MemberRole {
+
     @Id
+    @Column(name = "member_role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
     private Long id;
 
-    @Column
-    private String roleName;
+    @JoinColumn(name = "member_id")
+    @ManyToOne
+    private Member member;
 
-    @Column
-    private String roleDescription;
+    @JoinColumn(name = "role_id")
+    @ManyToOne
+    private Role role;
 
-    @OneToMany(mappedBy = "role")
-    private final List<MemberRole> memberRoles = new ArrayList<>();
-
-    public String getRoleName() {
-        return roleName;
+    public Long getId() {
+        return id;
     }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
     @Override
     public String toString(){
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("role_name", roleName)
-                .append("role_description", roleDescription)
                 .build();
     }
 }

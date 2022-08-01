@@ -8,9 +8,11 @@ import com.spring.boot.domain.Member;
 import com.spring.boot.service.MemberService;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/member")
+@RestController
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -23,7 +25,6 @@ public class MemberController {
     private ApiResult<MemberRegisterResponseDto> register(
             @ModelAttribute MemberRegisterRequestDto registerRequest
     ){
-        System.out.println(registerRequest);
         Member member = memberService.register(registerRequest);
         MemberRegisterResponseDto response = new MemberRegisterResponseDto(member);
         return ApiResult.success(response);

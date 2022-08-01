@@ -1,7 +1,10 @@
 package com.spring.boot.security;
 
-import com.spring.boot.domain.Role;
+import com.spring.boot.domain.RoleName;
+import com.spring.boot.repository.MemberRepository;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,13 +18,21 @@ import java.util.Collection;
 @Service
 public class FormUserDetailsService implements UserDetailsService {
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        System.out.println(s);
-        Collection<SimpleGrantedAuthority> collection = new ArrayList<>();
-        collection.add(new SimpleGrantedAuthority(Role.ADMIN.name()));
+    private final MemberRepository memberRepository;
+    private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-        return new User("user", "$2a$10$arnO0SDbGeFcPVDRwOzsGu4Oeg8ngSz68TOyU2tTgu/BykndDGjpa",
-                new NullAuthoritiesMapper().mapAuthorities(collection));
+    public FormUserDetailsService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return memberRepository.findByEmail(email)
+                .map(findMember -> {
+                    Collection<? extends GrantedAuthority> auths = findMember.getGrantedAuthorities();
+                    return new User(findMember.getEmail(), null, authoritiesMapper.mapAuthorities(auths));
+                })
+                .orElseThrow(()->new RuntimeException("존재하지 않는 email 입니다"));
     }
 }
+

@@ -5,17 +5,17 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RoleTest {
+class RoleNameTest {
     @Test
     public void Role_이름찾기(){
-        Optional<Role> role = Role.of("admIn");
+        Optional<RoleName> role = RoleName.of("admIn");
         assertTrue(role.isPresent());
-        assertEquals(role.get(), Role.ADMIN);
+        assertEquals(role.get(), RoleName.ADMIN);
     }
 
     @Test
     public void Role_이름찾기실패(){
-        Optional<Role> role = Role.of("test");
+        Optional<RoleName> role = RoleName.of("test");
         assertFalse(role.isPresent());
     }
 }

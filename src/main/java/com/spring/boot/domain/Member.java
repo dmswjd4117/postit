@@ -5,10 +5,14 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
@@ -37,10 +41,25 @@ public class Member extends BaseTime{
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<MemberRole> memberRoles = new ArrayList<>();
+
     public Member(String email, String password, String name){
         this.email = email;
         this.password = password;
         this.name = name;
+    }
+
+    public List<MemberRole> getMemberRoles() {
+        return memberRoles;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -50,5 +69,14 @@ public class Member extends BaseTime{
                 .append("password", "[password]")
                 .append("name", name)
                 .toString();
+    }
+
+    public Collection<? extends GrantedAuthority> getGrantedAuthorities() {
+        return getMemberRoles()
+                .stream()
+                .map(MemberRole::getRole)
+                .map(Role::getRoleName)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 }
