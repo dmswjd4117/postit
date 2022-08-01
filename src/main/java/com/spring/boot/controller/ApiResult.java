@@ -15,6 +15,18 @@ public class ApiResult<T> {
         this.error = error;
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public T getResponse() {
+        return response;
+    }
+
+    public ApiError getError() {
+        return error;
+    }
+
     public static <T> ApiResult<T> success(T response){
         return new ApiResult<>(true, response, null);
     }

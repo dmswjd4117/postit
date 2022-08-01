@@ -2,6 +2,7 @@ package com.spring.boot.service;
 
 import com.spring.boot.dto.member.MemberRegisterRequestDto;
 import com.spring.boot.domain.Member;
+import com.spring.boot.error.DuplicatedEmailException;
 import com.spring.boot.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class MemberService {
     }
 
     public Member register(MemberRegisterRequestDto registerRequest) {
+        memberRepository.findByEmail(registerRequest.getEmail())
+                .ifPresent(find -> {throw new DuplicatedEmailException(registerRequest.getEmail());});
+
         Member member = Member.builder()
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))

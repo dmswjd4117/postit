@@ -2,6 +2,7 @@ package com.spring.boot.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@Getter
 public class Member extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,16 +52,13 @@ public class Member extends BaseTime{
         this.name = name;
     }
 
-    public List<MemberRole> getMemberRoles() {
-        return memberRoles;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
+    public Collection<? extends GrantedAuthority> getGrantedAuthorities() {
+        return getMemberRoles()
+                .stream()
+                .map(MemberRole::getRole)
+                .map(Role::getRoleName)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -69,14 +68,5 @@ public class Member extends BaseTime{
                 .append("password", "[password]")
                 .append("name", name)
                 .toString();
-    }
-
-    public Collection<? extends GrantedAuthority> getGrantedAuthorities() {
-        return getMemberRoles()
-                .stream()
-                .map(MemberRole::getRole)
-                .map(Role::getRoleName)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
     }
 }

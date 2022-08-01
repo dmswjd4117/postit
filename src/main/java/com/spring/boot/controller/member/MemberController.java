@@ -2,6 +2,7 @@ package com.spring.boot.controller.member;
 
 
 import com.spring.boot.controller.ApiResult;
+import com.spring.boot.dto.member.MemberDto;
 import com.spring.boot.dto.member.MemberRegisterRequestDto;
 import com.spring.boot.dto.member.MemberRegisterResponseDto;
 import com.spring.boot.domain.Member;
@@ -26,8 +27,7 @@ public class MemberController {
             @ModelAttribute MemberRegisterRequestDto registerRequest
     ){
         Member member = memberService.register(registerRequest);
-        MemberRegisterResponseDto response = new MemberRegisterResponseDto(member);
-        return ApiResult.success(response);
+        return ApiResult.success(new MemberRegisterResponseDto(MemberDto.of(member)));
     }
 
 }

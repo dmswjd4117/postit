@@ -29,6 +29,7 @@ public class FormUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return memberRepository.findByEmail(email)
                 .map(findMember -> {
+                    System.out.println(findMember);
                     Collection<? extends GrantedAuthority> auths = findMember.getGrantedAuthorities();
                     return new User(findMember.getEmail(), null, authoritiesMapper.mapAuthorities(auths));
                 })
