@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,30 +23,31 @@ public final class S3Client {
         this.amazonS3Client = amazonS3Client;
     }
 
+    // File 이용
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)
+        File file = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
 
-        return upload(uploadFile, dirName);
+        return uploadFile(file, dirName);
     }
 
-     private String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();
-        String uploadImageUrl = putS3(uploadFile, fileName);
-        removeNewFile(uploadFile);
+     private String uploadFile(File file, String dirName) {
+        String fileName = dirName + "/" + UUID.randomUUID() + file.getName();
+        String uploadImageUrl = putS3(file, fileName);
+        removeNewFile(file);
         return uploadImageUrl;
     }
 
-     private String putS3(File uploadFile, String fileName) {
+    private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucketName, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucketName, fileName).toString();
     }
 
-     private void removeNewFile(File targetFile) {
+    private void removeNewFile(File targetFile) {
         targetFile.delete();
     }
 
-     private Optional<File> convert(MultipartFile file) throws IOException {
+    private Optional<File> convert(MultipartFile file) throws IOException {
         File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
@@ -54,6 +56,23 @@ public final class S3Client {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    // InputStream 이용
+    public String upload(InputStream inputStream, long length, String fileName, String contentType, Map<String, String> metaData){
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(length);
+        objectMetadata.setContentType(contentType);
+        if(metaData != null && !metaData.isEmpty()){
+            objectMetadata.setUserMetadata(metaData);
+        }
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata);
+        return putS3(putObjectRequest);
+    }
+
+    private String putS3(PutObjectRequest putObjectRequest){
+        amazonS3Client.putObject(putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead));
+        return amazonS3Client.getUrl(bucketName, putObjectRequest.getKey()).toString();
     }
 
 }
