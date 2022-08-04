@@ -2,8 +2,8 @@ package com.spring.boot.controller;
 
 import com.spring.boot.error.DuplicatedEmailException;
 import com.spring.boot.error.ServiceRuntimeException;
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,4 +29,11 @@ public class GeneralExceptionHandler {
         return newResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler({
+            IllegalArgumentException.class, IllegalStateException.class,
+    })
+    private ResponseEntity<?> handleBadRequestException(ServiceRuntimeException exception){
+        log.debug("Bad request exception : {}", exception.getMessage());
+        return newResponse(exception, HttpStatus.BAD_REQUEST);
+    }
 }

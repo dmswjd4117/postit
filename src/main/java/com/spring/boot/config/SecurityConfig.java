@@ -2,6 +2,8 @@ package com.spring.boot.config;
 
 
 import com.spring.boot.domain.RoleName;
+import com.spring.boot.security.FormAccessDeniedHandler;
+import com.spring.boot.security.FormAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +16,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
+
+    private final FormAccessDeniedHandler formAccessDeniedHandler;
+    private final FormAuthenticationEntryPoint formAuthenticationEntryPoint;
+
+    public SecurityConfig(FormAccessDeniedHandler formAccessDeniedHandler, FormAuthenticationEntryPoint formAuthenticationEntryPoint) {
+        this.formAccessDeniedHandler = formAccessDeniedHandler;
+        this.formAuthenticationEntryPoint = formAuthenticationEntryPoint;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -35,6 +46,7 @@ public class SecurityConfig{
 //        return new FormAuthenticationProvider();
 //    }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -48,6 +60,11 @@ public class SecurityConfig{
                 .loginProcessingUrl("/login_process")
                 .usernameParameter("email")
                 .passwordParameter("password")
+
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(formAccessDeniedHandler) // 인가 예외
+                .authenticationEntryPoint(formAuthenticationEntryPoint) // 인증 예외
 
                 .and()
                 .csrf()
