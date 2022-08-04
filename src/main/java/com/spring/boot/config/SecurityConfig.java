@@ -4,6 +4,8 @@ package com.spring.boot.config;
 import com.spring.boot.domain.RoleName;
 import com.spring.boot.security.FormAccessDeniedHandler;
 import com.spring.boot.security.FormAuthenticationEntryPoint;
+import com.spring.boot.security.FormAuthenticationProvider;
+import com.spring.boot.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig{
-
     private final FormAccessDeniedHandler formAccessDeniedHandler;
     private final FormAuthenticationEntryPoint formAuthenticationEntryPoint;
 
@@ -30,22 +31,10 @@ public class SecurityConfig{
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-
-//    @Bean
-//    public AccessDecisionManager accessDecisionManager(){
-//        List<AccessDecisionVoter<?>> voters = new ArrayList<>();
-//        voters.add(new WebExpressionVoter());
-//        return new UnanimousBased(voters);
-//    }
-//
-//    private AuthenticationProvider formAuthenticationProvider(){
-//        return new FormAuthenticationProvider();
-//    }
-
+    @Bean
+    public FormAuthenticationProvider formAuthenticationProvider(MemberService memberService){
+        return new FormAuthenticationProvider(memberService);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -53,6 +42,7 @@ public class SecurityConfig{
                 .authorizeRequests(registry -> {
                     registry
                             .antMatchers("/api/admin/**").hasRole(RoleName.ADMIN.name())
+                            .antMatchers("/api/post").hasAnyRole(RoleName.ADMIN.name(), RoleName.MEMBER.name())
                             .anyRequest().permitAll();
                 })
 
@@ -60,6 +50,15 @@ public class SecurityConfig{
                 .loginProcessingUrl("/login_process")
                 .usernameParameter("email")
                 .passwordParameter("password")
+//                .failureHandler((request, response, exception) -> {
+//                    ApiResult<?> LOGIN_FAIL_EXCEPTION = ApiResult.error("login failed", HttpStatus.NOT_FOUND);
+//                    ObjectMapper om = new ObjectMapper();
+//                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+//                    response.setHeader("content-type", "application/json");
+//                    response.getWriter().write(om.writeValueAsString(LOGIN_FAIL_EXCEPTION));
+//                    response.getWriter().flush();
+//                    response.getWriter().close();
+//                })
 
                 .and()
                 .exceptionHandling()
