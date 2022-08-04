@@ -1,5 +1,6 @@
 package com.spring.boot.domain;
 
+import javafx.geometry.Pos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,19 @@ public class Image extends BaseTime {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    public Image(String imagePath, Post post){
+        this.imagePath = imagePath;
+        this.post = post;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
 
     @Override
     public String toString() {

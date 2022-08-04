@@ -13,4 +13,9 @@ public class ApiError {
         this.message = throwable.getMessage();
         this.status = status.value();
     }
+
+    public ApiError(String message, HttpStatus status) {
+        this.message = message;
+        this.status = status.value();
+    }
 }

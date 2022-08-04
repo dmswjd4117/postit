@@ -34,4 +34,8 @@ public class ApiResult<T> {
     public static ApiResult<?> error(Throwable throwable, HttpStatus status){
         return new ApiResult<>(false, null, new ApiError(throwable, status));
     }
+
+    public static ApiResult<?> error(String msg, HttpStatus status){
+        return new ApiResult<>(false, null, new ApiError(msg, status));
+    }
 }
