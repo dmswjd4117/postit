@@ -53,13 +53,7 @@ public class PostService {
     @Transactional
     public List<Post> getPostByMemberId(Long memberId) {
         return memberRepository.findById(memberId)
-                .map(postRepository::findByMember)
-                .map(postList -> {
-                    postList.forEach(post -> {
-                        System.out.println(post.getImages());
-                    });
-                    return postList;
-                })
+                .map(postRepository::findByMemberWithImages)
                 .orElseThrow(IllegalArgumentException::new);
     }
 }
