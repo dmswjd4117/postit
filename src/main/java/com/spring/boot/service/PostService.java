@@ -8,6 +8,7 @@ import com.spring.boot.repository.ImageRepository;
 import com.spring.boot.repository.MemberRepository;
 import com.spring.boot.repository.PostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-
     private final S3Client s3Uploader;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
@@ -29,6 +29,8 @@ public class PostService {
         this.imageRepository = imageRepository;
     }
 
+
+    @Transactional
     public Post createPost(String title, String body, Long writerId, List<MultipartFile> multipartFiles) {
         return memberRepository.findById(writerId)
                 .map(writer->{
@@ -39,7 +41,7 @@ public class PostService {
                             .map(UploadFile::toUploadFile)
                             .filter(Optional::isPresent)
                             .map(Optional::get)
-                            .map(uploadFile -> imageRepository.save(new Image(s3Uploader.upload(uploadFile), post)))
+                            .map(uploadFile -> new Image(s3Uploader.upload(uploadFile), post))
                             .collect(Collectors.toList());
 
                     post.setImages(images);
@@ -47,4 +49,18 @@ public class PostService {
                 })
                 .orElseThrow(IllegalArgumentException::new);
     }
+
+    @Transactional
+    public List<Post> getPostByMemberId(Long memberId) {
+        return memberRepository.findById(memberId)
+                .map(postRepository::findByMember)
+                .map(postList -> {
+                    postList.forEach(post -> {
+                        System.out.println(post.getImages());
+                    });
+                    return postList;
+                })
+                .orElseThrow(IllegalArgumentException::new);
+    }
 }
+

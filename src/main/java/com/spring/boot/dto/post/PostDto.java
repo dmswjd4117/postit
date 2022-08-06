@@ -10,20 +10,21 @@ import java.util.stream.Collectors;
 
 @Getter
 @Builder
-public class PostResultDto {
+public class PostDto {
     private String title;
     private String body;
-    private Long writerId;
     private LocalDateTime createdDate;
     private List<PostImageDto> images;
 
-    public static PostResultDto from(Post post){
-        return PostResultDto.builder()
+    public static PostDto from(Post post){
+        return PostDto.builder()
                 .title(post.getTitle())
                 .body(post.getBody())
-                .writerId(post.getId())
                 .createdDate(post.getCreatedDate())
-                .images(post.getImages().stream().map(PostImageDto::from).collect(Collectors.toList()))
+                .images(post.getImages()
+                        .stream()
+                        .map(PostImageDto::from)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
