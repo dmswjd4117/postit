@@ -20,7 +20,6 @@ public final class S3Client {
         this.amazonS3Client = amazonS3Client;
     }
 
-    // InputStream 이용
     public String upload(UploadFile uploadFile) {
         String BASE_PATH = "images";
         String DEFAULT_EXTENSION = "jpeg";

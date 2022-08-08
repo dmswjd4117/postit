@@ -7,6 +7,7 @@ import com.spring.boot.repository.MemberRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -45,6 +46,14 @@ public class MemberService {
                         throw new BadCredentialsException("invalid user");
                     }
                     return findMember;
+                });
+    }
+
+    @Transactional
+    public void updateProfileImage(Long id, String profileImagePath) {
+        memberRepository.findById(id)
+                .ifPresent(findMember->{
+                    findMember.setProfileImagePath(profileImagePath);
                 });
     }
 }

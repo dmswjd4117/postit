@@ -36,6 +36,9 @@ public class Member extends BaseTime{
     private String name;
 
     @Column
+    private String profileImagePath;
+
+    @Column
     @OneToMany(mappedBy = "member")
     private List<Likes> likes = new ArrayList<>();
 
@@ -68,5 +71,9 @@ public class Member extends BaseTime{
                 .append("password", "[password]")
                 .append("name", name)
                 .toString();
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
     }
 }
