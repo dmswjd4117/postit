@@ -1,15 +1,23 @@
 package com.spring.boot.error;
 
 import com.spring.boot.util.MessageUtils;
+import org.apache.commons.lang3.StringUtils;
 
-public class DuplicatedEmailException extends  ServiceRuntimeException{
+public class DuplicatedException extends  ServiceRuntimeException{
 
     public static final String MESSAGE_KEY = "error.duplicated";
 
     public static final String MESSAGE_DETAIL = "error.duplicated.details";
 
-    public DuplicatedEmailException(String message) {
+    public DuplicatedException(String message) {
         super(MESSAGE_KEY, MESSAGE_DETAIL, new Object[]{message});
+    }
+    public DuplicatedException(Class<?> cls, Object... values){
+        this(cls.getSimpleName(), values);
+    }
+
+    public DuplicatedException(String target, Object... values) {
+        super(MESSAGE_KEY, MESSAGE_DETAIL, new String[]{target, (values != null && values.length > 0) ? StringUtils.join(values, ",") : ""});
     }
 
     @Override

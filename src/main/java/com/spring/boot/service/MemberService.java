@@ -2,7 +2,7 @@ package com.spring.boot.service;
 
 import com.spring.boot.dto.member.MemberRegisterRequestDto;
 import com.spring.boot.domain.Member;
-import com.spring.boot.error.DuplicatedEmailException;
+import com.spring.boot.error.DuplicatedException;
 import com.spring.boot.repository.MemberRepository;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +24,9 @@ public class MemberService {
 
     public Member register(MemberRegisterRequestDto registerRequest) {
         memberRepository.findByEmail(registerRequest.getEmail())
-                .ifPresent(find -> {throw new DuplicatedEmailException(registerRequest.getEmail());});
+                .ifPresent(find -> {
+                    throw new DuplicatedException("email", registerRequest.getEmail());
+                });
 
         Member member = Member.builder()
                 .email(registerRequest.getEmail())
@@ -41,8 +43,8 @@ public class MemberService {
 
     public Optional<Member> login(String email, String password) {
         return findByEmail(email)
-                .map(findMember ->{
-                    if(!passwordEncoder.matches(password, findMember.getPassword())){
+                .map(findMember -> {
+                    if (!passwordEncoder.matches(password, findMember.getPassword())) {
                         throw new BadCredentialsException("invalid user");
                     }
                     return findMember;
@@ -52,8 +54,9 @@ public class MemberService {
     @Transactional
     public void updateProfileImage(Long id, String profileImagePath) {
         memberRepository.findById(id)
-                .ifPresent(findMember->{
+                .ifPresent(findMember -> {
                     findMember.setProfileImagePath(profileImagePath);
                 });
     }
+
 }

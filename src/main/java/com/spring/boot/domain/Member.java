@@ -38,6 +38,12 @@ public class Member extends BaseTime{
     @Column
     private String profileImagePath;
 
+    @OneToMany(mappedBy = "member")
+    private List<Connections> followings;
+
+    @OneToMany(mappedBy = "targetMember")
+    private List<Connections> followers;
+
     @Column
     @OneToMany(mappedBy = "member")
     private List<Likes> likes = new ArrayList<>();
