@@ -1,6 +1,7 @@
-package com.spring.boot.domain;
+package com.spring.boot.domain.image;
 
-import javafx.geometry.Pos;
+import com.spring.boot.domain.BaseTime;
+import com.spring.boot.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

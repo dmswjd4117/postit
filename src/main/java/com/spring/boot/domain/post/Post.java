@@ -1,12 +1,18 @@
-package com.spring.boot.domain;
+package com.spring.boot.domain.post;
 
+import com.spring.boot.domain.BaseTime;
+import com.spring.boot.domain.image.Image;
+import com.spring.boot.domain.member.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,7 +28,6 @@ public class Post extends BaseTime {
 
     @Column
     private String body;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -30,10 +35,15 @@ public class Post extends BaseTime {
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Image> images;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    private Set<PostTag> postTags = new HashSet<>();
+
     public void setImages(List<Image> images) {
         this.images = images;
     }
-
+    public void setPostTags(Set<PostTag> postTags) {
+        this.postTags =  postTags;
+    }
     public Long getId() {
         return id;
     }

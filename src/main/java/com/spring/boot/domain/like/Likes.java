@@ -1,4 +1,7 @@
-package com.spring.boot.domain;
+package com.spring.boot.domain.like;
+
+import com.spring.boot.domain.BaseTime;
+import com.spring.boot.domain.member.Member;
 
 import javax.persistence.*;
 

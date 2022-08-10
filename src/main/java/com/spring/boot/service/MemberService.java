@@ -1,7 +1,7 @@
 package com.spring.boot.service;
 
 import com.spring.boot.dto.member.MemberRegisterRequestDto;
-import com.spring.boot.domain.Member;
+import com.spring.boot.domain.member.Member;
 import com.spring.boot.error.DuplicatedException;
 import com.spring.boot.repository.MemberRepository;
 import org.springframework.security.authentication.BadCredentialsException;

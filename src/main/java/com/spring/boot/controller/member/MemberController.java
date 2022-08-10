@@ -4,11 +4,11 @@ package com.spring.boot.controller.member;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.spring.boot.aws.S3Client;
 import com.spring.boot.controller.ApiResult;
-import com.spring.boot.domain.UploadFile;
+import com.spring.boot.util.UploadFile;
 import com.spring.boot.dto.member.MemberDto;
 import com.spring.boot.dto.member.MemberRegisterRequestDto;
 import com.spring.boot.dto.member.MemberRegisterResponseDto;
-import com.spring.boot.domain.Member;
+import com.spring.boot.domain.member.Member;
 import com.spring.boot.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,18 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    private Optional<String> uploadProfileImage(UploadFile uploadFile) {
+        String imagePath = null;
+        if(uploadFile != null){
+            try {
+                imagePath = s3Uploader.upload(uploadFile);
+            }catch (AmazonS3Exception exception){
+                log.warn("Amazon S3 error {}", exception.getMessage(), exception);
+            }
+        }
+        return Optional.ofNullable(imagePath);
+    }
+
     @PostMapping
     private ApiResult<MemberRegisterResponseDto> register(
             @ModelAttribute MemberRegisterRequestDto registerRequest,
@@ -53,15 +65,4 @@ public class MemberController {
         ));
     }
 
-    private Optional<String> uploadProfileImage(UploadFile uploadFile) {
-        String imagePath = null;
-        if(uploadFile != null){
-            try {
-                imagePath = s3Uploader.upload(uploadFile);
-            }catch (AmazonS3Exception exception){
-                log.warn("Amazon S3 error {}", exception.getMessage(), exception);
-            }
-        }
-        return Optional.ofNullable(imagePath);
-    }
 }

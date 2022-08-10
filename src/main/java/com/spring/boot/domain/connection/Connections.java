@@ -1,5 +1,6 @@
-package com.spring.boot.domain;
+package com.spring.boot.domain.connection;
 
+import com.spring.boot.domain.member.Member;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

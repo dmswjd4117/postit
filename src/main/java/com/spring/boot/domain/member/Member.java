@@ -1,5 +1,9 @@
-package com.spring.boot.domain;
+package com.spring.boot.domain.member;
 
+import com.spring.boot.domain.BaseTime;
+import com.spring.boot.domain.connection.Connections;
+import com.spring.boot.domain.like.Likes;
+import com.spring.boot.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +24,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @Getter
-public class Member extends BaseTime{
+public class Member extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -39,7 +43,7 @@ public class Member extends BaseTime{
     private String profileImagePath;
 
     @OneToMany(mappedBy = "member")
-    private List<Connections> followings;
+    private List<Connections> following;
 
     @OneToMany(mappedBy = "targetMember")
     private List<Connections> followers;

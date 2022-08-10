@@ -1,6 +1,6 @@
 package com.spring.boot.service;
 
-import com.spring.boot.domain.Connections;
+import com.spring.boot.domain.connection.Connections;
 import com.spring.boot.error.DuplicatedException;
 import com.spring.boot.error.NotFoundException;
 import org.junit.jupiter.api.*;
@@ -28,7 +28,6 @@ public class ConnectionServiceTest {
 
     @Autowired
     private ConnectionService connectionService;
-
     private Long memberId;
     private List<Long> targetMembers;
 
@@ -39,10 +38,11 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    @DisplayName("멤버가 없으면 조회실패")
+    @DisplayName("존재하지 않는 멤버를 팔로우하면 예외 발생")
     public void 멤버가_없을땐_친구신청_실패() {
         assertThatThrownBy(() -> {
-            connectionService.follow(memberId, 0L);
+            Long invalid_member_id = 0L;
+            connectionService.follow(memberId, invalid_member_id);
         }).isInstanceOf(NotFoundException.class);
     }
 
@@ -83,7 +83,7 @@ public class ConnectionServiceTest {
     @Order(2)
     @Test
     public void 팔로잉_목록을_조회한다() {
-        connectionService.getFollowings(memberId)
+        connectionService.getFollowing(memberId)
                 .stream()
                 .forEach(member -> {
                     System.out.println(member.getId());

@@ -1,6 +1,6 @@
 package com.spring.boot.dto.post;
 
-import com.spring.boot.domain.Image;
+import com.spring.boot.domain.image.Image;
 import lombok.Getter;
 
 @Getter

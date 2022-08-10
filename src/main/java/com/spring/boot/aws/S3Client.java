@@ -2,7 +2,7 @@ package com.spring.boot.aws;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
-import com.spring.boot.domain.UploadFile;
+import com.spring.boot.util.UploadFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.io.*;

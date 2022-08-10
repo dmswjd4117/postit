@@ -1,7 +1,7 @@
 package com.spring.boot.controller.post;
 
 import com.spring.boot.controller.ApiResult;
-import com.spring.boot.domain.Post;
+import com.spring.boot.domain.post.Post;
 import com.spring.boot.dto.post.PostRequestDto;
 import com.spring.boot.dto.post.PostDto;
 import com.spring.boot.security.FormAuthentication;
@@ -33,6 +33,7 @@ public class PostController {
                 postRequestDto.getTitle(),
                 postRequestDto.getBody(),
                 authentication.id,
+                postRequestDto.getPostTags(),
                 multipartFiles);
 
         return ApiResult.success(PostDto.from(post));

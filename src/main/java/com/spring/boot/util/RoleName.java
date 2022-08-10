@@ -1,4 +1,4 @@
-package com.spring.boot.domain;
+package com.spring.boot.util;
 
 import java.util.Arrays;
 import java.util.Optional;

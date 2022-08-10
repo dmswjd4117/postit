@@ -1,5 +1,6 @@
 package com.spring.boot.domain;
 
+import com.spring.boot.util.RoleName;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
 

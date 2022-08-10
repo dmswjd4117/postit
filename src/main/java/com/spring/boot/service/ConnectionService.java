@@ -1,7 +1,7 @@
 package com.spring.boot.service;
 
-import com.spring.boot.domain.Connections;
-import com.spring.boot.domain.Member;
+import com.spring.boot.domain.connection.Connections;
+import com.spring.boot.domain.member.Member;
 import com.spring.boot.error.DuplicatedException;
 import com.spring.boot.error.NotFoundException;
 import com.spring.boot.repository.ConnectionsRepository;
@@ -46,9 +46,9 @@ public class ConnectionService {
     }
 
     @Transactional
-    public List<Member> getFollowings(Long memberId) {
+    public List<Member> getFollowing(Long memberId) {
         return memberRepository.findById(memberId)
-                .map(findMember -> findMember.getFollowings()
+                .map(findMember -> findMember.getFollowing()
                         .stream()
                         .map(Connections::getTargetMember)
                         .collect(Collectors.toList()))

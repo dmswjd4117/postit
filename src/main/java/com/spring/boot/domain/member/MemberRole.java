@@ -1,4 +1,4 @@
-package com.spring.boot.domain;
+package com.spring.boot.domain.member;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

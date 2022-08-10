@@ -1,6 +1,6 @@
 package com.spring.boot.dto.member;
 
-import com.spring.boot.domain.Member;
+import com.spring.boot.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
