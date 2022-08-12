@@ -5,8 +5,6 @@ import com.spring.boot.dto.member.ConnectionDto;
 import com.spring.boot.dto.member.MemberDto;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.service.ConnectionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +35,7 @@ public class ConnectionController {
             @PathVariable Long memberId
     ){
         return ApiResult.success(
-                connectionService.getFollowings(memberId)
+                connectionService.getFollowing(memberId)
                         .stream()
                         .map(MemberDto::from)
                         .collect(Collectors.toList())
