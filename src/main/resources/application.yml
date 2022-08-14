@@ -1,15 +1,15 @@
 spring:
   profiles:
     active: local
+  config:
+    import: "optional:configserver:http://52.79.224.196:8888"
+  cloud:
+    config:
+      name: config
 
-  jpa:
-    database: mysql
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
 
-cloud:
-  aws:
-    s3:
-      bucketName: spring-sns
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
