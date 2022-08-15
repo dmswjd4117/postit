@@ -1,6 +1,6 @@
 package com.spring.boot.security;
 
-import com.spring.boot.service.MemberService;
+import com.spring.boot.member.application.MemberService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

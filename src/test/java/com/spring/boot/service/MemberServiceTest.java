@@ -1,12 +1,13 @@
 package com.spring.boot.service;
 
-import com.spring.boot.dto.member.MemberRegisterRequestDto;
-import com.spring.boot.domain.member.Member;
+import com.spring.boot.member.application.MemberService;
+import com.spring.boot.member.application.dto.MemberRegisterRequestDto;
+import com.spring.boot.member.domain.member.Member;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
+
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
