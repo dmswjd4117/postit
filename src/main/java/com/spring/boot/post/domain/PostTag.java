@@ -1,8 +1,10 @@
 package com.spring.boot.post.domain;
 
-import com.spring.boot.tag.application.dto.Tag;
+import com.spring.boot.tag.domain.Tag;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
@@ -33,5 +35,12 @@ public class PostTag {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String toString(){
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("post_tag_id", id)
+                .toString();
     }
 }

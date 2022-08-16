@@ -4,7 +4,7 @@ import com.spring.boot.common.util.S3Client;
 import com.spring.boot.post.domain.Image;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.PostTag;
-import com.spring.boot.tag.application.dto.Tag;
+import com.spring.boot.tag.domain.Tag;
 import com.spring.boot.common.error.NotFoundException;
 import com.spring.boot.tag.domain.TagRepository;
 import com.spring.boot.common.util.UploadFile;
@@ -74,11 +74,10 @@ public class PostService {
     @Transactional
     public List<Post> getPostByMemberId(Long memberId) {
         return memberRepository.findById(memberId)
-                .map(postRepository::findByMember)
+                .map(postRepository::findByMemberWithTags)
                 .map(posts -> {
                     posts.forEach(post -> {
                         post.getImages().forEach(Image::getId);
-                        post.getPostTags().forEach(PostTag::getTagName);
                     });
                     return posts;
                 })
@@ -87,10 +86,9 @@ public class PostService {
 
     @Transactional
     public Post getPostByPostId(Long postId) {
-        return postRepository.findById(postId)
+        return postRepository.findByPostIdWithTags(postId)
                 .map(post -> {
                     post.getImages().forEach(Image::getId);
-                    post.getPostTags().forEach(PostTag::getTagName);
                     return post;
                 })
                 .orElseThrow(()->new NotFoundException(Post.class, "post", postId));

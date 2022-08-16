@@ -1,4 +1,4 @@
-package com.spring.boot.tag.application.dto;
+package com.spring.boot.tag.domain;
 
 import com.spring.boot.post.domain.PostTag;
 import lombok.AccessLevel;

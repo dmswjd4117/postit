@@ -1,4 +1,4 @@
-package com.spring.boot.service;
+package com.spring.boot.post.application;
 
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
@@ -9,16 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -35,31 +38,25 @@ class PostServiceTest {
     String body;
     Long writerId;
     List<String> tagNames;
+    List<MultipartFile> images;
 
     @BeforeAll
     void before(){
         title = "title";
         body = "body";
         writerId = 1L;
-        tagNames = Arrays.asList("tag1", "tag2", "tag2", "tag1", "tag2", "tag3", "tag4", "tag5");
+        tagNames = Arrays.asList("tag1", "tag2", "tag2");
+        images = Arrays.asList(
+                new MockMultipartFile("test", "test.jpg", IMAGE_PNG_VALUE, "test".getBytes()),
+                new MockMultipartFile("test2", "test2.jpg", IMAGE_PNG_VALUE, "test2".getBytes())
+        );
     }
 
     // https://codechacha.com/ko/hamcrest-collections-matcher/
     @Test
     @Order(1)
     void 포스트_작성(){
-        Post post = postService.createPost(title, body, writerId, tagNames, Collections.emptyList());
-
-        assertThat(post, is(CoreMatchers.notNullValue()));
-        assertThat(post.getId(), is(CoreMatchers.notNullValue()));
-        assertThat(post.getBody(), is(body));
-        assertThat(post.getPostTags().size(), is(5));
-
-        assertThat(post.getPostTags()
-                .stream()
-                .map(PostTag::getTagName)
-                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2", "tag3", "tag4", "tag5"));
-
+        Post post = postService.createPost(title, body, writerId, tagNames, images);
         log.info("post: {}", post);
     }
 
@@ -71,29 +68,38 @@ class PostServiceTest {
         assertThat(post, is(notNullValue()));
         assertThat(post.getId(), is(CoreMatchers.notNullValue()));
         assertThat(post.getBody(), is(body));
-        assertThat(post.getPostTags().size(), is(5));
+        assertThat(post.getImages().size(), is(images.size()));
+        assertThat(post.getPostTags().size(), is(new HashSet<>(tagNames).size()));
 
         assertThat(post.getPostTags()
                 .stream()
                 .map(PostTag::getTagName)
-                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2", "tag3", "tag4", "tag5"));
+                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2"));
     }
 
+
     @Test
-    @Order(2)
+    @Order(3)
     void 포스트_멤버아이디로_조회(){
         Post post = postService.getPostByMemberId(writerId).get(0);
 
         assertThat(post, is(notNullValue()));
         assertThat(post.getId(), is(CoreMatchers.notNullValue()));
         assertThat(post.getBody(), is(body));
-        assertThat(post.getPostTags().size(), is(5));
+        assertThat(post.getImages().size(), is(images.size()));
+        assertThat(post.getPostTags().size(), is(new HashSet<>(tagNames).size()));
 
         assertThat(post.getPostTags()
                 .stream()
                 .map(PostTag::getTagName)
-                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2", "tag3", "tag4", "tag5"));
+                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2"));
     }
 
+    @Test
+    @Order(3)
+    void 포스트_멤버아이디로_조회2(){
+        List<Post> posts = postService.getPostByMemberId(2L);
+        assertThat(posts.size(), is(3));
+    }
 
 }

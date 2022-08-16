@@ -8,16 +8,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("select p " +
-            "from Post p " +
-            "where p.member = :findMember")
-    List<Post> findByMember(Member findMember);
 
-//    @Query("select p " +
-//            "from Post p " +
-//            "left join fetch p.images " +
-//            "left join fetch p.postTags pt " +
-//            "where p.id = :postId")
-//    Optional<Post> findByIdWithImageAndPostTag(Long postId);
+    @Query("select distinct p " +
+            "from Post p " +
+            "left join fetch p.postTags pt " +
+            "left join fetch pt.tag " +
+            "where p.member = :findMember")
+    List<Post> findByMemberWithTags(Member findMember);
+
+    @Query("select distinct p " +
+            "from Post p " +
+            "left join fetch p.postTags pt " +
+            "left join fetch pt.tag " +
+            "where p.id = :postId")
+    Optional<Post> findByPostIdWithTags(Long postId);
 }
 
