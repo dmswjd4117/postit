@@ -110,8 +110,8 @@ public class ConnectionsServiceTest {
     @Order(3)
     @Test
     public void 팔로워인지_확인한다() {
-        assertThat(connectionService.isMemberFollower(3L, 2L), is(true));
-        assertThat(connectionService.isMemberFollower(1L, 2L), is(true));
-        assertThat(connectionService.isMemberFollower(4L, 2L), is(false));
+        assertThat(connectionService.checkMemberFollowsTargetMember(3L, 2L), is(true));
+        assertThat(connectionService.checkMemberFollowsTargetMember(1L, 2L), is(true));
+        assertThat(connectionService.checkMemberFollowsTargetMember(4L, 2L), is(false));
     }
 }
