@@ -66,7 +66,7 @@ public class ConnectionService {
     }
 
     @Transactional
-    public boolean isMemberFollower(Long memberId, Long targetMemberId){
+    public boolean checkMemberFollowsTargetMember(Long memberId, Long targetMemberId){
         Member targetMember = memberRepository.findById(targetMemberId)
                 .orElseThrow(()-> new NotFoundException(Member.class, targetMemberId));
         Member member = memberRepository.findById(memberId)

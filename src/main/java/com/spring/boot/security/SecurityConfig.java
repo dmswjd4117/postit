@@ -3,7 +3,6 @@ package com.spring.boot.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.dto.ApiResult;
-import com.spring.boot.common.config.ConnectionBasedVoter;
 import com.spring.boot.common.util.RoleName;
 import com.spring.boot.member.application.MemberService;
 import org.springframework.context.annotation.Bean;
@@ -18,11 +17,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
 
 @Configuration
@@ -48,7 +54,13 @@ public class SecurityConfig{
 
     @Bean
     public ConnectionBasedVoter connectionBasedVoter(){
-        return new ConnectionBasedVoter();
+        final String regex = "^/api/post/member/(\\d+).*$";
+        final Pattern pattern = Pattern.compile(regex);
+        RequestMatcher requestMatcher = new RegexRequestMatcher(pattern.pattern(), null);
+        return new ConnectionBasedVoter(requestMatcher, (String url)->{
+            Matcher matcher = pattern.matcher(url);
+            return matcher.matches() ? toLong(matcher.group(1), -1) : -1;
+        });
     }
     @Bean
     public AccessDecisionManager accessDecisionManager(){
@@ -65,7 +77,7 @@ public class SecurityConfig{
                     registry
                             .accessDecisionManager(accessDecisionManager())
                             .antMatchers("/api/admin/**").hasRole(RoleName.ADMIN.name())
-                            .antMatchers("/api/post").hasAnyRole(RoleName.ADMIN.name(), RoleName.MEMBER.name())
+                            .antMatchers("/api/post/**").hasAnyRole(RoleName.ADMIN.name(), RoleName.MEMBER.name())
                             .antMatchers("/api/connection/*").hasAnyRole(RoleName.MEMBER.name())
                             .anyRequest().permitAll();
                 })
