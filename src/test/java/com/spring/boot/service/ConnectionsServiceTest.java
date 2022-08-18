@@ -4,6 +4,7 @@ import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.connection.domain.Connections;
 import com.spring.boot.common.error.DuplicatedException;
 import com.spring.boot.common.error.NotFoundException;
+import com.spring.boot.member.domain.member.Member;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -13,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,6 +47,7 @@ public class ConnectionsServiceTest {
         }).isInstanceOf(NotFoundException.class);
     }
 
+    // 1번이 2, 3, 4번 팔로우
     @Order(1)
     @ParameterizedTest
     @ValueSource(longs = {2L, 3L, 4L})
@@ -56,6 +59,7 @@ public class ConnectionsServiceTest {
         assertThat(connections.getTargetMember().getId(), is(targetMemberId));
     }
 
+    // 3번이 2번에게 팔로우
     private void follow(){
         Long memberId = 3L;
         Long targetMemberId = 2L;
@@ -82,20 +86,32 @@ public class ConnectionsServiceTest {
     @Order(2)
     @Test
     public void 팔로잉_목록을_조회한다() {
-        connectionService.getFollowing(memberId)
+        assertThat(connectionService.getFollowing(memberId)
                 .stream()
-                .forEach(member -> {
-                    System.out.println(member.getId());
-                });
+                .map(Member::getId)
+                .collect(Collectors.toList())
+                ,containsInAnyOrder(2L, 3L, 4L)
+        );
+
+
     }
 
     @Order(2)
     @Test
     public void 팔로워_목록을_조회한다() {
-        connectionService.getFollowers(2L)
-                .stream()
-                .forEach(member -> {
-                    System.out.println(member.getId());
-                });
+        assertThat(connectionService.getFollowers(2L).stream()
+                .map(Member::getId)
+                .collect(Collectors.toList()),
+                containsInAnyOrder(1L, 3L)
+        );
+    }
+
+
+    @Order(3)
+    @Test
+    public void 팔로워인지_확인한다() {
+        assertThat(connectionService.isMemberFollower(3L, 2L), is(true));
+        assertThat(connectionService.isMemberFollower(1L, 2L), is(true));
+        assertThat(connectionService.isMemberFollower(4L, 2L), is(false));
     }
 }

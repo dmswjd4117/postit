@@ -65,4 +65,12 @@ public class ConnectionService {
                 .orElseThrow(()-> new NotFoundException(Member.class, memberId));
     }
 
+    @Transactional
+    public boolean isMemberFollower(Long memberId, Long targetMemberId){
+        Member targetMember = memberRepository.findById(targetMemberId)
+                .orElseThrow(()-> new NotFoundException(Member.class, targetMemberId));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()-> new NotFoundException(Member.class, memberId));
+        return connectionRepository.findByMemberAndTargetMember(member, targetMember).isPresent();
+    }
 }
