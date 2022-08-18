@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class MainApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
-        System.out.println("jenkins test3");
+        System.out.println("cd test");
         new SpringApplicationBuilder(MainApplication.class)
                 .run(args);
     }
