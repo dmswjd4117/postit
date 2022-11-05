@@ -51,7 +51,7 @@ public class MemberController {
             @RequestPart(required = false, name = "profileImage") MultipartFile file
     ){
 
-        Member member = memberService.register(registerRequest);
+        Member member = memberService.register(MemberRegisterRequestDto.toEntity(registerRequest));
 
         UploadFile.toUploadFile(file)
                 .ifPresent(uploadFile ->{

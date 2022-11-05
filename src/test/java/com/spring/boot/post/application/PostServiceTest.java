@@ -46,21 +46,23 @@ class PostServiceTest {
     Member getDummyMember(){
         return memberRepository.save(new Member("test@gmail.com", "pass", "name"));
     }
-    PostRequestDto getPostRequestDto(Long memberId){
+
+    PostRequestDto getPostRequestDto(){
         String title = "title";
         String body = "body";
         List<String> tagNames = Arrays.asList("tag1", "tag2", "tag2");
-        return new PostRequestDto(title, body, memberId, tagNames);
+
+        return new PostRequestDto(title, body, tagNames);
     }
 
-    Post getDummyPost(Member member ){
-        PostRequestDto postRequest = getPostRequestDto(member.getId());
+    Post getDummyPost(Long memberId){
+        PostRequestDto postRequest = getPostRequestDto();
         List<MultipartFile> images = Arrays.asList(
             new MockMultipartFile("test", "test.jpg", IMAGE_PNG_VALUE, "test".getBytes()),
             new MockMultipartFile("test2", "test2.jpg", IMAGE_PNG_VALUE, "test2".getBytes())
         );
 
-        return postService.createPost(member.getId(), postRequest, images);
+        return postService.createPost(memberId, postRequest, images);
     }
     @Test
     @DisplayName("포스트 아이디로 포스트를 조회할 수 있다.")
@@ -68,7 +70,7 @@ class PostServiceTest {
     void 포스트_아이디_조회(){
         // given
         Member member = getDummyMember();
-        Post post = getDummyPost(member);
+        Post post = getDummyPost(member.getId());
 
         // when
         Post findPost = postService.getPostByPostId(post.getId());
@@ -94,7 +96,7 @@ class PostServiceTest {
     void 포스트_멤버아이디로_조회(){
         // given
         Member member = getDummyMember();
-        Post post = getDummyPost(member);
+        Post post = getDummyPost(member.getId());
 
         // then
         List<Post> posts = postService.getPostByMemberId(member.getId());

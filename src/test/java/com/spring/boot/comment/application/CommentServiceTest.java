@@ -46,7 +46,8 @@ class CommentServiceTest {
 
   Post getPost(Long writerId){
     PostRequestDto postRequestDto = new PostRequestDto(
-        POST.getTitle(), POST.getBody(), emptyList());
+        POST.getTitle(), POST.getBody(), emptyList()
+    );
     return postService.createPost(writerId, postRequestDto, emptyList());
   }
 

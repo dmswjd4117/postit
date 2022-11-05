@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.common.util.RoleName;
 import com.spring.boot.member.application.MemberService;
+import com.spring.boot.security.voter.ConnectionBasedVoter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;

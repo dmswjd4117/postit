@@ -30,11 +30,9 @@ public class PostController {
     ) {
 
         Post post = postService.createPost(
-                postRequestDto.getTitle(),
-                postRequestDto.getBody(),
-                authentication.id,
-                postRequestDto.getPostTags(),
-                multipartFiles);
+            authentication.id,
+            postRequestDto,
+            multipartFiles);
 
         return ApiResult.success(PostDto.from(post));
     }

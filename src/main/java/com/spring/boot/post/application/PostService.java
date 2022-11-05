@@ -1,6 +1,7 @@
 package com.spring.boot.post.application;
 
 import com.spring.boot.common.util.S3Client;
+import com.spring.boot.post.application.dto.PostRequestDto;
 import com.spring.boot.post.domain.Image;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.PostTag;
@@ -38,14 +39,14 @@ public class PostService {
 
 
     @Transactional
-    public Post createPost(String title, String body, Long writerId, List<String> tagNames, List<MultipartFile> multipartFiles) {
+    public Post createPost(Long writerId, PostRequestDto postRequestDto, List<MultipartFile> multipartFiles) {
         return memberRepository.findById(writerId)
                 .map(writer->{
-                    Post post = postRepository.save(new Post(title, body, writer));
+                    Post post = postRepository.save(new Post(postRequestDto.getTitle(), postRequestDto.getBody(), writer));
 
                     List<Image> images = convertToImages(multipartFiles, post);
 
-                    Set<PostTag> postTags = tagNames
+                    Set<PostTag> postTags = postRequestDto.getPostTags()
                             .stream()
                             .distinct()
                             .map(tagName -> tagRepository.findByTagName(tagName)
