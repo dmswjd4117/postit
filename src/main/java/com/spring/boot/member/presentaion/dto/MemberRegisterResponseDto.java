@@ -1,4 +1,4 @@
-package com.spring.boot.member.application.dto;
+package com.spring.boot.member.presentaion.dto;
 
 public class MemberRegisterResponseDto {
     private MemberDto member;

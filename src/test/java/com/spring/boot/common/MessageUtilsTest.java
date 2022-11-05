@@ -1,4 +1,4 @@
-package com.spring.boot.util;
+package com.spring.boot.common;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import java.util.Locale;
 @SpringBootTest
 @ActiveProfiles("test")
 class MessageUtilsTest {
-
     @Autowired
     private MessageSourceAccessor messageSourceAccessor;
 

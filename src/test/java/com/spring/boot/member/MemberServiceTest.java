@@ -1,7 +1,7 @@
-package com.spring.boot.service;
+package com.spring.boot.member;
 
 import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.application.dto.MemberRegisterRequestDto;
+import com.spring.boot.member.presentaion.dto.MemberRegisterRequestDto;
 import com.spring.boot.member.domain.member.Member;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,34 +14,23 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
-    private String email;
-    private String password;
-    private String name;
-
-    @BeforeAll
-    void setUp() {
-        email = "a@naver.com";
-        password = "1234";
-        name = "a";
-    }
-
 
     @Test
     public void 회원가입() {
-        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto();
+        // given
+        String email = "a@naver.com";
+        String password = "1234";
+        String name = "a";
+        MemberRegisterRequestDto requestDto = new MemberRegisterRequestDto(email, password, name);
 
-        requestDto.setEmail(email);
-        requestDto.setPassword(password);
-        requestDto.setName(name);
+        // when
+        Member member = memberService.register(MemberRegisterRequestDto.toEntity(requestDto));
 
-        Member member = memberService.register(requestDto);
-
+        // then
         assertThat(member, is(notNullValue()));
         assertThat(member.getEmail(), is(email));
     }
