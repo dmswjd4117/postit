@@ -33,16 +33,16 @@ public class MemberService {
     }
 
     @Transactional
-    public Member register(MemberRegisterRequestDto registerRequest) {
-        memberRepository.findByEmail(registerRequest.getEmail())
+    public Member register(Member memberInfo) {
+        memberRepository.findByEmail(memberInfo.getEmail())
                 .ifPresent(find -> {
-                    throw new DuplicatedException("email", registerRequest.getEmail());
+                    throw new DuplicatedException("email", memberInfo.getEmail());
                 });
 
         Member member = Member.builder()
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .name(registerRequest.getName())
+                .email(memberInfo.getEmail())
+                .password(passwordEncoder.encode(memberInfo.getPassword()))
+                .name(memberInfo.getName())
                 .build();
 
         roleRepository.findByRoleName(RoleName.MEMBER.getValue())
