@@ -2,12 +2,13 @@ package com.spring.boot.member.presentaion;
 
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.spring.boot.common.util.S3Client;
+import com.spring.boot.common.util.DefaultS3Client;
 import com.spring.boot.common.dto.ApiResult;
+import com.spring.boot.common.util.S3Client;
 import com.spring.boot.common.util.UploadFile;
-import com.spring.boot.member.application.dto.MemberDto;
-import com.spring.boot.member.application.dto.MemberRegisterRequestDto;
-import com.spring.boot.member.application.dto.MemberRegisterResponseDto;
+import com.spring.boot.member.presentaion.dto.MemberDto;
+import com.spring.boot.member.presentaion.dto.MemberRegisterRequestDto;
+import com.spring.boot.member.presentaion.dto.MemberRegisterResponseDto;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.member.application.MemberService;
 import org.slf4j.Logger;

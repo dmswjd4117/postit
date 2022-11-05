@@ -2,7 +2,7 @@ package com.spring.boot.member.application;
 
 import com.spring.boot.member.domain.role.MemberRole;
 import com.spring.boot.member.domain.role.Role;
-import com.spring.boot.member.application.dto.MemberRegisterRequestDto;
+import com.spring.boot.member.presentaion.dto.MemberRegisterRequestDto;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.common.error.DuplicatedException;
 import com.spring.boot.common.error.NotFoundException;
@@ -72,6 +72,10 @@ public class MemberService {
                 .ifPresent(findMember -> {
                     findMember.setProfileImagePath(profileImagePath);
                 });
+    }
+
+    public Optional<Member> findById(Long id){
+        return memberRepository.findById(id);
     }
 
 }
