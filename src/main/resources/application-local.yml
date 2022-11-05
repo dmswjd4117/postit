@@ -1,0 +1,36 @@
+spring:
+  profiles: local
+  datasource:
+    url: ENC(CwKqce1b75zc9TVkHnomhF2enzY1GBxdBMtRpS2dw7q4mRLVJdKlQEMHLEb1kme8eDkdksz9ws6ff/pqudSo/xsR+QVNTCUSxSSi0lgcUDwRR8HLmi1RaZn7ZvVv2l06LxY3qZaYQgeHc5Xvzf4pVnCzpOP9TVxm7eLFvL7AUiFCwwLJLZnWgyTD1XAfzdO1JrIZ2nNkGBgs/LHuAXq6pCdIlfRiRB1GXc+AWiM2JeA=)
+    username: ENC(9xovSbCV4S3shcksj8mw9A==)
+    password: ENC(qHrPAvKXlvyohNQL+ItoVVTiyg6AumJS)
+
+  sql:
+    init:
+      mode: always
+      platform: mysql
+
+  jpa:
+    database: mysql
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 1000
+
+
+cloud:
+  aws:
+    s3:
+      bucketName: spring-sns
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ENC(CPGFdbn8A1EHA98Lx7TdIVXeKgSz0IWPsD1MO0eel7M=)
+      secretKey: ENC(VR/oy3lLoJeR/jufO2HVd044qzjb0wl4rImHz++LwOMUUtosR+JsLPVp128rcVY6Giq25eqKxlY=)
+

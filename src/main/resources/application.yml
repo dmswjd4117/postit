@@ -1,15 +1,17 @@
 spring:
   profiles:
     active: local
-  config:
-    import: "optional:configserver:http://52.79.224.196:8888"
-  cloud:
-    config:
-      name: config
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
+  jpa:
+    properties:
+      hibernate:
+        use_sql_comments: true
 
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
