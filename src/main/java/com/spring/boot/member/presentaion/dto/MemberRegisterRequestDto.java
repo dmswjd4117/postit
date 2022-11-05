@@ -1,38 +1,28 @@
-package com.spring.boot.member.application.dto;
+package com.spring.boot.member.presentaion.dto;
 
+import com.spring.boot.member.domain.member.Member;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+@Setter
+@Getter
 public class MemberRegisterRequestDto {
 
     private String email;
     private String password;
     private String name;
 
-    public void setEmail(String email) {
+    public MemberRegisterRequestDto(String email, String password, String name) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public static Member toEntity(MemberRegisterRequestDto requestDto) {
+        return new Member(requestDto.getEmail(), requestDto.getPassword(), requestDto.getName());
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     @Override
     public String toString(){
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -41,4 +31,5 @@ public class MemberRegisterRequestDto {
                 .append("name", name)
                 .toString();
     }
+
 }

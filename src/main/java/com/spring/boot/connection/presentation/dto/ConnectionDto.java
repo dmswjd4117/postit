@@ -1,4 +1,4 @@
-package com.spring.boot.connection.application.dto;
+package com.spring.boot.connection.presentation.dto;
 
 
 import lombok.Getter;

@@ -1,8 +1,8 @@
-package com.spring.boot.member.presentaion;
+package com.spring.boot.connection.presentation;
 
 import com.spring.boot.common.dto.ApiResult;
-import com.spring.boot.connection.application.dto.ConnectionDto;
-import com.spring.boot.member.application.dto.MemberDto;
+import com.spring.boot.connection.presentation.dto.ConnectionDto;
+import com.spring.boot.member.presentaion.dto.MemberDto;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.connection.application.ConnectionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
