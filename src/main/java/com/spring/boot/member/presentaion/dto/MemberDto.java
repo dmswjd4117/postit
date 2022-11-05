@@ -1,4 +1,4 @@
-package com.spring.boot.member.application.dto;
+package com.spring.boot.member.presentaion.dto;
 
 import com.spring.boot.member.domain.member.Member;
 import lombok.Builder;

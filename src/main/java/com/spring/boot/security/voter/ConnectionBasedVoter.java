@@ -1,6 +1,8 @@
-package com.spring.boot.security;
+package com.spring.boot.security.voter;
 
 import com.spring.boot.connection.application.ConnectionService;
+import com.spring.boot.security.FormAuthentication;
+import com.spring.boot.security.FormAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.AccessDeniedException;

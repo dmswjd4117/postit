@@ -1,4 +1,4 @@
-package com.spring.boot;
+package com.spring.boot.util;
 
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.boot.common.util.S3Client;
