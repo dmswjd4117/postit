@@ -8,23 +8,23 @@ import lombok.Getter;
 @Getter
 public class PostImageResponse {
 
-    private Long id;
-    private String imagePath;
+  private Long id;
+  private String imagePath;
 
-    public PostImageResponse(Long id, String imagePath) {
-        this.id = id;
-        this.imagePath = imagePath;
-    }
+  public PostImageResponse(Long id, String imagePath) {
+    this.id = id;
+    this.imagePath = imagePath;
+  }
 
-    public static PostImageResponse from(Image image) {
-        return new PostImageResponse(image.getId(), image.getImagePath());
-    }
+  public static PostImageResponse from(Image image) {
+    return new PostImageResponse(image.getId(), image.getImagePath());
+  }
 
-    public static List<PostImageResponse> from(List<Image> images) {
-        return images
-            .stream()
-            .map(PostImageResponse::from)
-            .collect(Collectors.toList());
-    }
+  public static List<PostImageResponse> from(List<Image> images) {
+    return images
+        .stream()
+        .map(PostImageResponse::from)
+        .collect(Collectors.toList());
+  }
 
 }
