@@ -6,6 +6,16 @@ import com.spring.boot.like.domain.Likes;
 import com.spring.boot.member.domain.role.MemberRole;
 import com.spring.boot.member.domain.role.Role;
 import com.spring.boot.post.domain.Post;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,77 +25,74 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Entity
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
 @Getter
 public class Member extends BaseTime {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
 
-    @Column(nullable = false, length = 50, unique = true)
-    private String email;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "member_id")
+  private Long id;
 
-    @Column(nullable = false)
-    private String password;
+  @Column(nullable = false, length = 50, unique = true)
+  private String email;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String password;
 
-    @Column
-    private String profileImagePath;
+  @Column(nullable = false)
+  private String name;
 
-    @OneToMany(mappedBy = "member")
-    private List<Connections> following;
+  @Column
+  private String profileImagePath;
 
-    @OneToMany(mappedBy = "targetMember")
-    private List<Connections> followers;
+  @OneToMany(mappedBy = "member")
+  private List<Connections> following;
 
-    @Column
-    @OneToMany(mappedBy = "member")
-    private List<Likes> likes = new ArrayList<>();
+  @OneToMany(mappedBy = "targetMember")
+  private List<Connections> followers;
 
-    @Column
-    @OneToMany(mappedBy = "member")
-    private List<Post> posts = new ArrayList<>();
+  @Column
+  @OneToMany(mappedBy = "member")
+  private List<Likes> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<MemberRole> memberRoles = new ArrayList<>();
+  @Column
+  @OneToMany(mappedBy = "member")
+  private List<Post> posts = new ArrayList<>();
 
-    public Member(String email, String password, String name){
-        this.email = email;
-        this.password = password;
-        this.name = name;
-    }
+  @OneToMany(mappedBy = "member")
+  private List<MemberRole> memberRoles = new ArrayList<>();
 
-    public Collection<? extends GrantedAuthority> getGrantedAuthorities() {
-        return getMemberRoles()
-                .stream()
-                .map(MemberRole::getRole)
-                .map(Role::getRoleName)
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
+  public Member(String email, String password, String name) {
+    this.email = email;
+    this.password = password;
+    this.name = name;
+  }
 
-    @Override
-    public String toString(){
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("password", "[password]")
-                .append("name", name)
-                .toString();
-    }
+  public Collection<? extends GrantedAuthority> getGrantedAuthorities() {
+    return getMemberRoles()
+        .stream()
+        .map(MemberRole::getRole)
+        .map(Role::getRoleName)
+        .map(SimpleGrantedAuthority::new)
+        .collect(Collectors.toList());
+  }
 
-    public void setProfileImagePath(String profileImagePath) {
-        this.profileImagePath = profileImagePath;
-    }
+  public void setProfileImagePath(String profileImagePath) {
+    this.profileImagePath = profileImagePath;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        .append("id", id)
+        .append("password", "[password]")
+        .append("name", name)
+        .append("member roles", memberRoles)
+        .toString();
+  }
+
 }

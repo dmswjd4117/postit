@@ -38,14 +38,6 @@ public class Post extends BaseTime {
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
     private Set<PostTag> postTags = new HashSet<>();
 
-    public void setImages(List<Image> images) {
-        this.images = images;
-    }
-
-    public void setPostTags(Set<PostTag> postTags) {
-        this.postTags =  postTags;
-    }
-
     public Post(String title, String body, Member member){
         this.title = title;
         this.body = body;

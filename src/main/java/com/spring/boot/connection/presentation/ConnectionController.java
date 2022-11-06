@@ -2,7 +2,7 @@ package com.spring.boot.connection.presentation;
 
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.connection.presentation.dto.ConnectionDto;
-import com.spring.boot.member.presentaion.dto.MemberDto;
+import com.spring.boot.member.presentaion.dto.MemberResponse;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.connection.application.ConnectionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,25 +31,25 @@ public class ConnectionController {
     }
 
     @GetMapping("/following/{memberId}")
-    private ApiResult<List<MemberDto>> getFollowingList(
+    private ApiResult<List<MemberResponse>> getFollowingList(
             @PathVariable Long memberId
     ){
         return ApiResult.success(
                 connectionService.getFollowing(memberId)
                         .stream()
-                        .map(MemberDto::from)
+                        .map(MemberResponse::from)
                         .collect(Collectors.toList())
         );
     }
 
     @GetMapping("/followers/{memberId}")
-    private ApiResult<List<MemberDto>> getFollowerList(
+    private ApiResult<List<MemberResponse>> getFollowerList(
             @PathVariable Long memberId
     ){
         return ApiResult.success(
                 connectionService.getFollowers(memberId)
                         .stream()
-                        .map(MemberDto::from)
+                        .map(MemberResponse::from)
                         .collect(Collectors.toList())
         );
     }

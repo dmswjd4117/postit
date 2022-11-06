@@ -1,13 +1,13 @@
 package com.spring.boot.member.presentaion.dto;
 
 public class MemberRegisterResponseDto {
-    private MemberDto member;
+    private MemberResponse member;
 
-    public MemberRegisterResponseDto(MemberDto member){
+    public MemberRegisterResponseDto(MemberResponse member){
         this.member = member;
     }
 
-    public MemberDto getMember() {
+    public MemberResponse getMember() {
         return member;
     }
 }
