@@ -41,27 +41,9 @@ public class Post extends BaseTime {
     public void setImages(List<Image> images) {
         this.images = images;
     }
+
     public void setPostTags(Set<PostTag> postTags) {
         this.postTags =  postTags;
-    }
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public List<Image> getImages() {
-        return images;
     }
 
     public Post(String title, String body, Member member){
