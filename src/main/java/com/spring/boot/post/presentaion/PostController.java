@@ -2,8 +2,8 @@ package com.spring.boot.post.presentaion;
 
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.application.dto.PostRequestDto;
-import com.spring.boot.post.application.dto.PostDto;
+import com.spring.boot.post.application.dto.PostRequest;
+import com.spring.boot.post.application.dto.PostInfoResponse;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.post.application.PostService;
 import org.springframework.http.MediaType;
@@ -23,38 +23,38 @@ public class PostController {
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ApiResult<PostDto> createPost(
+    public ApiResult<PostInfoResponse> createPost(
             @AuthenticationPrincipal FormAuthentication authentication,
-            @ModelAttribute PostRequestDto postRequestDto,
+            @ModelAttribute PostRequest postRequest,
             @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
     ) {
 
         Post post = postService.createPost(
             authentication.id,
-            postRequestDto,
+            postRequest,
             multipartFiles);
 
-        return ApiResult.success(PostDto.from(post));
+        return ApiResult.success(PostInfoResponse.from(post));
     }
 
     @GetMapping("/member/{memberId}")
-    public ApiResult<List<PostDto>> getPostByMemberId(
+    public ApiResult<List<PostInfoResponse>> getPostByMemberId(
             @PathVariable Long memberId
     ){
         return ApiResult.success(
                 postService.getPostByMemberId(memberId)
                         .stream()
-                        .map(PostDto::from)
+                        .map(PostInfoResponse::from)
                         .collect(Collectors.toList())
         );
     }
 
     @GetMapping("/{postId}")
-    public ApiResult<PostDto> getPostByPostId(
+    public ApiResult<PostInfoResponse> getPostByPostId(
             @PathVariable Long postId
     ){
         return ApiResult.success(
-                PostDto.from(postService.getPostByPostId(postId))
+                PostInfoResponse.from(postService.getPostByPostId(postId))
         );
     }
 

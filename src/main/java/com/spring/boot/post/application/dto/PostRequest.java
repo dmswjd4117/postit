@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostRequestDto {
+public class PostRequest {
     private String title;
     private String body;
     private List<String> postTags;

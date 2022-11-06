@@ -6,7 +6,7 @@ import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostRequestDto;
+import com.spring.boot.post.application.dto.PostRequest;
 import com.spring.boot.post.domain.Post;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +47,10 @@ class CommentServiceTest {
   }
 
   Post getPost(Long writerId){
-    PostRequestDto postRequestDto = new PostRequestDto(
+    PostRequest postRequest = new PostRequest(
         POST.getTitle(), POST.getBody(), emptyList()
     );
-    return postService.createPost(writerId, postRequestDto, emptyList());
+    return postService.createPost(writerId, postRequest, emptyList());
   }
 
   @Test
