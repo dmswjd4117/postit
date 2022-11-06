@@ -6,7 +6,7 @@ import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostRequestDto;
+import com.spring.boot.post.application.dto.PostRequest;
 import com.spring.boot.post.domain.Post;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,8 @@ class CommentServiceTest {
   @Autowired
   private ConnectionService connectionService;
 
+  private final String COMMENT_BODY = "wow...good!";;
+
   Member getPostWriter(){
     return memberService.register(POST_WRITER);
   }
@@ -45,17 +47,16 @@ class CommentServiceTest {
   }
 
   Post getPost(Long writerId){
-    PostRequestDto postRequestDto = new PostRequestDto(
-        POST.getTitle(), POST.getBody(), emptyList());
-    return postService.createPost(writerId, postRequestDto, emptyList());
+    PostRequest postRequest = new PostRequest(
+        POST.getTitle(), POST.getBody(), emptyList()
+    );
+    return postService.createPost(writerId, postRequest, emptyList());
   }
 
   @Test
   @DisplayName("팔로잉한 블로거의 글에 댓글을 달 수 있다.")
   void createCommentSuccess(){
     // given
-    String COMMENT_BODY = "wow...good!";
-
     Member postWriter = getPostWriter();
     Member commentWriter = getCommentWriter();
     Post post = getPost(postWriter.getId());
@@ -78,8 +79,6 @@ class CommentServiceTest {
   @DisplayName("팔로잉하지 않은 블로거의 글에는 댓글을 달 수 없다..")
   void createCommentFail_NotConnected(){
     // given
-    String COMMENT_BODY = "wow...good!";
-
     Member postWriter = getPostWriter();
     Member commentWriter = getCommentWriter();
     Post post = getPost(postWriter.getId());

@@ -2,11 +2,10 @@ package com.spring.boot.member.presentaion;
 
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.spring.boot.common.util.DefaultS3Client;
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.common.util.S3Client;
 import com.spring.boot.common.util.UploadFile;
-import com.spring.boot.member.presentaion.dto.MemberDto;
+import com.spring.boot.member.presentaion.dto.MemberResponse;
 import com.spring.boot.member.presentaion.dto.MemberRegisterRequestDto;
 import com.spring.boot.member.presentaion.dto.MemberRegisterResponseDto;
 import com.spring.boot.member.domain.member.Member;
@@ -51,7 +50,7 @@ public class MemberController {
             @RequestPart(required = false, name = "profileImage") MultipartFile file
     ){
 
-        Member member = memberService.register(registerRequest);
+        Member member = memberService.register(MemberRegisterRequestDto.toEntity(registerRequest));
 
         UploadFile.toUploadFile(file)
                 .ifPresent(uploadFile ->{
@@ -62,7 +61,7 @@ public class MemberController {
                 });
 
         return ApiResult.success(new MemberRegisterResponseDto(
-                MemberDto.from(member)
+                MemberResponse.from(member)
         ));
     }
 
