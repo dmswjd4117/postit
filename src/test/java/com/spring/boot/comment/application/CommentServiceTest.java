@@ -36,6 +36,8 @@ class CommentServiceTest {
   @Autowired
   private ConnectionService connectionService;
 
+  private final String COMMENT_BODY = "wow...good!";;
+
   Member getPostWriter(){
     return memberService.register(POST_WRITER);
   }
@@ -55,8 +57,6 @@ class CommentServiceTest {
   @DisplayName("팔로잉한 블로거의 글에 댓글을 달 수 있다.")
   void createCommentSuccess(){
     // given
-    String COMMENT_BODY = "wow...good!";
-
     Member postWriter = getPostWriter();
     Member commentWriter = getCommentWriter();
     Post post = getPost(postWriter.getId());
@@ -79,8 +79,6 @@ class CommentServiceTest {
   @DisplayName("팔로잉하지 않은 블로거의 글에는 댓글을 달 수 없다..")
   void createCommentFail_NotConnected(){
     // given
-    String COMMENT_BODY = "wow...good!";
-
     Member postWriter = getPostWriter();
     Member commentWriter = getCommentWriter();
     Post post = getPost(postWriter.getId());
