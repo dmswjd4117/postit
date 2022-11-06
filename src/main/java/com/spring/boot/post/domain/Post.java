@@ -4,6 +4,7 @@ import com.spring.boot.common.domain.BaseTime;
 import com.spring.boot.member.domain.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.BatchSize;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class Post extends BaseTime {
     @Id
@@ -32,10 +33,10 @@ public class Post extends BaseTime {
     private Member member;
 
     @BatchSize(size = 1000)
-    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "post")
     private List<Image> images;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "post")
     private Set<PostTag> postTags = new HashSet<>();
 
     public Post(String title, String body, Member member){
