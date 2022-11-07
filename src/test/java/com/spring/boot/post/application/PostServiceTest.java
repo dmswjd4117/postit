@@ -97,13 +97,17 @@ class PostServiceTest {
         // given
         Member member = createDummyMember();
         createDummyPost(member.getId());
+        createDummyPost(member.getId());
+
         entityManager.clear();
 
-        // then
+        // when
         List<Post> posts = postService.getPostByMemberId(member.getId());
+
+        // then
+        assertThat(posts.size(), is(2));
         Post findPost = posts.get(0);
 
-        // when
         assertThat(findPost, is(notNullValue()));
 
         assertThat(findPost.getBody(), is(BODY));

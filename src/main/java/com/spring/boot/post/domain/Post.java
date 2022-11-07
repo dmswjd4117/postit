@@ -32,7 +32,7 @@ public class Post extends BaseTime {
     private Member member;
 
     @BatchSize(size = 1000)
-    @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.PERSIST)
     private List<Image> images;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
