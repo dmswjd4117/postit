@@ -21,6 +21,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
       "left join fetch p.postTags pt " +
       "left join fetch pt.tag " +
       "where p.id = :postId")
-  Optional<Post> findByPostIdWithTags(Long postId);
+  Optional<Post> findByPostIdWithTagsAndMember(Long postId);
 }
 

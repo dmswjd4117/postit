@@ -27,6 +27,7 @@ public class Post extends BaseTime {
 
     @Column
     private String body;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -50,8 +51,6 @@ public class Post extends BaseTime {
                 .append("id", id)
                 .append("title", title)
                 .append("body", body)
-                .append("member", member)
-                .append("images", "images")
                 .toString();
     }
 }

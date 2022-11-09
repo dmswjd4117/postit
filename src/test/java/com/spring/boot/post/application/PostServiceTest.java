@@ -93,34 +93,40 @@ class PostServiceTest {
 
 
     @Test
-    void 포스트_멤버아이디로_조회(){
+    @DisplayName("포스트 아이디로 조회한다")
+    void 포스트_멤버_아이디로_조회(){
+        int DUMMY_POST_CNT = 3;
+
         // given
         Member member = createDummyMember();
-        createDummyPost(member.getId());
-        createDummyPost(member.getId());
+        for(int i=0; i<DUMMY_POST_CNT; i++){
+            createDummyPost(member.getId());
+        }
 
         entityManager.clear();
 
         // when
         List<Post> posts = postService.getPostByMemberId(member.getId());
 
+
         // then
-        assertThat(posts.size(), is(2));
-        Post findPost = posts.get(0);
+        assertThat(posts.size(), is(DUMMY_POST_CNT));
+        for(int index=0; index<DUMMY_POST_CNT; index++){
+            Post findPost = posts.get(index);
+            assertThat(findPost, is(notNullValue()));
 
-        assertThat(findPost, is(notNullValue()));
+            assertThat(findPost.getBody(), is(BODY));
+            assertThat(findPost.getMember().getName(), is(member.getName()));
+            assertThat(findPost.getImages().size(), is(IMAGES.size()));
 
-        assertThat(findPost.getBody(), is(BODY));
-        assertThat(findPost.getMember().getName(), is(member.getName()));
-        assertThat(findPost.getImages().size(), is(IMAGES.size()));
-
-        assertAll(() -> {
-            assertThat(findPost.getPostTags().size(), is(TAG_NAMES.size()));
-            assertThat(findPost.getPostTags()
-                .stream()
-                .map(PostTag::getTagName)
-                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2"));
-        });
+            assertAll(() -> {
+                assertThat(findPost.getPostTags().size(), is(TAG_NAMES.size()));
+                assertThat(findPost.getPostTags()
+                    .stream()
+                    .map(PostTag::getTagName)
+                    .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2"));
+            });
+        }
     }
 
 }
