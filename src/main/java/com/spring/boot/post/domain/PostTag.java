@@ -24,9 +24,13 @@ public class PostTag {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public PostTag(Tag tag, Post post) {
+    public PostTag(Tag tag) {
         this.tag = tag;
+    }
+
+    public void changePost(Post post) {
         this.post = post;
+        post.getPostTags().add(this);
     }
 
     public String getTagName() {
