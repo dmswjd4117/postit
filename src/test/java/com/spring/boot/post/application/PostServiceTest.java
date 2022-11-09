@@ -7,6 +7,7 @@ import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.PostRepository;
 import com.spring.boot.post.domain.PostTag;
 import com.spring.boot.util.DatabaseCleanUp;
+import java.util.Collections;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 @SpringBootTest
@@ -65,6 +68,31 @@ class PostServiceTest {
         PostRequest postRequest = createPostRequestDto();
         return postService.createPost(memberId, postRequest, IMAGES);
     }
+
+    @Test
+    @DisplayName("포스트를 생성할 수 있다.")
+    void 포스트_생성(){
+        Member member = createDummyMember();
+        PostRequest postRequest = new PostRequest("title", "body", TAG_NAMES);
+
+        Post createdPost = postService.createPost(member.getId(), postRequest, IMAGES);
+
+        assertNotNull(createdPost);
+        assertThat(createdPost.getBody(), is(postRequest.getBody()));
+        assertThat(createdPost.getTitle(), is(postRequest.getTitle()));
+        assertThat(createdPost.getPostTags().size(), is(postRequest.getPostTags().size()));
+    }
+
+    @Test
+    @DisplayName("잘못된 유저 아이디일 경우 생성할 수 없다.")
+    void 포스트_생성_실패_잘못된_유저아이디(){
+        PostRequest postRequest = new PostRequest("title", "body", Collections.emptyList());
+
+        assertThrows(IllegalArgumentException.class, ()->{
+            postService.createPost(-1L, postRequest, Collections.emptyList());
+        });
+    }
+
     @Test
     @DisplayName("포스트 아이디로 포스트를 조회할 수 있다.")
     void 포스트_아이디_조회(){
