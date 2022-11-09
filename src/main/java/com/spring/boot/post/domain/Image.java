@@ -34,9 +34,13 @@ public class Image extends BaseTime {
   @JoinColumn(name = "post_id")
   private Post post;
 
-  public Image(String imagePath, Post post) {
+  public Image(String imagePath) {
     this.imagePath = imagePath;
+  }
+
+  public void changePost(Post post) {
     this.post = post;
+    this.post.getImages().add(this);
   }
 
   public Long getId() {
