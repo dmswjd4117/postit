@@ -2,17 +2,19 @@ package com.spring.boot.comment.application;
 
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.common.error.NotConnectedException;
+import com.spring.boot.common.error.NotFoundException;
+import com.spring.boot.common.util.RoleName;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostRequest;
 import com.spring.boot.post.domain.Post;
+import com.spring.boot.util.DatabaseCleanUp;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,13 +22,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@Transactional
 class CommentServiceTest {
 
   private final Member POST_WRITER = new Member("email@gmail.com", "password", "post");
   private final Member COMMENT_WRITER = new Member("email2@gmail.com", "password", "comment");
   private final Post POST = new Post("title", "post-body", POST_WRITER);
+  private final String COMMENT_BODY = "wow...good!";;
 
+  @Autowired
+  DatabaseCleanUp databaseCleanUp;
   @Autowired
   private MemberService memberService;
   @Autowired
@@ -35,18 +39,20 @@ class CommentServiceTest {
   private CommentService commentService;
   @Autowired
   private ConnectionService connectionService;
-
-  private final String COMMENT_BODY = "wow...good!";;
-
-  Member getPostWriter(){
-    return memberService.register(POST_WRITER);
+  @AfterEach
+  void cleanUp(){
+    databaseCleanUp.truncateAllEntity();
   }
 
-  Member getCommentWriter(){
-    return memberService.register(COMMENT_WRITER);
+  Member savePostWriter(){
+    return memberService.register(POST_WRITER, RoleName.MEMBER);
   }
 
-  Post getPost(Long writerId){
+  Member saveCommentWriter(){
+    return memberService.register(COMMENT_WRITER, RoleName.MEMBER);
+  }
+
+  Post savePost(Long writerId){
     PostRequest postRequest = new PostRequest(
         POST.getTitle(), POST.getBody(), emptyList()
     );
@@ -57,9 +63,9 @@ class CommentServiceTest {
   @DisplayName("팔로잉한 블로거의 글에 댓글을 달 수 있다.")
   void createCommentSuccess(){
     // given
-    Member postWriter = getPostWriter();
-    Member commentWriter = getCommentWriter();
-    Post post = getPost(postWriter.getId());
+    Member postWriter = savePostWriter();
+    Member commentWriter = saveCommentWriter();
+    Post post = savePost(postWriter.getId());
     connectionService.follow(commentWriter.getId(), postWriter.getId());
 
     // when
@@ -76,15 +82,34 @@ class CommentServiceTest {
   }
 
   @Test
-  @DisplayName("팔로잉하지 않은 블로거의 글에는 댓글을 달 수 없다..")
+  @DisplayName("팔로잉하지 않은 블로거의 글에는 댓글을 달 수 없다.")
   void createCommentFail_NotConnected(){
     // given
-    Member postWriter = getPostWriter();
-    Member commentWriter = getCommentWriter();
-    Post post = getPost(postWriter.getId());
+    Member postWriter = savePostWriter();
+    Member commentWriter = saveCommentWriter();
+    Post post = savePost(postWriter.getId());
 
     assertThrows(NotConnectedException.class, ()->{
       commentService.createComment(commentWriter.getId(), COMMENT_BODY, post.getId());
+    });
+  }
+
+  @Test
+  @DisplayName("존재하지 않는 멤버아이디일경우 예외발생")
+  void 댓글달기_실패(){
+    Member postWriter = savePostWriter();
+    Post post = savePost(postWriter.getId());
+    assertThrows(NotFoundException.class, ()->{
+      commentService.createComment(-1L, "body", post.getId());
+    });
+  }
+
+  @Test
+  @DisplayName("존재하지 않는 포스트 아이디 예외발생")
+  void 댓글달기_실패2(){
+    Member commentWriter = saveCommentWriter();
+    assertThrows(NotFoundException.class, ()->{
+      commentService.createComment(commentWriter.getId(), "body", -1L);
     });
   }
 

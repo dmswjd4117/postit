@@ -10,26 +10,27 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Getter
 public class MemberRegisterRequestDto {
 
-    private String email;
-    private String password;
-    private String name;
+  private String email;
+  private String password;
+  private String name;
 
-    public MemberRegisterRequestDto(String email, String password, String name) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-    }
+  public MemberRegisterRequestDto(String email, String password, String name) {
+    this.email = email;
+    this.password = password;
+    this.name = name;
+  }
 
-    public static Member toEntity(MemberRegisterRequestDto requestDto) {
-        return new Member(requestDto.getEmail(), requestDto.getPassword(), requestDto.getName());
-    }
-    @Override
-    public String toString(){
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("email", email)
-                .append("password", "[password]")
-                .append("name", name)
-                .toString();
-    }
+  public static Member toEntity(MemberRegisterRequestDto requestDto) {
+    return new Member(requestDto.getEmail(), requestDto.getPassword(), requestDto.getName());
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        .append("email", email)
+        .append("password", "[password]")
+        .append("name", name)
+        .toString();
+  }
 
 }

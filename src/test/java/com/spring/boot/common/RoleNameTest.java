@@ -1,4 +1,4 @@
-package com.spring.boot.domain;
+package com.spring.boot.common;
 
 import com.spring.boot.common.util.RoleName;
 import org.junit.jupiter.api.Test;

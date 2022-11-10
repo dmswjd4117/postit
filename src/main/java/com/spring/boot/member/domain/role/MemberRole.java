@@ -1,12 +1,14 @@
 package com.spring.boot.member.domain.role;
 
 import com.spring.boot.member.domain.member.Member;
+import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class MemberRole {
     @Id
     @Column(name = "member_role_id")
@@ -23,27 +25,23 @@ public class MemberRole {
 
     protected MemberRole() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public MemberRole(Member member, Role role){
+    private MemberRole(Member member, Role role){
         this.member = member;
         this.role = role;
     }
+    public MemberRole(Role role){
+        this(null, role);
+    }
 
+    public void changeMember(Member member) {
+        this.member = member;
+        member.getMemberRoles().add(this);
+    }
     @Override
     public String toString(){
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .build();
     }
+
 }
