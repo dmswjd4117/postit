@@ -48,8 +48,6 @@ class PostServiceTest {
     private PostRepository postRepository;
     @Autowired
     private MemberRepository memberRepository;
-    @Autowired
-    private EntityManager entityManager;
 
     @AfterEach
     void cleanUp(){
@@ -130,8 +128,6 @@ class PostServiceTest {
         for(int i=0; i<DUMMY_POST_CNT; i++){
             createDummyPost(member.getId());
         }
-
-        entityManager.clear();
 
         // when
         List<Post> posts = postService.getPostByMemberId(member.getId());
