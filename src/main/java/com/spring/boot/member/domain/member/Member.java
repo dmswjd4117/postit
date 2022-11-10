@@ -8,7 +8,9 @@ import com.spring.boot.member.domain.role.Role;
 import com.spring.boot.post.domain.Post;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +19,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,7 +28,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
 @Getter
 public class Member extends BaseTime {
@@ -64,7 +64,7 @@ public class Member extends BaseTime {
   private List<Post> posts = new ArrayList<>();
 
   @OneToMany(mappedBy = "member")
-  private List<MemberRole> memberRoles = new ArrayList<>();
+  private Set<MemberRole> memberRoles = new HashSet<>();
 
   public Member(String email, String password, String name) {
     this.email = email;
