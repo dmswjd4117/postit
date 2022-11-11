@@ -13,6 +13,7 @@ spring:
   jpa:
     database: mysql
     open-in-view: false
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     properties:
