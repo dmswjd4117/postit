@@ -7,11 +7,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Getter
 @NoArgsConstructor
-public class CommentRequestDto {
+public class CommentRequest {
     private String comment;
     private Long postId;
 
-    public CommentRequestDto(String comment, Long postId) {
+    public CommentRequest(String comment, Long postId) {
         this.comment = comment;
         this.postId = postId;
     }

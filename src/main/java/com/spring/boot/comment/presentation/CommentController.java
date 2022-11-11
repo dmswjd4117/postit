@@ -1,8 +1,8 @@
 package com.spring.boot.comment.presentation;
 
 import com.spring.boot.comment.application.CommentService;
-import com.spring.boot.comment.presentation.dto.CommentRequestDto;
-import com.spring.boot.comment.presentation.dto.CommentResponseDto;
+import com.spring.boot.comment.presentation.dto.CommentRequest;
+import com.spring.boot.comment.presentation.dto.CommentResponse;
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.security.FormAuthentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,14 +22,14 @@ public class CommentController {
     }
 
     @PostMapping
-    public ApiResult<CommentResponseDto> createComment(
+    public ApiResult<CommentResponse> createComment(
             @AuthenticationPrincipal FormAuthentication formAuthentication,
-            @RequestBody CommentRequestDto commentRequestDto){
+            @RequestBody CommentRequest commentRequest){
         return ApiResult.success(
-                CommentResponseDto.from(commentService.createComment(
+                CommentResponse.from(commentService.createComment(
                         formAuthentication.id,
-                        commentRequestDto.getComment(),
-                        commentRequestDto.getPostId()))
+                        commentRequest.getComment(),
+                        commentRequest.getPostId()))
         );
     }
 
