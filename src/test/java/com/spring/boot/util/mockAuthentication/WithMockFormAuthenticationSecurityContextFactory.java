@@ -1,4 +1,4 @@
-package com.spring.boot.util;
+package com.spring.boot.util.mockAuthentication;
 
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.security.FormAuthenticationToken;

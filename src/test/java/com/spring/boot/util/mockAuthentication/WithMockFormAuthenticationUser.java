@@ -1,4 +1,4 @@
-package com.spring.boot.util;
+package com.spring.boot.util.mockAuthentication;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,7 +12,7 @@ public @interface WithMockFormAuthenticationUser {
 
   String email() default "test@gmail.com";
 
-  String grade() default "MEMBER";
+  String grade() default "ROLE_MEMBER";
 
   String name() default "test";
 }
