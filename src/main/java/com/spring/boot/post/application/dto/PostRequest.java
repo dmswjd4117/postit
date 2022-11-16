@@ -1,6 +1,7 @@
 package com.spring.boot.post.application.dto;
 
 import java.util.List;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @AllArgsConstructor
 public class PostRequest {
 
+  @NotBlank
   private String title;
   private String body;
   private List<String> postTags;
