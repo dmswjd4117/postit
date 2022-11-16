@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Getter
 @Builder
@@ -26,6 +28,14 @@ public class PostInfoResponse {
         .createdDate(post.getCreatedDate())
         .images(PostImageResponse.from(post.getImages()))
         .postTags(PostTagDto.from(post.getPostTags()))
+        .build();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+        .append("title", title)
+        .append("body", body)
         .build();
   }
 }

@@ -8,7 +8,6 @@ import com.spring.boot.post.domain.PostRepository;
 import com.spring.boot.post.domain.PostTag;
 import com.spring.boot.util.DatabaseCleanUp;
 import java.util.Collections;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
