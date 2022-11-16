@@ -3,6 +3,8 @@ package com.spring.boot.tag.domain;
 import com.spring.boot.post.domain.PostTag;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -49,5 +51,13 @@ public class Tag {
         }
         Tag that = (Tag) obj;
         return Objects.equals(tagName, that.getTagName());
+    }
+
+    @Override
+    public String toString(){
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .append("tag name", tagName)
+            .append("id", id)
+            .build();
     }
 }

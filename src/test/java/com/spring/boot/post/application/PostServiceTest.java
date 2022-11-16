@@ -48,7 +48,7 @@ class PostServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @AfterEach
+    @BeforeEach
     void cleanUp(){
         databaseCleanUp.truncateAllEntity();
     }
