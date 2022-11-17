@@ -1,12 +1,12 @@
 package com.spring.boot.common.error;
 
 import com.spring.boot.common.dto.ApiResult;
+import org.springframework.validation.BindException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -37,9 +37,12 @@ public class GeneralExceptionHandler {
     return newResponse(exception, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<?> handleValidationExceptions(
-      MethodArgumentNotValidException exception) {
+  @ExceptionHandler({
+      BindException.class
+  })
+  private ResponseEntity<?> handleMethodArgumentNotValidException(BindException exception) {
+    log.debug("Bad request exception : {}", exception.getMessage());
     return newResponse(exception, HttpStatus.BAD_REQUEST);
   }
+
 }

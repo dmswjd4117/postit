@@ -2,12 +2,14 @@ package com.spring.boot.common.dto;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
+@NoArgsConstructor
 public class ApiError {
-    private final String message;
-    private final int status;
+    private String message;
+    private int status;
 
     public ApiError(Throwable throwable, HttpStatus status) {
         this.message = throwable.getMessage();

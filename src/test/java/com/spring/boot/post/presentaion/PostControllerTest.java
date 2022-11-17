@@ -2,10 +2,12 @@ package com.spring.boot.post.presentaion;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,11 +59,20 @@ class PostControllerTest {
     given(postService.createPost(any(), any(), any()))
         .willReturn(POST);
 
-    mockMvc.perform(
+    MockHttpServletResponse response = mockMvc.perform(
         multipart("/api/post")
             .param("title", title)
             .param("body", BODY)
-    ).andExpect(status().isBadRequest());
+    ).andReturn().getResponse();
+
+    TypeReference<ApiResult<PostInfoResponse>> responseType = new TypeReference<ApiResult<PostInfoResponse>>() {
+    };
+    ApiResult<PostInfoResponse> apiResult = objectMapper.readValue(
+        response.getContentAsString(), responseType);
+
+    assertEquals(response.getStatus(), HttpStatus.BAD_REQUEST.value());
+    assertNull(apiResult.getResponse());
+    assertFalse(apiResult.isSuccess());
   }
 
   @Test
