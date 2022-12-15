@@ -1,7 +1,8 @@
-package com.spring.boot.common.util;
+package com.spring.boot.post.infrastructure.image;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.spring.boot.post.domain.image.ImageUploader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -10,14 +11,14 @@ import java.util.Map;
 
 @Component
 @Profile("!test")
-public final class DefaultS3Client implements S3Client{
+public final class S3ImageUploader implements ImageUploader {
 
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucketName}")
     private String bucketName;
 
-    public DefaultS3Client(AmazonS3Client amazonS3Client) {
+    public S3ImageUploader(AmazonS3Client amazonS3Client) {
         this.amazonS3Client = amazonS3Client;
     }
 
@@ -40,10 +41,10 @@ public final class DefaultS3Client implements S3Client{
             objectMetadata.setUserMetadata(metaData);
         }
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata);
-        return putS3(putObjectRequest);
+        return putObjectRequest(putObjectRequest);
     }
 
-    public String putS3(PutObjectRequest putObjectRequest){
+    public String putObjectRequest(PutObjectRequest putObjectRequest){
         amazonS3Client.putObject(putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucketName, putObjectRequest.getKey()).toString();
     }

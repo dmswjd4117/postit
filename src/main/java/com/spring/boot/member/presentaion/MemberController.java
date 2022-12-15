@@ -5,9 +5,9 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.spring.boot.common.dto.ApiResult;
-import com.spring.boot.common.util.RoleName;
-import com.spring.boot.common.util.S3Client;
-import com.spring.boot.common.util.UploadFile;
+import com.spring.boot.member.domain.role.RoleName;
+import com.spring.boot.post.domain.image.ImageUploader;
+import com.spring.boot.post.infrastructure.image.UploadFile;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.member.presentaion.dto.MemberRegisterRequestDto;
@@ -28,10 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberController {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
-  private final S3Client s3Uploader;
+  private final ImageUploader s3Uploader;
   private final MemberService memberService;
 
-  public MemberController(S3Client s3Uploader, MemberService memberService) {
+  public MemberController(ImageUploader s3Uploader, MemberService memberService) {
     this.s3Uploader = s3Uploader;
     this.memberService = memberService;
   }

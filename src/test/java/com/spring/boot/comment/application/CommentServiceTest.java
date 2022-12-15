@@ -3,7 +3,7 @@ package com.spring.boot.comment.application;
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.common.error.NotConnectedException;
 import com.spring.boot.common.error.NotFoundException;
-import com.spring.boot.common.util.RoleName;
+import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.member.Member;
@@ -41,7 +41,7 @@ class CommentServiceTest {
   private ConnectionService connectionService;
   @AfterEach
   void cleanUp(){
-    databaseCleanUp.truncateAllEntity();
+    databaseCleanUp.clear();
   }
 
   Member savePostWriter(){

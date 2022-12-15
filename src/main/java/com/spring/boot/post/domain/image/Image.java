@@ -1,6 +1,7 @@
-package com.spring.boot.post.domain;
+package com.spring.boot.post.domain.image;
 
 import com.spring.boot.common.domain.BaseTime;
+import com.spring.boot.post.domain.Post;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -56,6 +57,7 @@ public class Image extends BaseTime {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
         .append("id", id)
         .append("imagePath", imagePath)
+        .append("post id", post.getId())
         .append("created", getCreatedDate())
         .append("modified", getModifiedDate())
         .toString();

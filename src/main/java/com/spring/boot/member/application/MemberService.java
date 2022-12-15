@@ -1,7 +1,7 @@
 package com.spring.boot.member.application;
 
 import com.spring.boot.common.error.DuplicatedException;
-import com.spring.boot.common.util.RoleName;
+import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.member.domain.member.MemberRepository;
 import com.spring.boot.member.domain.role.MemberRole;

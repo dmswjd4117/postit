@@ -1,5 +1,6 @@
-package com.spring.boot.post.domain;
+package com.spring.boot.post.domain.tag;
 
+import com.spring.boot.post.domain.Post;
 import com.spring.boot.tag.domain.Tag;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,10 @@ public class PostTag {
 
     public String getTagName() {
         return tag.getTagName();
+    }
+
+    public Tag getTag() {
+        return tag;
     }
 
     public Long getId() {

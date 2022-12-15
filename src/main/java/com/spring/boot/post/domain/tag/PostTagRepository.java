@@ -1,4 +1,4 @@
-package com.spring.boot.post.domain;
+package com.spring.boot.post.domain.tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

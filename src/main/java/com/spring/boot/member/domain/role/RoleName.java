@@ -1,4 +1,4 @@
-package com.spring.boot.common.util;
+package com.spring.boot.member.domain.role;
 
 import java.util.Arrays;
 import java.util.Optional;

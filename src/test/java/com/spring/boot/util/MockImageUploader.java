@@ -1,8 +1,8 @@
 package com.spring.boot.util;
 
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.spring.boot.common.util.S3Client;
-import com.spring.boot.common.util.UploadFile;
+import com.spring.boot.post.domain.image.ImageUploader;
+import com.spring.boot.post.infrastructure.image.UploadFile;
 import java.io.InputStream;
 import java.util.Map;
 import org.springframework.context.annotation.Profile;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("test")
-public class MockS3Client implements S3Client {
+public class MockImageUploader implements ImageUploader {
   @Override
   public String upload(UploadFile uploadFile) {
     return null;
@@ -23,7 +23,7 @@ public class MockS3Client implements S3Client {
   }
 
   @Override
-  public String putS3(PutObjectRequest putObjectRequest) {
+  public String putObjectRequest(PutObjectRequest putObjectRequest) {
     return null;
   }
 }

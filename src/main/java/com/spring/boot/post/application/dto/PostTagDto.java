@@ -1,6 +1,6 @@
 package com.spring.boot.post.application.dto;
 
-import com.spring.boot.post.domain.PostTag;
+import com.spring.boot.post.domain.tag.PostTag;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

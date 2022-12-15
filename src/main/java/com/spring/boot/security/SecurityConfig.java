@@ -3,7 +3,7 @@ package com.spring.boot.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.dto.ApiResult;
-import com.spring.boot.common.util.RoleName;
+import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.security.voter.ConnectionBasedVoter;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

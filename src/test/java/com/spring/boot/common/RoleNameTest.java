@@ -1,6 +1,6 @@
 package com.spring.boot.common;
 
-import com.spring.boot.common.util.RoleName;
+import com.spring.boot.member.domain.role.RoleName;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
