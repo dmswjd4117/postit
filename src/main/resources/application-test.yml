@@ -5,16 +5,11 @@ spring:
     username: root
     password: 1234
 
-  sql:
-    init:
-      mode: always
-      platform: mysql
-
-  jpa:
+경  jpa:
     database: mysql
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
