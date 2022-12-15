@@ -1,39 +1,67 @@
 package com.spring.boot.util;
 
-import com.google.common.base.CaseFormat;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Service
-@RequiredArgsConstructor
-public class DatabaseCleanUp implements InitializingBean {
+@Component
+public class DatabaseCleanUp {
 
-  private final EntityManager entityManager;
+  @Autowired
+  private DataSource dataSource;
 
   private List<String> tableNames;
 
-  @Override
-  public void afterPropertiesSet() {
-    tableNames = entityManager.getMetamodel().getEntities().stream()
-        .filter(entityType -> entityType.getJavaType().getAnnotation(Entity.class) != null)
-        .map(entityType -> CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entityType.getName()))
-        .collect(Collectors.toList());
-  }
-
-  @Transactional
-  public void truncateAllEntity() {
-    entityManager.flush();
-    entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
-    for (String tableName : tableNames) {
-      entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
+  @PostConstruct
+  public void postConstruct() {
+    try (Connection connection = dataSource.getConnection()) {
+      tableNames = extractTableNames(connection);
+    } catch (SQLException e) {
+      throw new IllegalStateException(e);
     }
-    entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
   }
 
+  private List<String> extractTableNames(Connection conn) throws SQLException {
+    List<String> tableNames = new ArrayList<>();
+
+    try (ResultSet tables = conn.getMetaData()
+        .getTables(conn.getCatalog(), null, "%", new String[]{"TABLE"})
+    ) {
+      while (tables.next()) {
+        tableNames.add(tables.getString("table_name"));
+      }
+
+      return tableNames;
+    }
+  }
+
+  public void clear() {
+    try (Connection connection = dataSource.getConnection()) {
+      cleanUpDatabase(connection);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new IllegalStateException(e);
+    }
+  }
+
+  private void cleanUpDatabase(Connection conn) throws SQLException {
+    try (Statement statement = conn.createStatement()) {
+      statement.executeUpdate("SET @@foreign_key_checks = 0");
+      for (String tableName : tableNames) {
+        try {
+          statement.executeUpdate("TRUNCATE TABLE " + tableName);
+        } catch (SQLException ignore) {
+        }
+      }
+      statement.executeUpdate("SET @@foreign_key_checks = 1");
+    }
+  }
 }
