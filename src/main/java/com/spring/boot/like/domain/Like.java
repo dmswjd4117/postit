@@ -3,10 +3,12 @@ package com.spring.boot.like.domain;
 import com.spring.boot.common.domain.BaseTime;
 import com.spring.boot.member.domain.member.Member;
 
+import com.spring.boot.post.domain.Post;
 import javax.persistence.*;
 
 @Entity
-public class Likes extends BaseTime {
+@Table(name = "likes")
+public class Like extends BaseTime {
     @Id
     @Column(name = "like_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +17,8 @@ public class Likes extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 }

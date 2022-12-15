@@ -3,7 +3,7 @@ package com.spring.boot.connection.application;
 import com.spring.boot.common.error.DuplicatedException;
 import com.spring.boot.common.error.NotFoundException;
 import com.spring.boot.connection.domain.ConnectionRepository;
-import com.spring.boot.connection.domain.Connections;
+import com.spring.boot.connection.domain.Connection;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.member.domain.member.MemberRepository;
 import java.util.List;
@@ -24,7 +24,7 @@ public class ConnectionService {
   }
 
   @Transactional
-  public Connections follow(Long memberId, Long targetMemberId) {
+  public Connection follow(Long memberId, Long targetMemberId) {
 
     if (memberId.equals(targetMemberId)) {
       throw new IllegalArgumentException("same memberId and targetMemberId error");
@@ -36,11 +36,11 @@ public class ConnectionService {
             .map(targetMember -> {
               connectionRepository.findByMemberAndTargetMember(findMember, targetMember)
                   .ifPresent(c -> {
-                    throw new DuplicatedException(Connections.class, "member: " + memberId,
+                    throw new DuplicatedException(Connection.class, "member: " + memberId,
                         " target: " + targetMemberId);
                   });
-              Connections connections = new Connections(findMember, targetMember);
-              return connectionRepository.save(connections);
+              Connection connection = new Connection(findMember, targetMember);
+              return connectionRepository.save(connection);
             })
             .orElseThrow(() -> new NotFoundException(Member.class, targetMemberId)))
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
@@ -51,7 +51,7 @@ public class ConnectionService {
     return memberRepository.findById(memberId)
         .map(findMember -> findMember.getFollowing()
             .stream()
-            .map(Connections::getTargetMember)
+            .map(Connection::getTargetMember)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
   }
@@ -61,7 +61,7 @@ public class ConnectionService {
     return memberRepository.findById(memberId)
         .map(findMember -> findMember.getFollowers()
             .stream()
-            .map(Connections::getMember)
+            .map(Connection::getMember)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
   }

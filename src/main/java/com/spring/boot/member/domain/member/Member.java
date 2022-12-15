@@ -1,8 +1,8 @@
 package com.spring.boot.member.domain.member;
 
 import com.spring.boot.common.domain.BaseTime;
-import com.spring.boot.connection.domain.Connections;
-import com.spring.boot.like.domain.Likes;
+import com.spring.boot.connection.domain.Connection;
+import com.spring.boot.like.domain.Like;
 import com.spring.boot.member.domain.role.MemberRole;
 import com.spring.boot.member.domain.role.Role;
 import com.spring.boot.post.domain.Post;
@@ -50,14 +50,14 @@ public class Member extends BaseTime {
   private String profileImagePath;
 
   @OneToMany(mappedBy = "member")
-  private List<Connections> following;
+  private List<Connection> following;
 
   @OneToMany(mappedBy = "targetMember")
-  private List<Connections> followers;
+  private List<Connection> followers;
 
   @Column
   @OneToMany(mappedBy = "member")
-  private List<Likes> likes = new ArrayList<>();
+  private List<Like> likes = new ArrayList<>();
 
   @Column
   @OneToMany(mappedBy = "member")

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,7 +17,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Getter
-public class Connections {
+@Table(name = "connections")
+public class Connection {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +36,10 @@ public class Connections {
   @CreatedDate
   private LocalDateTime createdDate;
 
-  public Connections() {
+  public Connection() {
   }
 
-  public Connections(Member member, Member targetMember) {
+  public Connection(Member member, Member targetMember) {
     this.member = member;
     this.targetMember = targetMember;
   }
