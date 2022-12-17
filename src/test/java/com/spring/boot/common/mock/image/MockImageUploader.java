@@ -9,13 +9,13 @@ import java.util.Map;
 public class MockImageUploader implements ImageUploader {
   @Override
   public String upload(UploadFile uploadFile) {
-    return null;
+    return "test image url";
   }
 
   @Override
   public String upload(InputStream inputStream, long bytesLength, String fileName,
       String contentType, Map<String, String> metaData) {
-    return null;
+    return "test image url";
   }
 
   @Override

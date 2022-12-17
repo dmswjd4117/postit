@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,7 +61,7 @@ class PostServiceTest {
   }
 
   Member createDummyMember() {
-    return memberRepository.save(new Member("test@gmail.com", "pass", "name"));
+    return memberRepository.save(new Member(RandomUtils.nextLong()+"@gmail.com", "pass", "name"));
   }
 
   PostRequest createPostRequestDto() {
@@ -74,15 +76,45 @@ class PostServiceTest {
   @Test
   @DisplayName("포스트를 생성할 수 있다.")
   void 포스트_생성() {
+    // given
     Member member = createDummyMember();
     PostRequest postRequest = new PostRequest("title", "body", TAG_NAMES);
 
+    // when
     Post createdPost = postService.createPost(member.getId(), postRequest, IMAGES);
 
+    // then
     assertNotNull(createdPost);
     assertThat(createdPost.getBody(), is(postRequest.getBody()));
     assertThat(createdPost.getTitle(), is(postRequest.getTitle()));
     assertThat(createdPost.getPostTags().size(), is(postRequest.getTagNames().size()));
+  }
+
+  @Test
+  @DisplayName("글 작성자는 포스트를 지울 수 있다")
+  void 포스트_삭제() {
+    // given
+    Member member = createDummyMember();
+    PostRequest postRequest = new PostRequest("title", "body", TAG_NAMES);
+    Post createdPost = postService.createPost(member.getId(), postRequest, IMAGES);
+
+    // when
+    postService.deletePost(member.getId(), createdPost.getId());
+  }
+
+  @Test
+  @DisplayName("글 작성자가 아니면 포스트를 지울 수 없다")
+  void 포스트_삭제_실패() {
+    // given
+    Member writer = createDummyMember();
+    Member member = createDummyMember();
+    PostRequest postRequest = new PostRequest("title", "body", TAG_NAMES);
+    Post createdPost = postService.createPost(writer.getId(), postRequest, IMAGES);
+
+    // when
+    assertThrows(AccessDeniedException.class, ()->{
+      postService.deletePost(member.getId(), createdPost.getId());
+    });
   }
 
   @Test
@@ -110,7 +142,7 @@ class PostServiceTest {
 
     assertThat(findPost.getBody(), is(BODY));
     assertThat(findPost.getMember().getName(), is(member.getName()));
-    assertThat(findPost.getImages().size(), is(IMAGES.size()));
+    assertThat(findPost.getPostImages().size(), is(IMAGES.size()));
     assertTags(findPost);
   }
 
@@ -137,7 +169,7 @@ class PostServiceTest {
 
       assertThat(findPost.getBody(), is(BODY));
       assertThat(findPost.getMember().getName(), is(member.getName()));
-      assertThat(findPost.getImages().size(), is(IMAGES.size()));
+      assertThat(findPost.getPostImages().size(), is(IMAGES.size()));
       assertTags(findPost);
     }
   }

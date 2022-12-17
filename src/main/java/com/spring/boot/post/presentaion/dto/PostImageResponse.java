@@ -1,6 +1,6 @@
 package com.spring.boot.post.presentaion.dto;
 
-import com.spring.boot.image.domain.Image;
+import com.spring.boot.image.domain.PostImage;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -16,12 +16,12 @@ public class PostImageResponse {
     this.imagePath = imagePath;
   }
 
-  public static PostImageResponse from(Image image) {
-    return new PostImageResponse(image.getId(), image.getImagePath());
+  public static PostImageResponse from(PostImage postImage) {
+    return new PostImageResponse(postImage.getId(), postImage.getImagePath());
   }
 
-  public static List<PostImageResponse> from(List<Image> images) {
-    return images
+  public static List<PostImageResponse> from(List<PostImage> postImages) {
+    return postImages
         .stream()
         .map(PostImageResponse::from)
         .collect(Collectors.toList());

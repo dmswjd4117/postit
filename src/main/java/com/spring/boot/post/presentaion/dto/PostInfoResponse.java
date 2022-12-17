@@ -26,7 +26,7 @@ public class PostInfoResponse {
         .body(post.getBody())
         .memberResponse(MemberResponse.from(post.getMember()))
         .createdDate(post.getCreatedDate())
-        .images(PostImageResponse.from(post.getImages()))
+        .images(PostImageResponse.from(post.getPostImages()))
         .postTags(PostTagDto.from(post.getPostTags()))
         .build();
   }
