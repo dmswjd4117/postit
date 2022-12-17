@@ -1,4 +1,4 @@
-package com.spring.boot.post.domain.image;
+package com.spring.boot.image.domain;
 
 import com.spring.boot.common.domain.BaseTime;
 import com.spring.boot.post.domain.Post;

@@ -1,4 +1,4 @@
-package com.spring.boot.post.application.dto;
+package com.spring.boot.post.presentaion.dto;
 
 import com.spring.boot.post.domain.tag.PostTag;
 import java.util.List;

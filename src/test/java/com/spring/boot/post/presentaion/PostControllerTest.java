@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostInfoResponse;
+import com.spring.boot.post.presentaion.dto.PostInfoResponse;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.util.mockAuthentication.WithMockFormAuthenticationUser;

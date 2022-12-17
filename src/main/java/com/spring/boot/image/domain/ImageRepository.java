@@ -1,4 +1,4 @@
-package com.spring.boot.post.domain.image;
+package com.spring.boot.image.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

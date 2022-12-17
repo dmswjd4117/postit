@@ -2,8 +2,8 @@ package com.spring.boot.post.presentaion;
 
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostInfoResponse;
-import com.spring.boot.post.application.dto.PostRequest;
+import com.spring.boot.post.presentaion.dto.PostInfoResponse;
+import com.spring.boot.post.presentaion.dto.PostRequest;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
@@ -66,6 +66,18 @@ public class PostController {
     );
   }
 
+//  @GetMapping("/all")
+//  public ApiResult<List<PostInfoResponse>> getAllFollowingsPost(
+//      @AuthenticationPrincipal FormAuthentication authentication,
+//      Pageable pageable
+//  ){
+//    return ApiResult.success(
+//        postService.getAllFollowingsPost(authentication.id, pageable)
+//            .stream()
+//            .map(PostInfoResponse::from)
+//            .collect(Collectors.toList())
+//    );
+//  }
 }
 
 

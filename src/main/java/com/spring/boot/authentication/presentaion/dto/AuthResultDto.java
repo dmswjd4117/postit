@@ -1,4 +1,4 @@
-package com.spring.boot.authentication.application.dto;
+package com.spring.boot.authentication.presentaion.dto;
 
 import com.spring.boot.member.presentaion.dto.MemberResponse;
 

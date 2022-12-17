@@ -8,7 +8,7 @@ import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostRequest;
+import com.spring.boot.post.presentaion.dto.PostRequest;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.util.DatabaseCleanUp;
 import org.junit.jupiter.api.*;

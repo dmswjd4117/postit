@@ -1,6 +1,6 @@
-package com.spring.boot.post.application.dto;
+package com.spring.boot.post.presentaion.dto;
 
-import com.spring.boot.post.domain.Image;
+import com.spring.boot.image.domain.Image;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
