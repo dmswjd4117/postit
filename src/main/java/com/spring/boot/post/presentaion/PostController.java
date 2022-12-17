@@ -2,15 +2,16 @@ package com.spring.boot.post.presentaion;
 
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.post.application.PostService;
+import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.presentaion.dto.PostInfoResponse;
 import com.spring.boot.post.presentaion.dto.PostRequest;
-import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,14 @@ public class PostController {
         multipartFiles);
 
     return ApiResult.success(PostInfoResponse.from(post));
+  }
+
+  @DeleteMapping("/{postId}")
+  public ApiResult<Long> deletePost(
+      @AuthenticationPrincipal FormAuthentication authentication,
+      @PathVariable Long postId
+  ){
+    return ApiResult.success(postService.deletePost(authentication.id, postId));
   }
 
   @GetMapping("/member/{memberId}")

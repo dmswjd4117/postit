@@ -1,4 +1,4 @@
-package com.spring.boot.security;
+package com.spring.boot.security.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.dto.ApiResult;

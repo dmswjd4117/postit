@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.member.application.MemberService;
+import com.spring.boot.security.exception.FormAccessDeniedHandler;
+import com.spring.boot.security.exception.FormAuthenticationEntryPoint;
 import com.spring.boot.security.voter.ConnectionBasedVoter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
