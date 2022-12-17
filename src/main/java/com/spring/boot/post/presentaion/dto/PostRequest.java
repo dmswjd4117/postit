@@ -16,14 +16,14 @@ public class PostRequest {
   @NotBlank
   private String title;
   private String body;
-  private List<String> postTags;
+  private List<String> tagNames;
 
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
         .append("title", title)
         .append("body", body)
-        .append("post_tags", String.join(",", postTags))
+        .append("post_tags", String.join(",", tagNames))
         .toString();
   }
 }

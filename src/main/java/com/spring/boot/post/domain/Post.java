@@ -1,14 +1,17 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.domain.BaseTime;
+import com.spring.boot.image.domain.Image;
 import com.spring.boot.like.domain.Like;
 import com.spring.boot.member.domain.member.Member;
-import com.spring.boot.image.domain.Image;
 import com.spring.boot.post.domain.tag.PostTag;
+import com.spring.boot.tag.domain.Tag;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,11 +48,11 @@ public class Post extends BaseTime {
   private Member member;
 
   @BatchSize(size = 1000)
-  @OneToMany(mappedBy = "post")
+  @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
   private List<Image> images = new ArrayList<>();
 
   @BatchSize(size = 1000)
-  @OneToMany(mappedBy = "post")
+  @OneToMany(mappedBy = "post", cascade = CascadeType.PERSIST)
   private Set<PostTag> postTags = new HashSet<>();
 
   @BatchSize(size = 1000)
@@ -61,6 +64,19 @@ public class Post extends BaseTime {
     this.body = body;
     this.member = member;
   }
+
+  public void initPostTags(List<PostTag> newPostTags) {
+    postTags.clear();
+    postTags.addAll(newPostTags);
+    newPostTags.forEach(postTag -> postTag.setPost(this));
+  }
+
+  public void initImages(List<Image> newImages) {
+    images.clear();
+    images.addAll(newImages);
+    images.forEach(image -> image.setPost(this));
+  }
+
 
   @Override
   public String toString() {
