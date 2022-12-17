@@ -39,9 +39,8 @@ public class Image extends BaseTime {
     this.imagePath = imagePath;
   }
 
-  public void changePost(Post post) {
+  public void setPost(Post post) {
     this.post = post;
-    this.post.getImages().add(this);
   }
 
   public Long getId() {
@@ -57,7 +56,7 @@ public class Image extends BaseTime {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
         .append("id", id)
         .append("imagePath", imagePath)
-        .append("post id", post.getId())
+        .append("post", post)
         .append("created", getCreatedDate())
         .append("modified", getModifiedDate())
         .toString();
