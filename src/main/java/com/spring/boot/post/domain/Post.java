@@ -1,7 +1,10 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.domain.BaseTime;
+import com.spring.boot.like.domain.Like;
 import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.image.domain.Image;
+import com.spring.boot.post.domain.tag.PostTag;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,12 +45,16 @@ public class Post extends BaseTime {
   private Member member;
 
   @BatchSize(size = 1000)
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "post")
+  @OneToMany(mappedBy = "post")
   private List<Image> images = new ArrayList<>();
 
+  @BatchSize(size = 1000)
   @OneToMany(mappedBy = "post")
   private Set<PostTag> postTags = new HashSet<>();
 
+  @BatchSize(size = 1000)
+  @OneToMany(mappedBy = "post")
+  private List<Like> likes = new ArrayList<>();
 
   public Post(String title, String body, Member member) {
     this.title = title;
