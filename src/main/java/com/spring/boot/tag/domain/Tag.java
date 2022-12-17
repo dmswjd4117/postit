@@ -1,6 +1,5 @@
 package com.spring.boot.tag.domain;
 
-import com.spring.boot.post.domain.PostTag;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -8,7 +7,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,9 +20,6 @@ public class Tag {
     @Column(unique = true)
     private String tagName;
 
-    @OneToMany(mappedBy = "tag")
-    private List<PostTag> postTags;
-
     public Tag(String tagName) {
         this.tagName = tagName;
     }
@@ -32,7 +27,7 @@ public class Tag {
         return tagName;
     }
 
-    private Long getId() {
+    public Long getId() {
         return id;
     }
 
