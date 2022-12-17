@@ -28,11 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberController {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
-  private final ImageUploader s3Uploader;
+  private final ImageUploader imageUploader;
   private final MemberService memberService;
 
-  public MemberController(ImageUploader s3Uploader, MemberService memberService) {
-    this.s3Uploader = s3Uploader;
+  public MemberController(ImageUploader imageUploader, MemberService memberService) {
+    this.imageUploader = imageUploader;
     this.memberService = memberService;
   }
 
@@ -40,7 +40,7 @@ public class MemberController {
     String imagePath = null;
     if (uploadFile != null) {
       try {
-        imagePath = s3Uploader.upload(uploadFile);
+        imagePath = imageUploader.upload(uploadFile);
       } catch (AmazonS3Exception exception) {
         log.warn("Amazon S3 error {}", exception.getMessage(), exception);
       }

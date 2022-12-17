@@ -1,4 +1,4 @@
-package com.spring.boot.util.mockAuthentication;
+package com.spring.boot.common.mock.auth;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

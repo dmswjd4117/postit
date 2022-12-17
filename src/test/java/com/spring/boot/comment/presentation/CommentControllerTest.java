@@ -16,7 +16,7 @@ import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
-import com.spring.boot.util.mockAuthentication.WithMockFormAuthenticationUser;
+import com.spring.boot.common.mock.auth.WithMockFormAuthenticationUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

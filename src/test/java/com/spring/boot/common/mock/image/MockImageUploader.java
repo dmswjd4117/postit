@@ -1,15 +1,11 @@
-package com.spring.boot.util;
+package com.spring.boot.common.mock.image;
 
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.domain.UploadFile;
 import java.io.InputStream;
 import java.util.Map;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
-@Component
-@Profile("test")
 public class MockImageUploader implements ImageUploader {
   @Override
   public String upload(UploadFile uploadFile) {

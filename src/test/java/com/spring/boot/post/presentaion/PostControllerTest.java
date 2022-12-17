@@ -17,7 +17,7 @@ import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.presentaion.dto.PostInfoResponse;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
-import com.spring.boot.util.mockAuthentication.WithMockFormAuthenticationUser;
+import com.spring.boot.common.mock.auth.WithMockFormAuthenticationUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
