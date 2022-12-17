@@ -2,10 +2,10 @@ package com.spring.boot.post.application;
 
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.member.domain.member.MemberRepository;
-import com.spring.boot.post.application.dto.PostRequest;
+import com.spring.boot.post.presentaion.dto.PostRequest;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.PostRepository;
-import com.spring.boot.post.domain.PostTag;
+import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.util.DatabaseCleanUp;
 import java.util.Collections;
 import org.junit.jupiter.api.*;
@@ -50,7 +50,7 @@ class PostServiceTest {
 
     @BeforeEach
     void cleanUp(){
-        databaseCleanUp.truncateAllEntity();
+        databaseCleanUp.clear();
     }
 
     Member createDummyMember(){
@@ -92,7 +92,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("포스트 아이디로 포스트를 조회할 수 있다.")
-    void 포스트_아이디_조회(){
+    void 포스트_포스트_아이디로_조회(){
         // given
         Member member = createDummyMember();
         Post post = createDummyPost(member.getId());
@@ -106,19 +106,12 @@ class PostServiceTest {
         assertThat(findPost.getBody(), is(BODY));
         assertThat(findPost.getMember().getName(), is(member.getName()));
         assertThat(findPost.getImages().size(), is(IMAGES.size()));
-
-        assertAll(() -> {
-            assertThat(findPost.getPostTags().size(), is(TAG_NAMES.size()));
-            assertThat(findPost.getPostTags()
-                .stream()
-                .map(PostTag::getTagName)
-                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2"));
-        });
+        assertTags(findPost);
     }
 
 
     @Test
-    @DisplayName("포스트 아이디로 조회한다")
+    @DisplayName("멤버 아이디로 글들을 조회한다")
     void 포스트_멤버_아이디로_조회(){
         int DUMMY_POST_CNT = 3;
 
@@ -141,15 +134,18 @@ class PostServiceTest {
             assertThat(findPost.getBody(), is(BODY));
             assertThat(findPost.getMember().getName(), is(member.getName()));
             assertThat(findPost.getImages().size(), is(IMAGES.size()));
-
-            assertAll(() -> {
-                assertThat(findPost.getPostTags().size(), is(TAG_NAMES.size()));
-                assertThat(findPost.getPostTags()
-                    .stream()
-                    .map(PostTag::getTagName)
-                    .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2"));
-            });
+            assertTags(findPost);
         }
+    }
+
+    private void assertTags(Post post) {
+        assertAll(() -> {
+            assertThat(post.getPostTags().size(), is(TAG_NAMES.size()));
+            assertThat(post.getPostTags()
+                .stream()
+                .map(PostTag::getTagName)
+                .collect(Collectors.toList()), containsInAnyOrder("tag1", "tag2"));
+        });
     }
 
 }
