@@ -24,9 +24,9 @@ public class PostInfoResponse {
     return PostInfoResponse.builder()
         .title(post.getTitle())
         .body(post.getContent())
-        .memberResponse(MemberResponse.from(post.getMember()))
+        .memberResponse(MemberResponse.from(post.getWriter()))
         .createdDate(post.getCreatedDate())
-        .images(PostImageResponse.from(post.getPostImages()))
+        .images(PostImageResponse.from(post.getImages()))
         .postTags(PostTagRequest.from(post.getPostTags()))
         .build();
   }

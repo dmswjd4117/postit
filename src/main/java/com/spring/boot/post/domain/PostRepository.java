@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 public interface PostRepository extends JpaRepository<Post, Long> {
   @Query("select distinct p " +
       "from Post p " +
-      "where p.member = :findMember")
+      "where p.writer = :findMember")
   List<Post> findByMember(Member findMember);
 
   @Query("select distinct p " +
       "from Post p " +
-      "left join fetch p.member " +
+      "left join fetch p.writer " +
       "where p.id = :postId")
   Optional<Post> findByPostIdWithMember(Long postId);
 

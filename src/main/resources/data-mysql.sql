@@ -53,5 +53,5 @@ INSERT INTO post_tag(post_tag_id, post_id, tag_id) VALUES(5, 4, 2);
 INSERT INTO post_tag(post_tag_id, post_id, tag_id) VALUES(6, 4, 3);
 
 --이미지
-INSERT INTO post_image(image_path, post_id) VALUES('https://i.pinimg.com/736x/ee/7a/4c/ee7a4c39dd2a5790acc6e24b5d710e44.jpg',  1);
-INSERT INTO post_image(image_path, post_id) VALUES('https://ibb.co/B4Zywkp',  1);
+INSERT INTO image(image_path, post_id) VALUES('https://i.pinimg.com/736x/ee/7a/4c/ee7a4c39dd2a5790acc6e24b5d710e44.jpg',  1);
+INSERT INTO image(image_path, post_id) VALUES('https://ibb.co/B4Zywkp',  1);
