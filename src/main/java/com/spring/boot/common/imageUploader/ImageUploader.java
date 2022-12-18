@@ -1,4 +1,4 @@
-package com.spring.boot.image.domain;
+package com.spring.boot.common.imageUploader;
 
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.spring.boot.common.dto;
+package com.spring.boot.common.response;
 
 
 import lombok.Getter;

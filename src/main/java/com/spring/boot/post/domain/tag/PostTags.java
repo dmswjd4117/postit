@@ -1,6 +1,6 @@
-package com.spring.boot.post.domain;
+package com.spring.boot.post.domain.tag;
 
-import com.spring.boot.post.domain.tag.PostTag;
+import com.spring.boot.post.domain.Post;
 import com.spring.boot.tag.domain.Tag;
 import java.util.HashSet;
 import java.util.List;

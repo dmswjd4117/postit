@@ -1,6 +1,6 @@
-package com.spring.boot.common.error;
+package com.spring.boot.common.exception;
 
-import com.spring.boot.common.util.MessageUtils;
+import com.spring.boot.common.MessageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class DuplicatedException extends  ServiceRuntimeException{

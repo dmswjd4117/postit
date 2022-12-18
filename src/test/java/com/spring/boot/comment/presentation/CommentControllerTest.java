@@ -12,7 +12,7 @@ import com.spring.boot.comment.application.CommentService;
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.presentation.dto.CommentRequest;
 import com.spring.boot.comment.presentation.dto.CommentResponse;
-import com.spring.boot.common.dto.ApiResult;
+import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;

@@ -1,7 +1,7 @@
 package com.spring.boot.connection.application;
 
-import com.spring.boot.common.error.DuplicatedException;
-import com.spring.boot.common.error.NotFoundException;
+import com.spring.boot.common.exception.DuplicatedException;
+import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.connection.domain.Connection;
 import com.spring.boot.member.domain.member.Member;

@@ -1,4 +1,4 @@
-package com.spring.boot.common.util;
+package com.spring.boot.common;
 
 import org.springframework.context.support.MessageSourceAccessor;
 

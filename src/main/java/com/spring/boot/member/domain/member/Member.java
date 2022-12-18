@@ -1,6 +1,6 @@
 package com.spring.boot.member.domain.member;
 
-import com.spring.boot.common.domain.BaseTime;
+import com.spring.boot.common.BaseTime;
 import com.spring.boot.connection.domain.Connection;
 import com.spring.boot.like.domain.Like;
 import com.spring.boot.member.domain.role.MemberRole;
@@ -60,7 +60,7 @@ public class Member extends BaseTime {
   private List<Like> likes = new ArrayList<>();
 
   @Column
-  @OneToMany(mappedBy = "member")
+  @OneToMany(mappedBy = "writer")
   private List<Post> posts = new ArrayList<>();
 
   @OneToMany(mappedBy = "member")
@@ -95,4 +95,20 @@ public class Member extends BaseTime {
         .toString();
   }
 
+  @Override
+  public int hashCode() {
+    return super.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o){
+    if(o == null){
+      return false;
+    }
+    if(!o.getClass().equals(this.getClass())){
+      return false;
+    }
+    Member target = (Member)o;
+    return target.id.equals(this.id);
+  }
 }

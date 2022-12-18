@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spring.boot.common.dto.ApiResult;
+import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.presentaion.dto.PostInfoResponse;

@@ -1,6 +1,6 @@
 package com.spring.boot.post.presentaion;
 
-import com.spring.boot.common.dto.ApiResult;
+import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.presentaion.dto.PostInfoResponse;

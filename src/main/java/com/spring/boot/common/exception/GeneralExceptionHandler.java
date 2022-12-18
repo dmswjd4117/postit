@@ -1,6 +1,6 @@
-package com.spring.boot.common.error;
+package com.spring.boot.common.exception;
 
-import com.spring.boot.common.dto.ApiResult;
+import com.spring.boot.common.response.ApiResult;
 import org.springframework.validation.BindException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

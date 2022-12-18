@@ -1,4 +1,4 @@
-package com.spring.boot.common.domain;
+package com.spring.boot.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
