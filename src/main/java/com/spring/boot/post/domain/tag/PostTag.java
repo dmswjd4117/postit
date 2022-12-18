@@ -35,15 +35,14 @@ public class PostTag {
   public PostTag(Tag tag) {
     this.tag = tag;
   }
-  public void setPost(Post post) {
+
+  public PostTag(Tag tag, Post post) {
+    this.tag = tag;
     this.post = post;
   }
+
   public String getTagName() {
     return tag.getTagName();
-  }
-
-  public Tag getTag() {
-    return tag;
   }
 
   public Long getId() {

@@ -1,4 +1,4 @@
-package com.spring.boot.image.domain;
+package com.spring.boot.post.domain.image;
 
 import com.spring.boot.common.domain.BaseTime;
 import com.spring.boot.post.domain.Post;
@@ -9,19 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
-@Builder
-@Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class PostImage extends BaseTime {
+public class Image extends BaseTime {
 
   @Id
   @Column(name = "image_id")
@@ -35,11 +29,8 @@ public class PostImage extends BaseTime {
   @JoinColumn(name = "post_id")
   private Post post;
 
-  public PostImage(String imagePath) {
-    this.imagePath = imagePath;
-  }
-
-  public void setPost(Post post) {
+  public Image(String path, Post post) {
+    this.imagePath = path;
     this.post = post;
   }
 

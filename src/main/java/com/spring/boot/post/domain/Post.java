@@ -1,16 +1,17 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.domain.BaseTime;
-import com.spring.boot.image.domain.PostImage;
+import com.spring.boot.post.domain.image.Image;
+import com.spring.boot.post.domain.image.Images;
 import com.spring.boot.like.domain.Like;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.domain.tag.PostTag;
+import com.spring.boot.tag.domain.Tag;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,7 +29,7 @@ import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseTime {
 
   @Id
@@ -43,46 +45,50 @@ public class Post extends BaseTime {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
-  private Member member;
+  private Member writer;
 
-  @BatchSize(size = 1000)
-  @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-  private List<PostImage> postImages = new ArrayList<>();
+  @Embedded
+  private Images images = new Images();
 
-  @BatchSize(size = 1000)
-  @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-  private Set<PostTag> postTags = new HashSet<>();
+  @Embedded
+  private PostTags postTags = new PostTags();
 
   @BatchSize(size = 1000)
   @OneToMany(mappedBy = "post")
   private List<Like> likes = new ArrayList<>();
 
-  public Post(String title, String content, Member member) {
+  public Post(String title, String content, Member writer) {
     this.title = title;
     this.content = content;
-    this.member = member;
+    this.writer = writer;
   }
 
-  public void initPostTags(List<PostTag> newPostTags) {
-    postTags.clear();
-    postTags.addAll(newPostTags);
-    postTags.forEach(postTag -> postTag.setPost(this));
+  public void initPostTags(List<Tag> tags) {
+    postTags.init(tags, this);
   }
 
-  public void initImages(List<PostImage> newPostImages) {
-    postImages.clear();
-    postImages.addAll(newPostImages);
-    postImages.forEach(postImage -> postImage.setPost(this));
-  }
-  public boolean isWrittenBy(Member member){
-    return this.member.getId().equals(member.getId());
+  public void initImages(List<String> imagePaths) {
+    images.init(imagePaths, this);
   }
 
-  public void updatePost(String title, String content, List<PostTag> tagNames) {
+  public boolean isWrittenBy(Member member) {
+    return writer.equals(member);
+  }
+
+  public void updatePost(String title, String content, List<Tag> tags) {
     this.title = title;
     this.content = content;
-    initPostTags(tagNames);
+    initPostTags(tags);
   }
+
+  public Set<PostTag> getPostTags() {
+    return postTags.getPostTags();
+  }
+
+  public List<Image> getImages() {
+    return images.getPostImages();
+  }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
