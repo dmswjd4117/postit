@@ -8,7 +8,7 @@ import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.presentaion.dto.PostRequest;
+import com.spring.boot.post.presentaion.dto.PostCreateRequest;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.util.DatabaseCleanUp;
 import org.junit.jupiter.api.*;
@@ -53,10 +53,10 @@ class CommentServiceTest {
   }
 
   Post savePost(Long writerId){
-    PostRequest postRequest = new PostRequest(
-        POST.getTitle(), POST.getBody(), emptyList()
+    PostCreateRequest postCreateRequest = new PostCreateRequest(
+        POST.getTitle(), POST.getContent(), emptyList()
     );
-    return postService.createPost(writerId, postRequest, emptyList());
+    return postService.createPost(writerId, postCreateRequest, emptyList());
   }
 
   @Test

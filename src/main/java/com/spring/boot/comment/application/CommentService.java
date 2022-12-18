@@ -30,8 +30,7 @@ public class CommentService {
 
   @Transactional
   public Comment createComment(Long writerId, String body, Long postId) {
-    Member commentWriter = memberService.findById(writerId)
-        .orElseThrow(() -> new NotFoundException(Member.class, "id", writerId));
+    Member commentWriter = memberService.findById(writerId);
 
     return postRepository.findById(postId)
         .map(findPost -> {

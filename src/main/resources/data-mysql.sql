@@ -20,19 +20,19 @@ INSERT INTO connections(member_id, target_member_id) VALUES(3, 2);
 INSERT INTO connections(member_id, target_member_id) VALUES(4, 3);
 
 --포스트
-INSERT INTO post(post_id, title, body, member_id) VALUES(1, '2-first', 'post!!', 2);
-INSERT INTO post(post_id, title, body, member_id) VALUES(2, '2-second', 'post!!', 2);
-INSERT INTO post(post_id, title, body, member_id) VALUES(3, '2-third', 'post!!', 2);
+INSERT INTO post(post_id, title, content, member_id) VALUES(1, '2-first', 'post!!', 2);
+INSERT INTO post(post_id, title, content, member_id) VALUES(2, '2-second', 'post!!', 2);
+INSERT INTO post(post_id, title, content, member_id) VALUES(3, '2-third', 'post!!', 2);
 
-INSERT INTO post(post_id, title, body, member_id) VALUES(4, '3-first', 'post!!', 3);
-INSERT INTO post(post_id, title, body, member_id) VALUES(5, '3-second', 'post!!', 3);
-INSERT INTO post(post_id, title, body, member_id) VALUES(6, '3-third', 'post!!', 3);
+INSERT INTO post(post_id, title, content, member_id) VALUES(4, '3-first', 'post!!', 3);
+INSERT INTO post(post_id, title, content, member_id) VALUES(5, '3-second', 'post!!', 3);
+INSERT INTO post(post_id, title, content, member_id) VALUES(6, '3-third', 'post!!', 3);
 
-INSERT INTO post(post_id, title, body, member_id) VALUES(7, '1-first', 'post!!', 1);
-INSERT INTO post(post_id, title, body, member_id) VALUES(8, '1-second', 'post!!', 1);
+INSERT INTO post(post_id, title, content, member_id) VALUES(7, '1-first', 'post!!', 1);
+INSERT INTO post(post_id, title, content, member_id) VALUES(8, '1-second', 'post!!', 1);
 
-INSERT INTO post(post_id, title, body, member_id) VALUES(9, '4-first', 'post!!', 4);
-INSERT INTO post(post_id, title, body, member_id) VALUES(10, '4-second', 'post!!', 4);
+INSERT INTO post(post_id, title, content, member_id) VALUES(9, '4-first', 'post!!', 4);
+INSERT INTO post(post_id, title, content, member_id) VALUES(10, '4-second', 'post!!', 4);
 
 --태그
 INSERT INTO tag(tag_id, tag_name) VALUES(1, "tag-1");

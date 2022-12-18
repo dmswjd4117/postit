@@ -1,6 +1,7 @@
 package com.spring.boot.member.application;
 
 import com.spring.boot.common.error.DuplicatedException;
+import com.spring.boot.common.error.NotFoundException;
 import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.member.domain.member.MemberRepository;
@@ -82,8 +83,8 @@ public class MemberService {
         });
   }
 
-  public Optional<Member> findById(Long id) {
-    return memberRepository.findById(id);
+  public Member findById(Long id) {
+    return memberRepository.findById(id).orElseThrow(()->new NotFoundException(Member.class, id));
   }
 
 }

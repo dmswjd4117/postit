@@ -107,7 +107,7 @@ class PostControllerTest {
 
           assertAll(() -> {
             PostInfoResponse postInfoResponse = ApiResultResponse.getResponse();
-            assertThat(postInfoResponse.getBody()).isEqualTo(POST.getBody());
+            assertThat(postInfoResponse.getBody()).isEqualTo(POST.getContent());
             assertThat(postInfoResponse.getTitle()).isEqualTo(POST.getTitle());
           });
         }
