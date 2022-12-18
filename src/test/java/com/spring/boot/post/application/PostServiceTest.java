@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
-import com.spring.boot.common.error.NotFoundException;
+import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.member.domain.member.Member;
 import com.spring.boot.member.domain.member.MemberRepository;
 import com.spring.boot.post.domain.Post;
@@ -177,8 +177,8 @@ class PostServiceTest {
     assertThat(findPost, is(notNullValue()));
 
     assertThat(findPost.getContent(), is(BODY));
-    assertThat(findPost.getMember().getName(), is(member.getName()));
-    assertThat(findPost.getPostImages().size(), is(IMAGES.size()));
+    assertThat(findPost.getWriter().getName(), is(member.getName()));
+    assertThat(findPost.getImages().size(), is(IMAGES.size()));
     assertTags(findPost, TAG_NAMES);
   }
 
@@ -204,8 +204,8 @@ class PostServiceTest {
       assertThat(findPost, is(notNullValue()));
 
       assertThat(findPost.getContent(), is(BODY));
-      assertThat(findPost.getMember().getName(), is(member.getName()));
-      assertThat(findPost.getPostImages().size(), is(IMAGES.size()));
+      assertThat(findPost.getWriter().getName(), is(member.getName()));
+      assertThat(findPost.getImages().size(), is(IMAGES.size()));
       assertTags(findPost, TAG_NAMES);
     }
   }

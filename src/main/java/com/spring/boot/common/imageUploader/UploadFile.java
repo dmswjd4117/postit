@@ -1,4 +1,4 @@
-package com.spring.boot.image.domain;
+package com.spring.boot.common.imageUploader;
 
 import lombok.Builder;
 import org.apache.commons.io.FilenameUtils;
