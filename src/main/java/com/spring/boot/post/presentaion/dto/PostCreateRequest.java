@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostRequest {
+public class PostCreateRequest {
 
   @NotBlank
   private String title;

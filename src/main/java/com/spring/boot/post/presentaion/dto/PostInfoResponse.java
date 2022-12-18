@@ -17,17 +17,17 @@ public class PostInfoResponse {
   private String body;
   private LocalDateTime createdDate;
   private List<PostImageResponse> images;
-  private List<PostTagDto> postTags;
+  private List<PostTagRequest> postTags;
   private MemberResponse memberResponse;
 
   public static PostInfoResponse from(Post post) {
     return PostInfoResponse.builder()
         .title(post.getTitle())
-        .body(post.getBody())
+        .body(post.getContent())
         .memberResponse(MemberResponse.from(post.getMember()))
         .createdDate(post.getCreatedDate())
         .images(PostImageResponse.from(post.getPostImages()))
-        .postTags(PostTagDto.from(post.getPostTags()))
+        .postTags(PostTagRequest.from(post.getPostTags()))
         .build();
   }
 

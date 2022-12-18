@@ -11,22 +11,22 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Setter
 @Getter
-public class PostTagDto {
+public class PostTagRequest {
 
   private Long id;
   private String tagName;
 
-  public static PostTagDto from(PostTag postTag) {
-    return new PostTagDto(postTag.getId(), postTag.getTagName());
+  public static PostTagRequest from(PostTag postTag) {
+    return new PostTagRequest(postTag.getId(), postTag.getTagName());
   }
 
-  public static List<PostTagDto> from(Set<PostTag> postTags) {
+  public static List<PostTagRequest> from(Set<PostTag> postTags) {
     return postTags.stream()
-        .map(PostTagDto::from)
+        .map(PostTagRequest::from)
         .collect(Collectors.toList());
   }
 
-  private PostTagDto(Long id, String tagName) {
+  private PostTagRequest(Long id, String tagName) {
     this.id = id;
     this.tagName = tagName;
   }
