@@ -39,34 +39,34 @@ public class Post extends BaseTime {
   private String title;
 
   @Column
-  private String body;
+  private String content;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private Member member;
 
   @BatchSize(size = 1000)
-  @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+  @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
   private List<PostImage> postImages = new ArrayList<>();
 
   @BatchSize(size = 1000)
-  @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+  @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
   private Set<PostTag> postTags = new HashSet<>();
 
   @BatchSize(size = 1000)
   @OneToMany(mappedBy = "post")
   private List<Like> likes = new ArrayList<>();
 
-  public Post(String title, String body, Member member) {
+  public Post(String title, String content, Member member) {
     this.title = title;
-    this.body = body;
+    this.content = content;
     this.member = member;
   }
 
   public void initPostTags(List<PostTag> newPostTags) {
     postTags.clear();
     postTags.addAll(newPostTags);
-    newPostTags.forEach(postTag -> postTag.setPost(this));
+    postTags.forEach(postTag -> postTag.setPost(this));
   }
 
   public void initImages(List<PostImage> newPostImages) {
@@ -77,12 +77,18 @@ public class Post extends BaseTime {
   public boolean isWrittenBy(Member member){
     return this.member.getId().equals(member.getId());
   }
+
+  public void updatePost(String title, String content, List<PostTag> tagNames) {
+    this.title = title;
+    this.content = content;
+    initPostTags(tagNames);
+  }
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
         .append("id", id)
         .append("title", title)
-        .append("body", body)
+        .append("body", content)
         .toString();
   }
 }

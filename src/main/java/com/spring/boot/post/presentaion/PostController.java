@@ -4,7 +4,8 @@ import com.spring.boot.common.dto.ApiResult;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.presentaion.dto.PostInfoResponse;
-import com.spring.boot.post.presentaion.dto.PostRequest;
+import com.spring.boot.post.presentaion.dto.PostCreateRequest;
+import com.spring.boot.post.presentaion.dto.PostUpdateRequest;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,13 +37,13 @@ public class PostController {
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ApiResult<PostInfoResponse> createPost(
       @AuthenticationPrincipal FormAuthentication authentication,
-      @ModelAttribute @Valid PostRequest postRequest,
+      @ModelAttribute @Valid PostCreateRequest postCreateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
 
     Post post = postService.createPost(
         authentication.id,
-        postRequest,
+        postCreateRequest,
         multipartFiles);
 
     return ApiResult.success(PostInfoResponse.from(post));
@@ -52,6 +55,22 @@ public class PostController {
       @PathVariable Long postId
   ){
     return ApiResult.success(postService.deletePost(authentication.id, postId));
+  }
+
+  @PutMapping("/{postId}")
+  public ApiResult<PostInfoResponse> updatePost(
+      @AuthenticationPrincipal FormAuthentication authentication,
+      @PathVariable Long postId,
+      @RequestBody PostUpdateRequest postUpdateRequest
+  ){
+    Post updatedPost = postService.updatePost(
+        authentication.id,
+        postId,
+        postUpdateRequest.getTitle(),
+        postUpdateRequest.getContent(),
+        postUpdateRequest.getTagNames()
+    );
+    return ApiResult.success(PostInfoResponse.from(updatedPost));
   }
 
   @GetMapping("/member/{memberId}")
