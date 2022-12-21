@@ -64,7 +64,7 @@ public class Post extends BaseTime {
     this.writer = writer;
   }
 
-  public void initPostTags(List<Tag> tags) {
+  public void initPostTags(Set<Tag> tags) {
     postTags.init(tags, this);
   }
 
@@ -76,7 +76,7 @@ public class Post extends BaseTime {
     return writer.equals(member);
   }
 
-  public void updatePost(String title, String content, List<Tag> tags) {
+  public void updatePost(String title, String content, Set<Tag> tags) {
     this.title = title;
     this.content = content;
     initPostTags(tags);

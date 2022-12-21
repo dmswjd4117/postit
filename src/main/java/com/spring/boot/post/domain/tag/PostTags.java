@@ -22,7 +22,7 @@ public class PostTags {
   )
   private Set<PostTag> postTags = new HashSet<>();
 
-  public void init(List<Tag> tags, Post post) {
+  public void init(Set<Tag> tags, Post post) {
     Set<PostTag> newPostTags = tags.stream().map(tag -> new PostTag(tag, post))
         .collect(Collectors.toSet());
     postTags.clear();

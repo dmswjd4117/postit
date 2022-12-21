@@ -1,16 +1,27 @@
 package com.spring.boot.post.presentaion.dto;
 
 import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.assertj.core.util.Strings;
 
 @Getter
 public class PostUpdateRequest {
+  @NotBlank
   private String title;
+  @NotEmpty
   private String content;
+  @NotNull
   private List<String> tagNames;
+
+  public PostUpdateRequest(String title, String content, List<String> tagNames) {
+    this.title = title;
+    this.content = content;
+    this.tagNames = tagNames;
+  }
 
   @Override
   public String toString() {

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Builder
 public class PostInfoResponse {
 
+  private Long id;
   private String title;
   private String body;
   private LocalDateTime createdDate;
@@ -22,6 +23,7 @@ public class PostInfoResponse {
 
   public static PostInfoResponse from(Post post) {
     return PostInfoResponse.builder()
+        .id(post.getId())
         .title(post.getTitle())
         .body(post.getContent())
         .memberResponse(MemberResponse.from(post.getWriter()))

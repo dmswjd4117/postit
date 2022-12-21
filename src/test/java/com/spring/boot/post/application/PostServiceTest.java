@@ -1,6 +1,7 @@
 package com.spring.boot.post.application;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -17,6 +18,7 @@ import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.PostRepository;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.presentaion.dto.PostCreateRequest;
+import com.spring.boot.post.presentaion.dto.PostUpdateRequest;
 import com.spring.boot.util.DatabaseCleanUp;
 import java.util.Arrays;
 import java.util.Collections;
@@ -97,7 +99,7 @@ class PostServiceTest {
 
     // then
     assertNotNull(createdPost);
-    assertThat(createdPost.getContent(), is(postCreateRequest.getBody()));
+    assertThat(createdPost.getContent(), is(postCreateRequest.getContent()));
     assertThat(createdPost.getTitle(), is(postCreateRequest.getTitle()));
     assertThat(createdPost.getPostTags().size(), is(postCreateRequest.getTagNames().size()));
   }
@@ -133,24 +135,29 @@ class PostServiceTest {
   @DisplayName("글 제목, 내용, 태그들을 수정할 수 있다.")
   void 포스트_수정() {
     // given
-    String NEW_TITLE = "new title";
-    String NEW_CONTENT = "new content";
-    List<String> NEW_TAG_NAMES = Arrays.asList("tag1", "newa", "newb");
+    String title = "new title";
+    String content = "new content";
+    List<String> tagNAmes = Arrays.asList("tag1", "newa", "newb");
+    List<MultipartFile> images = Collections.singletonList(
+        new MockMultipartFile("new", "new.jpg", IMAGE_PNG_VALUE, "new".getBytes())
+    );
+    PostUpdateRequest postUpdateRequest = new PostUpdateRequest(title, content, tagNAmes);
 
     Member writer = createDummyMember();
     PostCreateRequest postCreateRequest = new PostCreateRequest("title", "body", TAG_NAMES);
-    Post createdPost = postService.createPost(writer.getId(), postCreateRequest, IMAGES);
+    Post createdPost = postService.createPost(writer.getId(), postCreateRequest, images);
 
     // when
-    postService.updatePost(writer.getId(), createdPost.getId(), NEW_TITLE, NEW_CONTENT,
-        NEW_TAG_NAMES);
+    postService.updatePost(writer.getId(), createdPost.getId(), postUpdateRequest, images);
     Post updated = postService.getPostByPostId(createdPost.getId());
 
-    // then
-    assertThat(updated.getTitle(), is(NEW_TITLE));
-    assertThat(updated.getContent(), is(NEW_CONTENT));
-    assertTags(updated, NEW_TAG_NAMES);
 
+    // then
+    assertThat(updated.getTitle(), is(title));
+    assertThat(updated.getContent(), is(content));
+    assertThat(updated.getImages().size(), is(images.size()));
+    assertThat(updated.getWriter(), equalTo(writer));
+    assertTags(updated, tagNAmes);
   }
 
   @Test

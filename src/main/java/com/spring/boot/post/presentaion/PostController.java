@@ -61,14 +61,14 @@ public class PostController {
   public ApiResult<PostInfoResponse> updatePost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId,
-      @RequestBody PostUpdateRequest postUpdateRequest
+      @ModelAttribute @Valid PostUpdateRequest postUpdateRequest,
+      @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ){
     Post updatedPost = postService.updatePost(
         authentication.id,
         postId,
-        postUpdateRequest.getTitle(),
-        postUpdateRequest.getContent(),
-        postUpdateRequest.getTagNames()
+        postUpdateRequest,
+        multipartFiles
     );
     return ApiResult.success(PostInfoResponse.from(updatedPost));
   }
