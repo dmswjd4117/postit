@@ -26,7 +26,7 @@ class CommentServiceTest {
 
   private final Member POST_WRITER = new Member("email@gmail.com", "password", "post");
   private final Member COMMENT_WRITER = new Member("email2@gmail.com", "password", "comment");
-  private final Post POST = new Post("title", "post-body", POST_WRITER);
+  private final Post POST = new Post("title", "post-content", POST_WRITER);
   private final String COMMENT_BODY = "wow...good!";;
 
   @Autowired

@@ -36,7 +36,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class CommentControllerTest {
 
   private final Member POST_WRITER = new Member("email@gmail.com", "password", "name");
-  private final Post POST = new Post("title", "post-body", POST_WRITER);
+  private final Post POST = new Post("title", "post-content", POST_WRITER);
   @MockBean
   private CommentService commentService;
   @Autowired
@@ -57,7 +57,7 @@ class CommentControllerTest {
     Comment comment = new Comment(
         commentWriter,
         POST,
-        "comment-body"
+        "comment-content"
     );
 
     given(commentService.createComment(any(), any(), any()))

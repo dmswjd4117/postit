@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
@@ -96,19 +97,19 @@ public class Member extends BaseTime {
   }
 
   @Override
-  public int hashCode() {
-    return super.hashCode();
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Member)) {
+      return false;
+    }
+    Member member = (Member) o;
+    return id.equals(member.getId()) && email.equals(member.email);
   }
 
   @Override
-  public boolean equals(Object o){
-    if(o == null){
-      return false;
-    }
-    if(!o.getClass().equals(this.getClass())){
-      return false;
-    }
-    Member target = (Member)o;
-    return target.id.equals(this.id);
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
