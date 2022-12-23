@@ -4,7 +4,7 @@ import com.spring.boot.common.BaseTime;
 import com.spring.boot.post.domain.image.Image;
 import com.spring.boot.post.domain.image.Images;
 import com.spring.boot.like.domain.Like;
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.domain.tag.PostTags;
 import com.spring.boot.tag.domain.Tag;

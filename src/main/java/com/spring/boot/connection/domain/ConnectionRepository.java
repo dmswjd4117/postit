@@ -1,6 +1,6 @@
 package com.spring.boot.connection.domain;
 
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

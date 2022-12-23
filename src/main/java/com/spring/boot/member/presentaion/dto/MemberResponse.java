@@ -1,6 +1,6 @@
 package com.spring.boot.member.presentaion.dto;
 
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,7 @@
 package com.spring.boot.post.presentaion;
 
 import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.post.application.PostSearchService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.presentaion.dto.PostInfoResponse;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,9 +29,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostController {
 
   private final PostService postService;
+  private final PostSearchService postSearchService;
 
-  public PostController(PostService postService) {
+  public PostController(PostService postService, PostSearchService postSearchService) {
     this.postService = postService;
+    this.postSearchService = postSearchService;
   }
 
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -77,12 +79,13 @@ public class PostController {
   public ApiResult<List<PostInfoResponse>> getPostByMemberId(
       @PathVariable Long memberId
   ) {
-    return ApiResult.success(
-        postService.getPostByMemberId(memberId)
-            .stream()
-            .map(PostInfoResponse::from)
-            .collect(Collectors.toList())
-    );
+//    return ApiResult.success(
+//        postSearchService.getPostByMemberId(memberId)
+//            .stream()
+//            .map(PostInfoResponse::from)
+//            .collect(Collectors.toList())
+//    );
+    return null;
   }
 
   @GetMapping("/{postId}")
@@ -90,17 +93,17 @@ public class PostController {
       @PathVariable Long postId
   ) {
     return ApiResult.success(
-        PostInfoResponse.from(postService.getPostByPostId(postId))
+        PostInfoResponse.from(postSearchService.getPostByPostId(postId))
     );
   }
 
 //  @GetMapping("/all")
-//  public ApiResult<List<PostInfoResponse>> getAllFollowingsPost(
+//  public ApiResult<List<PostInfoResponse>> findAllFollowingsPost(
 //      @AuthenticationPrincipal FormAuthentication authentication,
 //      Pageable pageable
 //  ){
 //    return ApiResult.success(
-//        postService.getAllFollowingsPost(authentication.id, pageable)
+//        postService.findAllFollowingsPost(authentication.id, pageable)
 //            .stream()
 //            .map(PostInfoResponse::from)
 //            .collect(Collectors.toList())

@@ -1,6 +1,6 @@
 package com.spring.boot.member.domain.role;
 
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

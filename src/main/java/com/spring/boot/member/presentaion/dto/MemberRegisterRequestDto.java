@@ -1,6 +1,6 @@
 package com.spring.boot.member.presentaion.dto;
 
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;

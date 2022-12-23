@@ -1,7 +1,7 @@
 package com.spring.boot.like.domain;
 
 import com.spring.boot.common.BaseTime;
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 
 import com.spring.boot.post.domain.Post;
 import javax.persistence.*;

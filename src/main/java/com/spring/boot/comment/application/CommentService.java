@@ -6,9 +6,9 @@ import com.spring.boot.common.exception.NotConnectedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.domain.PostRepository;
+import com.spring.boot.post.infrastructure.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

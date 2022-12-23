@@ -14,9 +14,10 @@ import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.MemberRepository;
+import com.spring.boot.post.application.PostSearchService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.domain.PostRepository;
+import com.spring.boot.post.infrastructure.PostRepository;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.presentaion.dto.PostCreateRequest;
 import com.spring.boot.post.presentaion.dto.PostUpdateRequest;
@@ -55,6 +56,8 @@ class PostServiceTest {
   DatabaseCleanUp databaseCleanUp;
   @Autowired
   private PostService postService;
+  @Autowired
+  private PostSearchService postSearchService;
   @Autowired
   private PostRepository postRepository;
   @Autowired
@@ -150,7 +153,7 @@ class PostServiceTest {
 
     // when
     postService.updatePost(writer.getId(), createdPost.getId(), postUpdateRequest, images);
-    Post updated = postService.getPostByPostId(createdPost.getId());
+    Post updated = postSearchService.getPostByPostId(createdPost.getId());
 
 
     // then

@@ -9,7 +9,7 @@ import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.common.imageUploader.ImageUploader;
 import com.spring.boot.common.imageUploader.UploadFile;
 import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.presentaion.dto.MemberRegisterRequestDto;
 import com.spring.boot.member.presentaion.dto.MemberRegisterResponseDto;
 import com.spring.boot.member.presentaion.dto.MemberResponse;
