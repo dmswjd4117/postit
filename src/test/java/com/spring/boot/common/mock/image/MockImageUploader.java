@@ -1,8 +1,8 @@
 package com.spring.boot.common.mock.image;
 
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.spring.boot.common.imageUploader.ImageUploader;
-import com.spring.boot.common.imageUploader.UploadFile;
+import com.spring.boot.image.domain.ImageUploader;
+import com.spring.boot.image.infrastructure.UploadFile;
 import java.io.InputStream;
 import java.util.Map;
 

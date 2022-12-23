@@ -4,12 +4,13 @@ import com.spring.boot.comment.application.CommentService;
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.common.exception.NotConnectedException;
 import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.member.application.dto.MemberInfoDto;
 import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.presentaion.dto.PostCreateRequest;
+import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.common.DatabaseCleanUp;
 import org.junit.jupiter.api.*;
@@ -45,11 +46,11 @@ class CommentServiceTest {
     databaseCleanUp.clear();
   }
 
-  Member savePostWriter(){
+  MemberInfoDto savePostWriter(){
     return memberService.register(POST_WRITER, RoleName.MEMBER);
   }
 
-  Member saveCommentWriter(){
+  MemberInfoDto saveCommentWriter(){
     return memberService.register(COMMENT_WRITER, RoleName.MEMBER);
   }
 
@@ -64,8 +65,8 @@ class CommentServiceTest {
   @DisplayName("팔로잉한 블로거의 글에 댓글을 달 수 있다.")
   void createCommentSuccess(){
     // given
-    Member postWriter = savePostWriter();
-    Member commentWriter = saveCommentWriter();
+    MemberInfoDto postWriter = savePostWriter();
+    MemberInfoDto commentWriter = saveCommentWriter();
     Post post = savePost(postWriter.getId());
     connectionService.follow(commentWriter.getId(), postWriter.getId());
 
@@ -86,8 +87,8 @@ class CommentServiceTest {
   @DisplayName("팔로잉하지 않은 블로거의 글에는 댓글을 달 수 없다.")
   void createCommentFail_NotConnected(){
     // given
-    Member postWriter = savePostWriter();
-    Member commentWriter = saveCommentWriter();
+    MemberInfoDto postWriter = savePostWriter();
+    MemberInfoDto commentWriter = saveCommentWriter();
     Post post = savePost(postWriter.getId());
 
     assertThrows(NotConnectedException.class, ()->{
@@ -98,7 +99,7 @@ class CommentServiceTest {
   @Test
   @DisplayName("존재하지 않는 멤버아이디일경우 예외발생")
   void 댓글달기_실패(){
-    Member postWriter = savePostWriter();
+    MemberInfoDto postWriter = savePostWriter();
     Post post = savePost(postWriter.getId());
     assertThrows(NotFoundException.class, ()->{
       commentService.createComment(-1L, "body", post.getId());
@@ -108,7 +109,7 @@ class CommentServiceTest {
   @Test
   @DisplayName("존재하지 않는 포스트 아이디 예외발생")
   void 댓글달기_실패2(){
-    Member commentWriter = saveCommentWriter();
+    MemberInfoDto commentWriter = saveCommentWriter();
     assertThrows(NotFoundException.class, ()->{
       commentService.createComment(commentWriter.getId(), "body", -1L);
     });

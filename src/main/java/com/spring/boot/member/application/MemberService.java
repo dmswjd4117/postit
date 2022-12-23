@@ -2,12 +2,14 @@ package com.spring.boot.member.application;
 
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.member.domain.role.RoleName;
+import com.spring.boot.member.application.dto.MemberDtoMapper;
+import com.spring.boot.member.application.dto.MemberInfoDto;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.MemberRepository;
 import com.spring.boot.member.domain.role.MemberRole;
 import com.spring.boot.member.domain.role.MemberRoleRepository;
 import com.spring.boot.member.domain.role.Role;
+import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.member.domain.role.RoleRepository;
 import java.util.Optional;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,14 +34,14 @@ public class MemberService {
   }
 
   @Transactional
-  public Member register(Member memberInfo, RoleName roleName) {
+  public MemberInfoDto register(Member memberInfo, RoleName roleName) {
     Member member = saveMember(memberInfo);
 
     MemberRole memberRole = getMemberRole(roleName);
     memberRole.changeMember(member);
     memberRoleRepository.save(memberRole);
 
-    return member;
+    return MemberDtoMapper.memberInfoDto(member);
   }
 
   private MemberRole getMemberRole(RoleName roleName) {
@@ -65,14 +67,15 @@ public class MemberService {
     return memberRepository.findByEmail(email);
   }
 
-  public Optional<Member> login(String email, String password) {
+  public Optional<MemberInfoDto> login(String email, String password) {
     return findByEmail(email)
         .map(findMember -> {
-          if (!passwordEncoder.matches(password, findMember.getPassword())) {
+          if (!findMember.checkPassword(passwordEncoder)) {
             throw new BadCredentialsException("invalid user");
           }
           return findMember;
-        });
+        })
+        .map(MemberDtoMapper::memberInfoDto);
   }
 
   @Transactional
@@ -84,7 +87,7 @@ public class MemberService {
   }
 
   public Member findById(Long id) {
-    return memberRepository.findById(id).orElseThrow(()->new NotFoundException(Member.class, id));
+    return memberRepository.findById(id).orElseThrow(() -> new NotFoundException(Member.class, id));
   }
 
 }

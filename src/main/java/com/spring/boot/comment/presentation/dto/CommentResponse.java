@@ -1,7 +1,7 @@
 package com.spring.boot.comment.presentation.dto;
 
 import com.spring.boot.comment.domain.Comment;
-import com.spring.boot.member.presentaion.dto.MemberResponse;
+import com.spring.boot.member.presentaion.dto.response.MemberResponse;
 import lombok.Builder;
 import lombok.Getter;
 

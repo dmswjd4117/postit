@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @NoArgsConstructor
-public class Image extends BaseTime {
+public class PostImage extends BaseTime {
 
   @Id
   @Column(name = "image_id")
@@ -29,7 +29,7 @@ public class Image extends BaseTime {
   @JoinColumn(name = "post_id")
   private Post post;
 
-  public Image(String path, Post post) {
+  public PostImage(String path, Post post) {
     this.imagePath = path;
     this.post = post;
   }

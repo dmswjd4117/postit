@@ -1,10 +1,10 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.BaseTime;
-import com.spring.boot.post.domain.image.Image;
-import com.spring.boot.post.domain.image.Images;
-import com.spring.boot.like.domain.Like;
+import com.spring.boot.post.domain.image.PostImage;
+import com.spring.boot.post.domain.image.PostImages;
 import com.spring.boot.member.domain.Member;
+import com.spring.boot.post.domain.like.PostLike;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.domain.tag.PostTags;
 import com.spring.boot.tag.domain.Tag;
@@ -49,14 +49,14 @@ public class Post extends BaseTime {
   private Member writer;
 
   @Embedded
-  private Images images = new Images();
+  private PostImages postImages = new PostImages();
 
   @Embedded
   private PostTags postTags = new PostTags();
 
   @BatchSize(size = 1000)
   @OneToMany(mappedBy = "post")
-  private List<Like> likes = new ArrayList<>();
+  private List<PostLike> postLikes = new ArrayList<>();
 
   public Post(String title, String content, Member writer) {
     this.title = title;
@@ -69,7 +69,7 @@ public class Post extends BaseTime {
   }
 
   public void initImages(List<String> imagePaths) {
-    images.init(imagePaths, this);
+    postImages.init(imagePaths, this);
   }
 
   public boolean isWrittenBy(Member member) {
@@ -86,8 +86,8 @@ public class Post extends BaseTime {
     return postTags.getPostTags();
   }
 
-  public List<Image> getImages() {
-    return images.getPostImages();
+  public List<PostImage> getPostImages() {
+    return postImages.getPostImages();
   }
 
   @Override

@@ -3,10 +3,10 @@ package com.spring.boot.post.presentaion;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostSearchService;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.presentaion.dto.PostInfoResponse;
-import com.spring.boot.post.presentaion.dto.PostCreateRequest;
-import com.spring.boot.post.presentaion.dto.PostUpdateRequest;
+import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
+import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
+import com.spring.boot.post.presentaion.dto.PostMapper;
+import com.spring.boot.post.presentaion.dto.request.PostUpdateRequest;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,12 +43,13 @@ public class PostController {
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
 
-    Post post = postService.createPost(
-        authentication.id,
-        postCreateRequest,
-        multipartFiles);
-
-    return ApiResult.success(PostInfoResponse.from(post));
+//    Post post = postService.createPost(
+//        authentication.id,
+//        postCreateRequest,
+//        multipartFiles);
+//
+//    return ApiResult.success(PostInfoResponse.from(post));
+    return null;
   }
 
   @DeleteMapping("/{postId}")
@@ -66,35 +67,36 @@ public class PostController {
       @ModelAttribute @Valid PostUpdateRequest postUpdateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ){
-    Post updatedPost = postService.updatePost(
-        authentication.id,
-        postId,
-        postUpdateRequest,
-        multipartFiles
-    );
-    return ApiResult.success(PostInfoResponse.from(updatedPost));
+//    Post updatedPost = postService.updatePost(
+//        authentication.id,
+//        postId,
+//        postUpdateRequest,
+//        multipartFiles
+//    );
+//    return ApiResult.success(PostMapper.postInfoResponse(updatedPost));
+    return null;
   }
 
   @GetMapping("/member/{memberId}")
   public ApiResult<List<PostInfoResponse>> getPostByMemberId(
       @PathVariable Long memberId
   ) {
-//    return ApiResult.success(
-//        postSearchService.getPostByMemberId(memberId)
-//            .stream()
-//            .map(PostInfoResponse::from)
-//            .collect(Collectors.toList())
-//    );
-    return null;
+    return ApiResult.success(
+        postSearchService.getPostByMemberId(memberId)
+            .stream()
+            .map(PostMapper::postInfoResponse)
+            .collect(Collectors.toList())
+    );
   }
 
   @GetMapping("/{postId}")
   public ApiResult<PostInfoResponse> getPostByPostId(
       @PathVariable Long postId
   ) {
-    return ApiResult.success(
-        PostInfoResponse.from(postSearchService.getPostByPostId(postId))
-    );
+    return null;
+//    return ApiResult.success(
+//        PostInfoResponse.from(postSearchService.getPostByPostId(postId))
+//    );
   }
 
 //  @GetMapping("/all")

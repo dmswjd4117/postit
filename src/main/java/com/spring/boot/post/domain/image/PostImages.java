@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.BatchSize;
 
 @Embeddable
-public class Images {
+public class PostImages {
 
   @BatchSize(size = 1000)
   @OneToMany(
@@ -18,17 +18,17 @@ public class Images {
       cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
       orphanRemoval = true
   )
-  private List<Image> images = new ArrayList<>();
+  private List<PostImage> postImages = new ArrayList<>();
 
   public void init(List<String> imagePaths, Post post) {
-    List<Image> newImages = imagePaths.stream()
-        .map(path -> new Image(path, post))
+    List<PostImage> newPostImages = imagePaths.stream()
+        .map(path -> new PostImage(path, post))
         .collect(Collectors.toList());
-    images.clear();
-    images.addAll(newImages);
+    postImages.clear();
+    postImages.addAll(newPostImages);
   }
 
-  public List<Image> getPostImages() {
-    return images;
+  public List<PostImage> getPostImages() {
+    return postImages;
   }
 }

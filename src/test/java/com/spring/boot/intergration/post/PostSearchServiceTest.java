@@ -15,11 +15,9 @@ import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
-import com.spring.boot.post.domain.tag.PostTag;
-import com.spring.boot.post.presentaion.dto.PostCreateRequest;
+import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
 import com.spring.boot.common.DatabaseCleanUp;
-import com.spring.boot.tag.application.dto.TagInfoDto;
-import com.spring.boot.tag.domain.Tag;
+import com.spring.boot.post.application.dto.PostTagInfoDto;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -77,12 +75,12 @@ class PostSearchServiceTest {
     return postService.createPost(memberId, postCreateRequest, IMAGES);
   }
 
-  private void assertTags(List<TagInfoDto> tags, List<String> tagNames) {
+  private void assertTags(List<PostTagInfoDto> tags, List<String> tagNames) {
     assertAll(() -> {
       assertThat(tags.size(), is(tagNames.size()));
       assertThat(tags
           .stream()
-          .map(TagInfoDto::getName)
+          .map(PostTagInfoDto::getName)
           .collect(Collectors.toSet()), is(equalTo(new HashSet<>(tagNames))));
     });
   }
@@ -102,7 +100,7 @@ class PostSearchServiceTest {
 
     assertThat(findPost.getContent(), is(BODY));
     assertThat(findPost.getWriter().getName(), is(member.getName()));
-    assertThat(findPost.getImages().size(), is(IMAGES.size()));
+    assertThat(findPost.getPostImages().size(), is(IMAGES.size()));
 //    assertTags(findPost, TAG_NAMES);
   }
 
@@ -154,7 +152,7 @@ class PostSearchServiceTest {
 //      System.out.println(post);
 //      System.out.println(post.getWriter());
 //      System.out.println(post.getImages());
-//      System.out.println(post.getPostTags());
+//      System.out.println(post.getTags());
 //    }
   }
 }

@@ -19,8 +19,8 @@ import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import com.spring.boot.post.domain.tag.PostTag;
-import com.spring.boot.post.presentaion.dto.PostCreateRequest;
-import com.spring.boot.post.presentaion.dto.PostUpdateRequest;
+import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
+import com.spring.boot.post.presentaion.dto.request.PostUpdateRequest;
 import com.spring.boot.common.DatabaseCleanUp;
 import java.util.Arrays;
 import java.util.Collections;
@@ -159,7 +159,7 @@ class PostServiceTest {
     // then
     assertThat(updated.getTitle(), is(title));
     assertThat(updated.getContent(), is(content));
-    assertThat(updated.getImages().size(), is(images.size()));
+    assertThat(updated.getPostImages().size(), is(images.size()));
     assertThat(updated.getWriter(), equalTo(writer));
     assertTags(updated, tagNAmes);
   }

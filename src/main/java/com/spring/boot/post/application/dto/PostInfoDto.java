@@ -1,12 +1,8 @@
 package com.spring.boot.post.application.dto;
 
 import com.spring.boot.comment.application.dto.CommentInfoDto;
-import com.spring.boot.comment.domain.Comment;
-import com.spring.boot.image.application.dto.ImageInfoDto;
-import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.domain.image.Image;
-import com.spring.boot.tag.application.dto.TagInfoDto;
-import com.spring.boot.tag.domain.Tag;
+import com.spring.boot.member.application.dto.MemberInfoDto;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +13,11 @@ public class PostInfoDto {
   private Long id;
   private String title;
   private String content;
-  private Member writer;
-  private int likeCount;
+  private MemberInfoDto writer;
+  private List<PostLikeInfoDto> likes;
   private List<CommentInfoDto> comments;
-  private List<ImageInfoDto> images;
-  private List<TagInfoDto> tags;
+  private List<PostImageInfoDto> images;
+  private List<PostTagInfoDto> tags;
+  private LocalDateTime createdDate;
+  private LocalDateTime modifiedDate;
 }

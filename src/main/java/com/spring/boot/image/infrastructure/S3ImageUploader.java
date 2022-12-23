@@ -1,7 +1,8 @@
-package com.spring.boot.common.imageUploader;
+package com.spring.boot.image.infrastructure;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.spring.boot.image.domain.ImageUploader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

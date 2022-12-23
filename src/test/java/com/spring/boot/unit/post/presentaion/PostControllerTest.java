@@ -15,7 +15,7 @@ import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.presentaion.dto.PostInfoResponse;
+import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.common.mock.auth.WithMockFormAuthenticationUser;
@@ -112,7 +112,7 @@ class PostControllerTest {
 
           assertAll(() -> {
             PostInfoResponse postInfoResponse = ApiResultResponse.getResponse();
-            assertThat(postInfoResponse.getBody()).isEqualTo(post.getContent());
+            assertThat(postInfoResponse.getContent()).isEqualTo(post.getContent());
             assertThat(postInfoResponse.getTitle()).isEqualTo(post.getTitle());
           });
         }

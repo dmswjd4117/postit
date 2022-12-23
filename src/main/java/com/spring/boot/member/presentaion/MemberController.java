@@ -5,14 +5,14 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.member.application.dto.MemberInfoDto;
 import com.spring.boot.member.domain.role.RoleName;
-import com.spring.boot.common.imageUploader.ImageUploader;
-import com.spring.boot.common.imageUploader.UploadFile;
+import com.spring.boot.image.domain.ImageUploader;
+import com.spring.boot.image.infrastructure.UploadFile;
 import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.domain.Member;
-import com.spring.boot.member.presentaion.dto.MemberRegisterRequestDto;
-import com.spring.boot.member.presentaion.dto.MemberRegisterResponseDto;
-import com.spring.boot.member.presentaion.dto.MemberResponse;
+import com.spring.boot.member.presentaion.dto.request.MemberMapper;
+import com.spring.boot.member.presentaion.dto.request.MemberRegisterReques;
+import com.spring.boot.member.presentaion.dto.response.MemberResponse;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,13 +49,13 @@ public class MemberController {
   }
 
   @PostMapping
-  private ApiResult<MemberRegisterResponseDto> register(
-      @ModelAttribute MemberRegisterRequestDto registerRequest,
+  private ApiResult<MemberResponse> register(
+      @ModelAttribute MemberRegisterReques registerRequest,
       @RequestPart(required = false, name = "profileImage") MultipartFile file
   ) {
 
-    Member member = memberService.register(
-        MemberRegisterRequestDto.toEntity(registerRequest),
+    MemberInfoDto memberInfoDto = memberService.register(
+        MemberRegisterReques.toEntity(registerRequest),
         RoleName.MEMBER
     );
 
@@ -63,13 +63,12 @@ public class MemberController {
         .ifPresent(uploadFile -> {
           supplyAsync(() -> uploadProfileImage(uploadFile))
               .thenAccept(image -> image.ifPresent(imagePath -> {
-                memberService.updateProfileImage(member.getId(), imagePath);
+                memberService.updateProfileImage(memberInfoDto.getId(), imagePath);
               }));
         });
 
-    return ApiResult.success(new MemberRegisterResponseDto(
-        MemberResponse.from(member)
-    ));
+
+    return ApiResult.success(MemberMapper.memberResponse(memberInfoDto));
   }
 
 }

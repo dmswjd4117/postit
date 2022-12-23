@@ -6,7 +6,7 @@ import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.dto.PostDtoMapper;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.domain.image.Image;
+import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.infrastructure.PostRepository;
 import java.util.List;
@@ -32,8 +32,8 @@ public class PostSearchService {
   public Post getPostByPostId(Long postId) {
     return postRepository.findByPostId(postId).map(post -> {
           // todo
-          for (Image image : post.getImages()) {
-            image.getId();
+          for (PostImage postImage : post.getPostImages()) {
+            postImage.getId();
             break;
           }
           for (PostTag postTag : post.getPostTags()) {

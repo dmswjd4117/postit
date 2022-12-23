@@ -2,18 +2,15 @@ package com.spring.boot.member.domain;
 
 import com.spring.boot.common.BaseTime;
 import com.spring.boot.connection.domain.Connection;
-import com.spring.boot.like.domain.Like;
-import com.spring.boot.member.domain.role.MemberRole;
-import com.spring.boot.member.domain.role.Role;
+import com.spring.boot.post.domain.like.PostLike;
+import com.spring.boot.member.domain.role.MemberRoles;
 import com.spring.boot.post.domain.Post;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +22,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @NoArgsConstructor
@@ -58,14 +55,14 @@ public class Member extends BaseTime {
 
   @Column
   @OneToMany(mappedBy = "member")
-  private List<Like> likes = new ArrayList<>();
+  private List<PostLike> postLikes = new ArrayList<>();
 
   @Column
   @OneToMany(mappedBy = "writer")
   private List<Post> posts = new ArrayList<>();
 
-  @OneToMany(mappedBy = "member")
-  private Set<MemberRole> memberRoles = new HashSet<>();
+  @Embedded
+  private MemberRoles memberRoles = new MemberRoles();
 
   public Member(String email, String password, String name) {
     this.email = email;
@@ -74,16 +71,15 @@ public class Member extends BaseTime {
   }
 
   public Collection<? extends GrantedAuthority> getGrantedAuthorities() {
-    return getMemberRoles()
-        .stream()
-        .map(MemberRole::getRole)
-        .map(Role::getRoleName)
-        .map(SimpleGrantedAuthority::new)
-        .collect(Collectors.toList());
+    return memberRoles.getGrantedAuthorities();
   }
 
   public void setProfileImagePath(String profileImagePath) {
     this.profileImagePath = profileImagePath;
+  }
+
+  public boolean checkPassword(PasswordEncoder passwordEncoder) {
+    return passwordEncoder.matches(this.password, password);
   }
 
   @Override
@@ -112,4 +108,5 @@ public class Member extends BaseTime {
   public int hashCode() {
     return Objects.hash(id);
   }
+
 }

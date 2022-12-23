@@ -1,14 +1,16 @@
-package com.spring.boot.like.domain;
+package com.spring.boot.post.domain.like;
 
 import com.spring.boot.common.BaseTime;
 import com.spring.boot.member.domain.Member;
 
 import com.spring.boot.post.domain.Post;
 import javax.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "likes")
-public class Like extends BaseTime {
+@Getter
+public class PostLike extends BaseTime {
     @Id
     @Column(name = "like_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
