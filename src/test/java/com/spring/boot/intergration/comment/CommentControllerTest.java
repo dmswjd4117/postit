@@ -1,4 +1,4 @@
-package com.spring.boot.comment.presentation;
+package com.spring.boot.intergration.comment;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -13,7 +13,7 @@ import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.presentation.dto.CommentRequest;
 import com.spring.boot.comment.presentation.dto.CommentResponse;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.common.mock.auth.WithMockFormAuthenticationUser;

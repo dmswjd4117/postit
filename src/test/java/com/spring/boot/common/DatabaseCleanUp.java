@@ -1,4 +1,4 @@
-package com.spring.boot.util;
+package com.spring.boot.common;
 
 
 import java.sql.Connection;

@@ -1,16 +1,17 @@
-package com.spring.boot.comment.application;
+package com.spring.boot.intergration.comment;
 
+import com.spring.boot.comment.application.CommentService;
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.common.exception.NotConnectedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.member.domain.role.RoleName;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.domain.member.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.presentaion.dto.PostCreateRequest;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.util.DatabaseCleanUp;
+import com.spring.boot.common.DatabaseCleanUp;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

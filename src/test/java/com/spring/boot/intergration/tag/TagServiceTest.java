@@ -1,14 +1,13 @@
-package com.spring.boot.tag.application;
+package com.spring.boot.intergration.tag;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
+import com.spring.boot.tag.application.TagService;
 import com.spring.boot.tag.domain.Tag;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
