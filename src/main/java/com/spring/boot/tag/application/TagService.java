@@ -19,6 +19,7 @@ public class TagService {
   public Set<Tag> createOrGetTags(List<String> tagNames) {
     return tagNames
         .stream()
+        .distinct()
         .map(name -> tagRepository.findByTagName(name).orElseGet(()->tagRepository.save(new Tag(name))))
         .collect(Collectors.toSet());
   }
