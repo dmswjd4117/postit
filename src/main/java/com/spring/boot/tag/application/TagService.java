@@ -16,7 +16,7 @@ public class TagService {
     this.tagRepository = tagRepository;
   }
 
-  public Set<Tag> createOrGetTags(List<String> tagNames) {
+  public Set<Tag> getTags(List<String> tagNames) {
     return tagNames
         .stream()
         .distinct()

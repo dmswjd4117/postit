@@ -2,19 +2,18 @@ package com.spring.boot.member.domain;
 
 import com.spring.boot.common.BaseTime;
 import com.spring.boot.connection.domain.Connection;
-import com.spring.boot.post.domain.like.PostLike;
-import com.spring.boot.member.domain.role.MemberRoles;
 import com.spring.boot.post.domain.Post;
+import com.spring.boot.role.domain.Role;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,15 +53,11 @@ public class Member extends BaseTime {
   private List<Connection> followers;
 
   @Column
-  @OneToMany(mappedBy = "member")
-  private List<PostLike> postLikes = new ArrayList<>();
-
-  @Column
   @OneToMany(mappedBy = "writer")
   private List<Post> posts = new ArrayList<>();
-
-  @Embedded
-  private MemberRoles memberRoles = new MemberRoles();
+  @JoinColumn(name = "role_id")
+  @ManyToOne
+  private Role role;
 
   public Member(String email, String password, String name) {
     this.email = email;
@@ -70,8 +65,12 @@ public class Member extends BaseTime {
     this.name = name;
   }
 
-  public Collection<? extends GrantedAuthority> getGrantedAuthorities() {
-    return memberRoles.getGrantedAuthorities();
+  public void initRole(Role role) {
+    this.role = role;
+  }
+
+  public GrantedAuthority getGrantedAuthority() {
+    return role.getGrantedAuthority();
   }
 
   public void setProfileImagePath(String profileImagePath) {
@@ -88,7 +87,7 @@ public class Member extends BaseTime {
         .append("id", id)
         .append("password", "[password]")
         .append("name", name)
-        .append("member roles", memberRoles)
+        .append("role", role)
         .toString();
   }
 

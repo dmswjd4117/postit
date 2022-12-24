@@ -3,7 +3,7 @@ package com.spring.boot.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.member.domain.role.RoleName;
+import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.security.exception.FormAccessDeniedHandler;
 import com.spring.boot.security.exception.FormAuthenticationEntryPoint;

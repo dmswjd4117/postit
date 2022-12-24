@@ -12,5 +12,5 @@ public class MemberInfoDto {
   private String name;
   private String email;
   private String profileImagePath;
-  private Collection<? extends GrantedAuthority> grantedAuthorities;
+  private GrantedAuthority grantedAuthority;
 }

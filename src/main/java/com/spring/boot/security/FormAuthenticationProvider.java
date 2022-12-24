@@ -1,6 +1,7 @@
 package com.spring.boot.security;
 
 import com.spring.boot.member.application.MemberService;
+import java.util.List;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +36,7 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
                             findMember.getName()
                     );
 
-                    Collection<? extends GrantedAuthority> auths = findMember.getGrantedAuthorities();
+                    Collection<? extends GrantedAuthority> auths = List.of(findMember.getGrantedAuthority());
 
                     return new FormAuthenticationToken(formAuthentication, null, authoritiesMapper.mapAuthorities(auths));
                 })

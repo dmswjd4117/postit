@@ -4,6 +4,7 @@ import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.connection.domain.Connection;
+import com.spring.boot.member.application.dto.MemberDtoMapper;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.MemberRepository;
 import java.util.List;
@@ -47,21 +48,23 @@ public class ConnectionService {
   }
 
   @Transactional
-  public List<Member> getFollowing(Long memberId) {
+  public List<com.spring.boot.member.application.dto.MemberInfoDto> getFollowing(Long memberId) {
     return memberRepository.findById(memberId)
         .map(findMember -> findMember.getFollowing()
             .stream()
             .map(Connection::getTargetMember)
+            .map(MemberDtoMapper::memberInfoDto)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
   }
 
   @Transactional
-  public List<Member> getFollowers(Long memberId) {
+  public List<com.spring.boot.member.application.dto.MemberInfoDto> getFollowers(Long memberId) {
     return memberRepository.findById(memberId)
         .map(findMember -> findMember.getFollowers()
             .stream()
             .map(Connection::getMember)
+            .map(MemberDtoMapper::memberInfoDto)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
   }

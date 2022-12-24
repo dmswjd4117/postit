@@ -8,7 +8,7 @@ import javax.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "likes")
+@Table(name = "likeCount")
 @Getter
 public class PostLike extends BaseTime {
     @Id

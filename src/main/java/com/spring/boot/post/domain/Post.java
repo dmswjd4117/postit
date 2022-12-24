@@ -1,9 +1,9 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.BaseTime;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.image.PostImages;
-import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.like.PostLike;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.domain.tag.PostTags;

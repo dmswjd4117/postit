@@ -6,11 +6,8 @@ import com.spring.boot.member.application.dto.MemberDtoMapper;
 import com.spring.boot.member.application.dto.MemberInfoDto;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.MemberRepository;
-import com.spring.boot.member.domain.role.MemberRole;
-import com.spring.boot.member.domain.role.MemberRoleRepository;
-import com.spring.boot.member.domain.role.Role;
-import com.spring.boot.member.domain.role.RoleName;
-import com.spring.boot.member.domain.role.RoleRepository;
+import com.spring.boot.role.application.RoleService;
+import com.spring.boot.role.domain.RoleName;
 import java.util.Optional;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,45 +18,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
   private final MemberRepository memberRepository;
-  private final MemberRoleRepository memberRoleRepository;
-  private final RoleRepository roleRepository;
+  private final RoleService roleService;
   private final PasswordEncoder passwordEncoder;
 
-  public MemberService(MemberRepository memberRepository, MemberRoleRepository memberRoleRepository,
-      RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+  public MemberService(MemberRepository memberRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
     this.memberRepository = memberRepository;
-    this.memberRoleRepository = memberRoleRepository;
-    this.roleRepository = roleRepository;
+    this.roleService = roleService;
     this.passwordEncoder = passwordEncoder;
   }
 
   @Transactional
-  public MemberInfoDto register(Member memberInfo, RoleName roleName) {
-    Member member = saveMember(memberInfo);
-
-    MemberRole memberRole = getMemberRole(roleName);
-    memberRole.changeMember(member);
-    memberRoleRepository.save(memberRole);
-
+  public MemberInfoDto register(String name, String email, String password, RoleName roleName) {
+    Member member = saveMember(name, email, password, roleName);
+    member.initRole(roleService.getRole(roleName));
     return MemberDtoMapper.memberInfoDto(member);
   }
 
-  private MemberRole getMemberRole(RoleName roleName) {
-    Role role = roleRepository.findByRoleName(roleName.name())
-        .orElse(roleRepository.save(new Role(RoleName.MEMBER.getValue(), "member role")));
-    return new MemberRole(role);
-  }
-
-  private Member saveMember(Member memberInfo) {
-    memberRepository.findByEmail(memberInfo.getEmail())
+  private Member saveMember(String name, String email, String password, RoleName roleName) {
+    memberRepository.findByEmail(email)
         .ifPresent(find -> {
-          throw new DuplicatedException("email", memberInfo.getEmail());
+          throw new DuplicatedException("email", email);
         });
 
     Member member = new Member(
-        memberInfo.getEmail(),
-        passwordEncoder.encode(memberInfo.getPassword()),
-        memberInfo.getName());
+        email,
+        passwordEncoder.encode(password),
+        name);
     return memberRepository.save(member);
   }
 
@@ -67,7 +51,7 @@ public class MemberService {
     return memberRepository.findByEmail(email);
   }
 
-  public Optional<MemberInfoDto> login(String email, String password) {
+  public Optional<com.spring.boot.member.application.dto.MemberInfoDto> login(String email, String password) {
     return findByEmail(email)
         .map(findMember -> {
           if (!findMember.checkPassword(passwordEncoder)) {

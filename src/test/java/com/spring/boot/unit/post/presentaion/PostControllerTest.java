@@ -12,13 +12,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
+import com.spring.boot.common.mock.auth.WithMockFormAuthenticationUser;
 import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.member.application.dto.MemberInfoDto;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
+import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
+import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
 import com.spring.boot.security.FormAuthentication;
-import com.spring.boot.common.mock.auth.WithMockFormAuthenticationUser;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,19 +58,22 @@ class PostControllerTest {
   @ValueSource(strings = {"", " "})
   @NullSource
   void 포스트_생성_실패(String title) throws Exception {
-    String BODY = "content...";
-    Member MEMBER = getMember();
-    Post POST = new Post(title, BODY, MEMBER);
+    // given
+    String content = "content";
+    Member member = new Member("email", "password", "name");
+    PostInfoDto post = PostInfoDto.from(new Post(title, content, member));
 
     given(postService.createPost(any(), any(), any()))
-        .willReturn(POST);
+        .willReturn(post);
 
+    // when
     MockHttpServletResponse response = mockMvc.perform(
         multipart("/api/post")
             .param("title", title)
-            .param("body", BODY)
+            .param("content", content)
     ).andReturn().getResponse();
 
+    // then
     TypeReference<ApiResult<PostInfoResponse>> responseType = new TypeReference<ApiResult<PostInfoResponse>>() {
     };
     ApiResult<PostInfoResponse> apiResult = objectMapper.readValue(
@@ -83,14 +88,16 @@ class PostControllerTest {
   @DisplayName("포스트 생성할 수 있다.")
   @WithMockFormAuthenticationUser
   void 포스트_생성_성공() throws Exception {
+    // given
     String title = "title";
-    String content = "content...";
-    Member member = getMember();
-    Post post = new Post(title, content, member);
+    String content = "content";
+    Member member = new Member("email", "password", "name");
+    PostInfoDto post = PostInfoDto.from(new Post(title, content, member));
 
     given(postService.createPost(any(), any(), any()))
         .willReturn(post);
 
+    // then
     MockHttpServletResponse response = mockMvc.perform(
         multipart("/api/post")
             .param("title", title)
@@ -99,7 +106,7 @@ class PostControllerTest {
     ).andReturn().getResponse();
 
     // then
-    TypeReference<ApiResult<PostInfoResponse>> responseType = new TypeReference<ApiResult<PostInfoResponse>>() {
+    TypeReference<ApiResult<PostInfoResponse>> responseType = new TypeReference<>() {
     };
     ApiResult<PostInfoResponse> ApiResultResponse = objectMapper.readValue(
         response.getContentAsString(), responseType);
@@ -119,9 +126,4 @@ class PostControllerTest {
     );
   }
 
-  private Member getMember() {
-    FormAuthentication principal = (FormAuthentication) SecurityContextHolder.getContext()
-        .getAuthentication().getPrincipal();
-    return new Member(principal.email, null, principal.name);
-  }
 }

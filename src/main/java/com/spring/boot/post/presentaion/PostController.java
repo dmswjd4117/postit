@@ -3,14 +3,15 @@ package com.spring.boot.post.presentaion;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostSearchService;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
+import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
-import com.spring.boot.post.presentaion.dto.PostMapper;
 import com.spring.boot.post.presentaion.dto.request.PostUpdateRequest;
+import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,20 +44,19 @@ public class PostController {
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
 
-//    Post post = postService.createPost(
-//        authentication.id,
-//        postCreateRequest,
-//        multipartFiles);
-//
-//    return ApiResult.success(PostInfoResponse.from(post));
-    return null;
+    PostInfoDto post = postService.createPost(
+        authentication.id,
+        postCreateRequest,
+        multipartFiles);
+
+    return ApiResult.success(PostInfoResponse.from(post));
   }
 
   @DeleteMapping("/{postId}")
   public ApiResult<Long> deletePost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId
-  ){
+  ) {
     return ApiResult.success(postService.deletePost(authentication.id, postId));
   }
 
@@ -66,15 +66,14 @@ public class PostController {
       @PathVariable Long postId,
       @ModelAttribute @Valid PostUpdateRequest postUpdateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
-  ){
-//    Post updatedPost = postService.updatePost(
-//        authentication.id,
-//        postId,
-//        postUpdateRequest,
-//        multipartFiles
-//    );
-//    return ApiResult.success(PostMapper.postInfoResponse(updatedPost));
-    return null;
+  ) {
+    PostInfoDto updatedPost = postService.updatePost(
+        authentication.id,
+        postId,
+        postUpdateRequest,
+        multipartFiles
+    );
+    return ApiResult.success(PostInfoResponse.from(updatedPost));
   }
 
   @GetMapping("/member/{memberId}")
@@ -84,7 +83,7 @@ public class PostController {
     return ApiResult.success(
         postSearchService.getPostByMemberId(memberId)
             .stream()
-            .map(PostMapper::postInfoResponse)
+            .map(PostInfoResponse::from)
             .collect(Collectors.toList())
     );
   }
@@ -93,24 +92,24 @@ public class PostController {
   public ApiResult<PostInfoResponse> getPostByPostId(
       @PathVariable Long postId
   ) {
-    return null;
-//    return ApiResult.success(
-//        PostInfoResponse.from(postSearchService.getPostByPostId(postId))
-//    );
+    PostInfoDto postInfoDto = postSearchService.getPostByPostId(postId);
+    return ApiResult.success(
+        PostInfoResponse.from(postInfoDto)
+    );
   }
 
-//  @GetMapping("/all")
-//  public ApiResult<List<PostInfoResponse>> findAllFollowingsPost(
-//      @AuthenticationPrincipal FormAuthentication authentication,
-//      Pageable pageable
-//  ){
-//    return ApiResult.success(
-//        postService.findAllFollowingsPost(authentication.id, pageable)
-//            .stream()
-//            .map(PostInfoResponse::from)
-//            .collect(Collectors.toList())
-//    );
-//  }
+  @GetMapping("/all")
+  public ApiResult<List<PostInfoResponse>> findAllFollowingsPost(
+      @AuthenticationPrincipal FormAuthentication authentication,
+      Pageable pageable
+  ) {
+    return ApiResult.success(
+        postSearchService.getAllFollowingsPost(authentication.id, pageable)
+            .stream()
+            .map(PostInfoResponse::from)
+            .collect(Collectors.toList())
+    );
+  }
 }
 
 

@@ -6,7 +6,7 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.member.application.dto.MemberInfoDto;
-import com.spring.boot.member.domain.role.RoleName;
+import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.infrastructure.UploadFile;
 import com.spring.boot.member.application.MemberService;
@@ -55,7 +55,9 @@ public class MemberController {
   ) {
 
     MemberInfoDto memberInfoDto = memberService.register(
-        MemberRegisterReques.toEntity(registerRequest),
+        registerRequest.getName(),
+        registerRequest.getEmail(),
+        registerRequest.getPassword(),
         RoleName.MEMBER
     );
 

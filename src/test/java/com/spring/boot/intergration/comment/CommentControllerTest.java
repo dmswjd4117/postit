@@ -12,6 +12,7 @@ import com.spring.boot.comment.application.CommentService;
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.presentation.dto.CommentRequest;
 import com.spring.boot.comment.presentation.dto.CommentResponse;
+import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -33,6 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Import(InfrastructureTestConfiguration.class)
 class CommentControllerTest {
 
   private final Member POST_WRITER = new Member("email@gmail.com", "password", "name");
@@ -85,8 +88,6 @@ class CommentControllerTest {
           assertAll(() -> {
             CommentResponse commentResponse = ApiResultResponse.getResponse();
             assertThat(commentResponse.getComment()).isEqualTo(comment.getBody());
-            assertThat(commentResponse.getCommentWriter().getEmail()).isEqualTo(
-                commentWriter.getEmail());
           });
         }
     );
