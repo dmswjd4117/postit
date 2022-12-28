@@ -12,15 +12,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
-import com.spring.boot.common.mock.auth.WithMockFormAuthenticationUser;
+import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.member.application.dto.MemberInfoDto;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
-import com.spring.boot.security.FormAuthentication;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +32,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 

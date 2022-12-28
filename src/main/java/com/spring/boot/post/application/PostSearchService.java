@@ -7,6 +7,7 @@ import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,18 +36,23 @@ public class PostSearchService {
   @Transactional
   public List<PostInfoDto> getPostByMemberId(Long memberId) {
     Member member = memberService.findById(memberId);
-    List<Post> posts = postRepository.findAllByMember(member);
+    List<Post> posts = postRepository.findAllByMemberId(member.getId());
     return PostInfoDto.from(posts);
   }
 
   @Transactional(readOnly = true)
   public List<PostInfoDto> getAllFollowingsPost(Long memberId, Pageable pageable) {
-    return null;
+    return postRepository.findAllFollowingsPost(memberId, pageable).stream()
+        .map(PostInfoDto::from)
+        .collect(Collectors.toList());
   }
 
   @Transactional
   public List<PostInfoDto> getAllPost() {
-    return null;
+    return postRepository.findAll()
+        .stream()
+        .map(PostInfoDto::from)
+        .collect(Collectors.toList());
   }
 
 }

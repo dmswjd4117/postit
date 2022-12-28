@@ -1,4 +1,4 @@
-package com.spring.boot.common.mock.auth;
+package com.spring.boot.intergration.formAuthentication;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
