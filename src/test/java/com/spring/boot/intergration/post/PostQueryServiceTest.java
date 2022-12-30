@@ -8,7 +8,7 @@ import com.spring.boot.connection.domain.Connection;
 import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.application.PostSearchService;
+import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
 import java.util.List;
@@ -17,10 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 
-public class PostSearchServiceTest extends IntegrationTest {
+public class PostQueryServiceTest extends IntegrationTest {
 
   @Autowired
-  private PostSearchService postSearchService;
+  private PostQueryService postQueryService;
   @Autowired
   private ConnectionRepository connectionRepository;
 
@@ -41,7 +41,7 @@ public class PostSearchServiceTest extends IntegrationTest {
 
     // when
     Pageable pageable = Pageable.ofSize(2);
-    List<PostInfoDto> findPosts = postSearchService.getAllFollowingsPost(member.getId(),
+    List<PostInfoDto> findPosts = postQueryService.getAllFollowingsPost(member.getId(),
         pageable);
 
     // then
@@ -56,7 +56,7 @@ public class PostSearchServiceTest extends IntegrationTest {
     Post post = savePost(member);
 
     // when
-    PostInfoDto findPost = postSearchService.getPostByPostId(post.getId());
+    PostInfoDto findPost = postQueryService.getPostByPostId(post.getId());
 
     // then
     assertThat(post, is(notNullValue()));
@@ -80,7 +80,7 @@ public class PostSearchServiceTest extends IntegrationTest {
     }
 
     // when
-    List<PostInfoDto> findPosts = postSearchService.getPostByMemberId(
+    List<PostInfoDto> findPosts = postQueryService.getPostByMemberId(
         member.getId());
 
     // then
@@ -103,7 +103,7 @@ public class PostSearchServiceTest extends IntegrationTest {
     }
 
     // when
-    List<PostInfoDto> posts = postSearchService.getAllPost();
+    List<PostInfoDto> posts = postQueryService.getAllPost();
 
     // then
     assertThat(posts.size(), is(5));

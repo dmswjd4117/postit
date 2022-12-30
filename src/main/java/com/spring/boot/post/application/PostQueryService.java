@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-public class PostSearchService {
+public class PostQueryService {
 
   private final MemberService memberService;
   private final PostRepository postRepository;
 
-  public PostSearchService(MemberService memberService,
+  public PostQueryService(MemberService memberService,
       PostRepository postRepository) {
     this.memberService = memberService;
     this.postRepository = postRepository;

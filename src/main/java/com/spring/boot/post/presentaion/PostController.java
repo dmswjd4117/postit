@@ -1,7 +1,7 @@
 package com.spring.boot.post.presentaion;
 
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.post.application.PostSearchService;
+import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
@@ -30,11 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostController {
 
   private final PostService postService;
-  private final PostSearchService postSearchService;
+  private final PostQueryService postQueryService;
 
-  public PostController(PostService postService, PostSearchService postSearchService) {
+  public PostController(PostService postService, PostQueryService postQueryService) {
     this.postService = postService;
-    this.postSearchService = postSearchService;
+    this.postQueryService = postQueryService;
   }
 
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -81,7 +81,7 @@ public class PostController {
       @PathVariable Long memberId
   ) {
     return ApiResult.success(
-        postSearchService.getPostByMemberId(memberId)
+        postQueryService.getPostByMemberId(memberId)
             .stream()
             .map(PostInfoResponse::from)
             .collect(Collectors.toList())
@@ -92,7 +92,7 @@ public class PostController {
   public ApiResult<PostInfoResponse> getPostByPostId(
       @PathVariable Long postId
   ) {
-    PostInfoDto postInfoDto = postSearchService.getPostByPostId(postId);
+    PostInfoDto postInfoDto = postQueryService.getPostByPostId(postId);
     return ApiResult.success(
         PostInfoResponse.from(postInfoDto)
     );
@@ -104,7 +104,7 @@ public class PostController {
       Pageable pageable
   ) {
     return ApiResult.success(
-        postSearchService.getAllFollowingsPost(authentication.id, pageable)
+        postQueryService.getAllFollowingsPost(authentication.id, pageable)
             .stream()
             .map(PostInfoResponse::from)
             .collect(Collectors.toList())

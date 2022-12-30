@@ -11,7 +11,6 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.application.PostSearchService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.application.dto.PostInfoDto.PostTagInfoDto;
