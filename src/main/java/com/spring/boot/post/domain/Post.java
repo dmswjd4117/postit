@@ -38,14 +38,14 @@ public class Post extends BaseTime {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column
+  @Column(nullable = false)
   private String title;
 
-  @Column
+  @Column(nullable = false)
   private String content;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "member_id")
+  @JoinColumn(name = "member_id", nullable = false)
   private Member writer;
 
   @Embedded

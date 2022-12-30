@@ -45,6 +45,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
   @Override
   public Optional<Post> findByPostId(Long postId) {
+    if(postId == null){
+      throw new IllegalArgumentException("postId가 null입니다");
+    }
     return Optional.ofNullable(queryFactory
         .selectFrom(post)
         .join(post.writer, member)

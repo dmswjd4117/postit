@@ -6,22 +6,18 @@ import com.spring.boot.post.domain.Post;
 import com.spring.boot.role.domain.Role;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockMember {
 
-  public static Builder builder(String email, String name, String password) {
+  public static Builder builder(String email, String name, String password, Role role) {
     return new Builder()
         .email(email)
         .name(name)
-        .password(password);
+        .password(password)
+        .role(role);
   }
 
   public static class Builder {
@@ -29,12 +25,12 @@ public class MockMember {
     private Long id;
     private String email;
     private String password;
-    private String name;
-    private String profileImagePath;
+    private Role role;
+    private String name = "test";
+    private String profileImagePath = "https://i.ibb.co/4M4JvyT/2022-12-30-1-58-57.png";
     private List<Connection> following = new ArrayList<>();
     private List<Connection> followers = new ArrayList<>();
     private List<Post> posts = new ArrayList<>();
-    private Role role;
 
     public Builder id(Long id) {
       this.id = id;
@@ -71,15 +67,16 @@ public class MockMember {
       return this;
     }
 
-    public Builder post( List<Post> posts) {
+    public Builder post(List<Post> posts) {
       this.posts = posts;
       return this;
     }
 
-    public Builder email(Role role) {
+    public Builder role(Role role) {
       this.role = role;
       return this;
     }
+
 
     public Member build() {
       return new Member(
