@@ -5,8 +5,8 @@ import com.spring.boot.comment.domain.CommentRepository;
 import com.spring.boot.common.exception.NotConnectedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.application.ConnectionService;
-import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.user.application.UserService;
+import com.spring.boot.user.domain.User;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import org.springframework.stereotype.Service;
@@ -18,26 +18,26 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final PostRepository postRepository;
   private final ConnectionService connectionService;
-  private final MemberService memberService;
+  private final UserService userService;
 
   public CommentService(CommentRepository commentRepository, PostRepository postRepository,
-      ConnectionService connectionService, MemberService memberService) {
+      ConnectionService connectionService, UserService userService) {
     this.commentRepository = commentRepository;
     this.postRepository = postRepository;
     this.connectionService = connectionService;
-    this.memberService = memberService;
+    this.userService = userService;
   }
 
   @Transactional
   public Comment createComment(Long writerId, String body, Long postId) {
-    Member commentWriter = memberService.findById(writerId);
+    User commentWriter = userService.findById(writerId);
 
     return postRepository.findById(postId)
         .map(findPost -> {
-          Member postWriter = findPost.getWriter();
+          User postWriter = findPost.getWriter();
           if (!postWriter.getId().equals(writerId) &&
               !connectionService.checkMemberFollowsTargetMember(writerId, postWriter.getId())) {
-            throw new NotConnectedException(Member.class, writerId, "doesn't follow",
+            throw new NotConnectedException(User.class, writerId, "doesn't follow",
                 postWriter.getId());
           }
           return commentRepository.save(new Comment(commentWriter, findPost, body));

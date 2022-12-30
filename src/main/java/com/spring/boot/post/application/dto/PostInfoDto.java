@@ -1,7 +1,7 @@
 package com.spring.boot.post.application.dto;
 
 
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.user.domain.User;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.tag.PostTag;
@@ -65,8 +65,8 @@ public class PostInfoDto {
       this.name = name;
     }
 
-    public static PostWriterDto from(Member member){
-      return new PostWriterDto(member.getId(), member.getName());
+    public static PostWriterDto from(User user){
+      return new PostWriterDto(user.getId(), user.getName());
     }
   }
   @Getter

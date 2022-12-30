@@ -1,8 +1,8 @@
 package com.spring.boot.post.application;
 
 import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.user.application.UserService;
+import com.spring.boot.user.domain.User;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
@@ -17,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class PostSearchService {
 
-  private final MemberService memberService;
+  private final UserService userService;
   private final PostRepository postRepository;
 
-  public PostSearchService(MemberService memberService,
+  public PostSearchService(UserService userService,
       PostRepository postRepository) {
-    this.memberService = memberService;
+    this.userService = userService;
     this.postRepository = postRepository;
   }
 
@@ -35,8 +35,8 @@ public class PostSearchService {
 
   @Transactional
   public List<PostInfoDto> getPostByMemberId(Long memberId) {
-    Member member = memberService.findById(memberId);
-    List<Post> posts = postRepository.findAllByMemberId(member.getId());
+    User user = userService.findById(memberId);
+    List<Post> posts = postRepository.findAllByMemberId(user.getId());
     return PostInfoDto.from(posts);
   }
 

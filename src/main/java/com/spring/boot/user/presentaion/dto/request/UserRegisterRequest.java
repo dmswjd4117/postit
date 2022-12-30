@@ -1,6 +1,5 @@
-package com.spring.boot.member.presentaion.dto.request;
+package com.spring.boot.user.presentaion.dto.request;
 
-import com.spring.boot.member.domain.Member;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -8,20 +7,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Setter
 @Getter
-public class MemberRegisterRequest {
+public class UserRegisterRequest {
 
   private String email;
   private String password;
   private String name;
 
-  public MemberRegisterRequest(String email, String password, String name) {
+  public UserRegisterRequest(String email, String password, String name) {
     this.email = email;
     this.password = password;
     this.name = name;
-  }
-
-  public static Member toEntity(MemberRegisterRequest requestDto) {
-    return new Member(requestDto.getEmail(), requestDto.getPassword(), requestDto.getName());
   }
 
   @Override

@@ -1,4 +1,4 @@
-package com.spring.boot.member.domain;
+package com.spring.boot.user.domain;
 
 import com.spring.boot.common.BaseTime;
 import com.spring.boot.connection.domain.Connection;
@@ -28,7 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Member extends BaseTime {
+public class User extends BaseTime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,23 +47,24 @@ public class Member extends BaseTime {
   @Column
   private String profileImagePath;
 
-  @OneToMany(mappedBy = "member")
+  @OneToMany(mappedBy = "user")
   private List<Connection> following;
 
-  @OneToMany(mappedBy = "targetMember")
+  @OneToMany(mappedBy = "targetUser")
   private List<Connection> followers;
 
   @Column
   @OneToMany(mappedBy = "writer")
   private List<Post> posts = new ArrayList<>();
   @JoinColumn(name = "role_id")
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   private Role role;
 
-  public Member(String email, String password, String name) {
+  public User(String email, String password, String name, Role role) {
     this.email = email;
     this.password = password;
     this.name = name;
+    this.role = role;
   }
 
   public void initRole(Role role) {
@@ -78,8 +79,8 @@ public class Member extends BaseTime {
     this.profileImagePath = profileImagePath;
   }
 
-  public boolean checkPassword(PasswordEncoder passwordEncoder) {
-    return passwordEncoder.matches(this.password, password);
+  public boolean checkPassword(String rawPassword, PasswordEncoder passwordEncoder) {
+    return passwordEncoder.matches(rawPassword, this.password);
   }
 
   @Override
@@ -97,11 +98,11 @@ public class Member extends BaseTime {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Member)) {
+    if (!(o instanceof User)) {
       return false;
     }
-    Member member = (Member) o;
-    return id.equals(member.getId()) && email.equals(member.email);
+    User user = (User) o;
+    return id.equals(user.getId()) && email.equals(user.email);
   }
 
   @Override

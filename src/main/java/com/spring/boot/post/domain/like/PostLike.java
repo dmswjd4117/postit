@@ -1,7 +1,7 @@
 package com.spring.boot.post.domain.like;
 
 import com.spring.boot.common.BaseTime;
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.user.domain.User;
 
 import com.spring.boot.post.domain.Post;
 import javax.persistence.*;
@@ -18,7 +18,7 @@ public class PostLike extends BaseTime {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "post_id")

@@ -1,13 +1,12 @@
-package com.spring.boot.member.application.dto;
+package com.spring.boot.user.application.dto;
 
-import java.util.Collection;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
 @Builder
 @Getter
-public class MemberInfoDto {
+public class UserInfoDto {
   private Long id;
   private String name;
   private String email;
