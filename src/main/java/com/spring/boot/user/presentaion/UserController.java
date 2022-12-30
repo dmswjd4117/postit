@@ -10,7 +10,6 @@ import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.infrastructure.UploadFile;
 import com.spring.boot.user.application.UserService;
-import com.spring.boot.user.presentaion.dto.UserMapper;
 import com.spring.boot.user.presentaion.dto.request.UserRegisterRequest;
 import com.spring.boot.user.presentaion.dto.response.UserResponse;
 import java.util.Optional;
@@ -70,7 +69,7 @@ public class UserController {
         });
 
 
-    return ApiResult.success(UserMapper.memberResponse(userInfoDto));
+    return ApiResult.success(UserResponse.from(userInfoDto));
   }
 
 }

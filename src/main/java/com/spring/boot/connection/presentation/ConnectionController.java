@@ -3,7 +3,6 @@ package com.spring.boot.connection.presentation;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.connection.presentation.dto.ConnectionDto;
-import com.spring.boot.user.presentaion.dto.UserMapper;
 import com.spring.boot.user.presentaion.dto.response.UserResponse;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
@@ -41,7 +40,7 @@ public class ConnectionController {
     return ApiResult.success(
         connectionService.getFollowing(memberId)
             .stream()
-            .map(UserMapper::memberResponse)
+            .map(UserResponse::from)
             .collect(Collectors.toList())
     );
   }
@@ -53,7 +52,7 @@ public class ConnectionController {
     return ApiResult.success(
         connectionService.getFollowers(memberId)
             .stream()
-            .map(UserMapper::memberResponse)
+            .map(UserResponse::from)
             .collect(Collectors.toList())
     );
   }

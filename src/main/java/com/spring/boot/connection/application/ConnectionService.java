@@ -3,7 +3,6 @@ package com.spring.boot.connection.application;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.connection.domain.Connection;
-import com.spring.boot.user.application.dto.UserDtoMapper;
 import com.spring.boot.user.application.dto.UserInfoDto;
 import com.spring.boot.user.domain.User;
 import com.spring.boot.user.domain.UserRepository;
@@ -47,7 +46,7 @@ public class ConnectionService {
         .map(findMember -> findMember.getFollowing()
             .stream()
             .map(Connection::getTargetUser)
-            .map(UserDtoMapper::memberInfoDto)
+            .map(UserInfoDto::from)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(User.class, memberId));
   }
@@ -58,7 +57,7 @@ public class ConnectionService {
         .map(findMember -> findMember.getFollowers()
             .stream()
             .map(Connection::getUser)
-            .map(UserDtoMapper::memberInfoDto)
+            .map(UserInfoDto::from)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(User.class, memberId));
   }

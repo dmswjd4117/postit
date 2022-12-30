@@ -88,7 +88,7 @@ public class SecurityConfig{
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .failureHandler((request, response, exception) -> {
-                    ApiResult<?> LOGIN_FAIL_EXCEPTION = ApiResult.error("login failed", HttpStatus.NOT_FOUND);
+                    ApiResult<?> LOGIN_FAIL_EXCEPTION = ApiResult.error(exception.getMessage(), HttpStatus.NOT_FOUND);
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     writeResponse(response, LOGIN_FAIL_EXCEPTION);
                 })

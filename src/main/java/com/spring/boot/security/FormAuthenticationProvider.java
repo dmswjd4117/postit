@@ -28,8 +28,7 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
     String email = (String) authentication.getPrincipal();
     String password = (String) authentication.getCredentials();
 
-    UserInfoDto findMember = userService.login(email, password)
-        .orElseThrow(() -> new AuthenticationFailException("login failed"));
+    UserInfoDto findMember = userService.login(email, password);
 
     FormAuthentication formAuthentication = new FormAuthentication(
         findMember.getId(),

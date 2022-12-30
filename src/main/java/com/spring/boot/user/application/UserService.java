@@ -1,8 +1,8 @@
 package com.spring.boot.user.application;
 
+import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.user.application.dto.UserDtoMapper;
 import com.spring.boot.user.application.dto.UserInfoDto;
 import com.spring.boot.user.domain.User;
 import com.spring.boot.user.domain.UserRepository;
@@ -32,7 +32,7 @@ public class UserService {
   public UserInfoDto register(String name, String email, String password, RoleName roleName) {
     User user = saveMember(name, email, password, roleName);
     user.initRole(roleService.getRole(roleName));
-    return UserDtoMapper.memberInfoDto(user);
+    return UserInfoDto.from(user);
   }
 
   private User saveMember(String name, String email, String password, RoleName roleName) {
@@ -55,15 +55,16 @@ public class UserService {
     return userRepository.findByEmail(email);
   }
 
-  public Optional<UserInfoDto> login(String email, String rawPassword) {
+  public UserInfoDto login(String email, String rawPassword) {
     return findByEmail(email)
         .map(findMember -> {
           if (!findMember.checkPassword(rawPassword, passwordEncoder)) {
-            throw new BadCredentialsException("invalid user");
+            throw new BadCredentialsException("password doesn't match");
           }
           return findMember;
         })
-        .map(UserDtoMapper::memberInfoDto);
+        .map(UserInfoDto::from)
+        .orElseThrow(() -> new AuthenticationFailException("email is invalid"));
   }
 
   @Transactional
