@@ -8,19 +8,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Setter
 @Getter
-public class MemberRegisterReques {
+public class MemberRegisterRequest {
 
   private String email;
   private String password;
   private String name;
 
-  public MemberRegisterReques(String email, String password, String name) {
+  public MemberRegisterRequest(String email, String password, String name) {
     this.email = email;
     this.password = password;
     this.name = name;
   }
 
-  public static Member toEntity(MemberRegisterReques requestDto) {
+  public static Member toEntity(MemberRegisterRequest requestDto) {
     return new Member(requestDto.getEmail(), requestDto.getPassword(), requestDto.getName());
   }
 

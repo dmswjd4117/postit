@@ -11,7 +11,7 @@ import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.infrastructure.UploadFile;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.presentaion.dto.request.MemberMapper;
-import com.spring.boot.member.presentaion.dto.request.MemberRegisterReques;
+import com.spring.boot.member.presentaion.dto.request.MemberRegisterRequest;
 import com.spring.boot.member.presentaion.dto.response.MemberResponse;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class MemberController {
 
   @PostMapping
   private ApiResult<MemberResponse> register(
-      @ModelAttribute MemberRegisterReques registerRequest,
+      @ModelAttribute MemberRegisterRequest registerRequest,
       @RequestPart(required = false, name = "profileImage") MultipartFile file
   ) {
 
