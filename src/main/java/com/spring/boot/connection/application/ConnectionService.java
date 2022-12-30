@@ -31,20 +31,14 @@ public class ConnectionService {
       throw new IllegalArgumentException("same memberId and targetMemberId error");
     }
 
-    return memberRepository.findById(memberId)
-        .map(findMember -> memberRepository
-            .findById(targetMemberId)
-            .map(targetMember -> {
-              connectionRepository.findByMemberAndTargetMember(findMember, targetMember)
-                  .ifPresent(c -> {
-                    throw new DuplicatedException(Connection.class, "member: " + memberId,
-                        " target: " + targetMemberId);
-                  });
-              Connection connection = new Connection(findMember, targetMember);
-              return connectionRepository.save(connection);
-            })
-            .orElseThrow(() -> new NotFoundException(Member.class, targetMemberId)))
-        .orElseThrow(() -> new NotFoundException(Member.class, memberId));
+    Member sourceMember =  memberRepository.findById(memberId)
+        .orElseThrow(()->new NotFoundException(Member.class,"member doesn't exist with id", memberId));
+    Member targetMember = memberRepository.findById(targetMemberId)
+        .orElseThrow(()->new NotFoundException(Member.class,"member doesn't exist with id", targetMemberId));
+
+    Connection connection = new Connection(sourceMember, targetMember);
+    connectionRepository.save(connection);
+    return connection;
   }
 
   @Transactional

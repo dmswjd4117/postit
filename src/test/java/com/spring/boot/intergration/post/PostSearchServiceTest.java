@@ -4,86 +4,110 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
+import com.spring.boot.connection.domain.Connection;
+import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.intergration.IntegrationTest;
-import com.spring.boot.member.application.dto.MemberInfoDto;
+import com.spring.boot.member.domain.Member;
+import com.spring.boot.post.application.PostSearchService;
 import com.spring.boot.post.application.dto.PostInfoDto;
+import com.spring.boot.post.domain.Post;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 
+public class PostSearchServiceTest extends IntegrationTest {
 
-class PostSearchServiceTest extends IntegrationTest {
+  @Autowired
+  private PostSearchService postSearchService;
+  @Autowired
+  private ConnectionRepository connectionRepository;
+
+  @Test
+  @DisplayName("팔로잉하고 있는 멤버들의 게시물들을 조회한다")
+  void 팔로잉들의_게시물_조회() {
+    // given
+    Member member = saveMember("member@naver.com");
+
+    for (int i = 0; i < 4; i++) {
+      Member targetMember = saveMember(i + "email@naver.com");
+
+      connectionRepository.save(new Connection(member, targetMember));
+      for (int j = 0; j < 2; j++) {
+        savePost(targetMember);
+      }
+    }
+
+    // when
+    Pageable pageable = Pageable.ofSize(2);
+    List<PostInfoDto> findPosts = postSearchService.getAllFollowingsPost(member.getId(),
+        pageable);
+
+    // then
+    assertThat(findPosts.size(), is(8));
+  }
 
   @Test
   @DisplayName("포스트 아이디로 포스트를 조회할 수 있다.")
-  void 포스트_포스트_아이디로_조회() {
+  void 게시물_게시물아이디로_조회() {
     // given
-    MemberInfoDto member = saveMember();
-    PostInfoDto post = savePost(member.getId());
+    Member member = saveMember("email@naver.com");
+    Post post = savePost(member);
 
     // when
     PostInfoDto findPost = postSearchService.getPostByPostId(post.getId());
 
     // then
-    assertThat(findPost, is(notNullValue()));
-
-    assertThat(findPost.getContent(), is(post.getContent()));
-    assertThat(findPost.getWriter().getName(), is(member.getName()));
-    assertThat(findPost.getImages().size(), is(post.getImages().size()));
-    assertThat(extractTagNames(findPost.getTags()),
-        is(extractTagNames(post.getTags())));
+    assertThat(post, is(notNullValue()));
+    assertThat(post.getContent(), is(findPost.getContent()));
+    assertThat(post.getWriter().getId(), is(findPost.getWriter().getId()));
+    assertThat(post.getPostImages().size(), is(findPost.getImages().size()));
+    assertThat(post.getPostTags().size(), is(findPost.getTags().size()));
+//    assertThat(extractTagNames(post.getTags()), is(extractTagNames(origin.getTags())));
   }
-
 
   @Test
   @DisplayName("멤버 아이디로 글들을 조회한다")
-  void 포스트_멤버_아이디로_조회() {
+  void 게시물_멤버아이디로_조회() {
     int DUMMY_POST_CNT = 3;
 
     // given
-    MemberInfoDto member = saveMember();
+    Member member = saveMember("email@naver.com");
+
     for (int i = 0; i < DUMMY_POST_CNT; i++) {
-      savePost(member.getId());
+      savePost(member);
     }
 
     // when
-    List<PostInfoDto> postInfoDtos = postSearchService.getPostByMemberId(
+    List<PostInfoDto> findPosts = postSearchService.getPostByMemberId(
         member.getId());
 
     // then
-    assertThat(postInfoDtos.size(), is(DUMMY_POST_CNT));
-    for (int index = 0; index < DUMMY_POST_CNT; index++) {
-      com.spring.boot.post.application.dto.PostInfoDto findPostInfoDto = postInfoDtos.get(index);
-      assertThat(findPostInfoDto, is(notNullValue()));
-
-      assertThat(findPostInfoDto.getContent(), is(CONTENT));
-      assertThat(findPostInfoDto.getWriter().getName(), is(member.getName()));
-      assertThat(findPostInfoDto.getImages().size(), is(IMAGES.size()));
-      assertThat(findPostInfoDto.getTags().size(), is(TAG_NAMES.size()));
-    }
+    assertThat(findPosts.size(), is(DUMMY_POST_CNT));
   }
 
   @Test
   @DisplayName("모든 게시물 조회한다")
-  void search() {
+  void 모든_게시물_조회() {
     // given
-    MemberInfoDto member = saveMember();
+    Member member = saveMember("email@naver.com");
+
     for (int i = 0; i < 2; i++) {
-      savePost(member.getId());
+      savePost(member);
     }
 
-    MemberInfoDto member2 = saveMember();
+    Member member2 = saveMember("email2@naver.com");
     for (int i = 0; i < 3; i++) {
-      savePost(member2.getId());
+      savePost(member2);
     }
 
-//    // when
-//    List<Post> posts = postSearchService.getAllPost();
-//    for (Post post: posts) {
-//      System.out.println(post);
-//      System.out.println(post.getWriter());
-//      System.out.println(post.getImages());
-//      System.out.println(post.getTags());
-//    }
+    // when
+    List<PostInfoDto> posts = postSearchService.getAllPost();
+
+    // then
+    assertThat(posts.size(), is(5));
   }
+
+
 }

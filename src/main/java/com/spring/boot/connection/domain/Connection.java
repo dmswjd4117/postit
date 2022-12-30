@@ -36,9 +36,6 @@ public class Connection {
   @CreatedDate
   private LocalDateTime createdDate;
 
-  public Connection() {
-  }
-
   public Connection(Member member, Member targetMember) {
     this.member = member;
     this.targetMember = targetMember;

@@ -1,27 +1,32 @@
 package com.spring.boot.intergration.post;
 
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
-import com.spring.boot.member.application.dto.MemberInfoDto;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostSearchService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
+import com.spring.boot.post.application.dto.PostInfoDto.PostTagInfoDto;
+import com.spring.boot.post.domain.Post;
+import com.spring.boot.post.infrastructure.PostRepository;
 import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
 import com.spring.boot.post.presentaion.dto.request.PostUpdateRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
@@ -34,85 +39,85 @@ class PostServiceTest extends IntegrationTest {
   @Autowired
   private PostService postService;
   @Autowired
-  private PostSearchService postSearchService;
+  private PostRepository postRepository;
 
-  @Test
-  @DisplayName("포스트를 생성할 수 있다.")
-  void 포스트_생성() {
-    // given
-    MemberInfoDto member = saveMember();
 
-    // when
-    PostInfoDto createdPost = savePost(member.getId());
-
-    // then
-    assertNotNull(createdPost);
-    assertThat(createdPost.getContent(), is(CONTENT));
-    assertThat(createdPost.getTitle(), is(TITLE));
-    assertThat(createdPost.getTags().size(), is(TAG_NAMES.size()));
+  public Set<String> extractTagNames(Set<PostTagInfoDto> postTagInfoDtos) {
+    return postTagInfoDtos.stream()
+        .map(PostTagInfoDto::getName)
+        .collect(Collectors.toSet());
   }
 
-  @Test
-  @DisplayName("글 작성자는 포스트를 지울 수 있다")
-  void 포스트_삭제() {
-    // given
-    MemberInfoDto member = saveMember();
-    PostInfoDto createdPost = savePost(member.getId());
+  @Nested
+  @DisplayName("게시물 생성, 삭제, 수정")
+  class 생성_삭제_수정 {
 
-    // when
-    postService.deletePost(member.getId(), createdPost.getId());
-  }
+    @Test
+    @DisplayName("글 작성자는 게시물을 지울 수 있다")
+    void 포스트_삭제() {
+      // given
+      Member member = saveMember("email");
+      Post createdPost = savePost(member);
 
-  @Test
-  @DisplayName("글 작성자가 아니면 포스트를 지울 수 없다")
-  void 포스트_삭제_실패() {
-    // given
-    MemberInfoDto writer = saveMember();
-    MemberInfoDto member = saveMember();
-    PostInfoDto createdPost = savePost(writer.getId());
-
-    // when
-    assertThrows(AccessDeniedException.class, () -> {
+      // when
       postService.deletePost(member.getId(), createdPost.getId());
-    });
-  }
 
-  @Test
-  @DisplayName("글 제목, 내용, 태그들을 수정할 수 있다.")
-  void 포스트_수정() {
-    // given
-    String newTitle = "new title";
-    String newContent = "new content";
-    List<String> newTagNames = Arrays.asList("tag1", "newa", "newb");
-    List<MultipartFile> newImages = Collections.singletonList(
-        new MockMultipartFile("new", "new.jpg", IMAGE_PNG_VALUE, "new".getBytes())
-    );
+      // then
+      assertFalse(postRepository.findByPostId(createdPost.getId()).isPresent());
+    }
 
-    MemberInfoDto writer = saveMember();
-    PostInfoDto createdPost = savePost(writer.getId());
+    @Test
+    @DisplayName("글 작성자가 아니면 포스트를 지울 수 없다")
+    void 포스트_삭제_실패() {
+      // given
+      Member writer = saveMember("email@naver.com");
+      Member member = saveMember("member@naver.com");
+      Post createdPost = savePost(writer);
 
-    // when
-    PostUpdateRequest postUpdateRequest = new PostUpdateRequest(newTitle, newContent, newTagNames);
-    postService.updatePost(writer.getId(), createdPost.getId(), postUpdateRequest, newImages);
-    PostInfoDto updated = postSearchService.getPostByPostId(createdPost.getId());
+      // when
+      assertThrows(AccessDeniedException.class, () -> {
+        postService.deletePost(member.getId(), createdPost.getId());
+      });
+    }
 
-    // then
-    assertThat(updated.getTitle(), is(newTitle));
-    assertThat(updated.getContent(), is(newContent));
-    assertThat(updated.getImages().size(), is(newImages.size()));
-    assertThat(updated.getWriter().getId(), equalTo(writer.getId()));
-    assertThat(extractTagNames(updated.getTags()), is(new HashSet<>(newTagNames)));
-  }
+    @Test
+    @DisplayName("글 제목, 내용, 태그들을 수정할 수 있다.")
+    void 포스트_수정() {
+      // given
+      String newTitle = "new title";
+      String newContent = "new content";
+      List<String> newTagNames = Arrays.asList("tag1", "newa", "newb");
+      List<MultipartFile> newImages = Collections.singletonList(
+          new MockMultipartFile("new", "new.jpg", IMAGE_PNG_VALUE, "new".getBytes())
+      );
 
-  @Test
-  @DisplayName("잘못된 유저 아이디일 경우 생성할 수 없다.")
-  void 포스트_생성_실패_잘못된_유저아이디() {
-    PostCreateRequest postCreateRequest = new PostCreateRequest("title", "body",
-        Collections.emptyList());
+      Member writer = saveMember("email@naver.com");
+      Post createdPost = savePost(writer);
 
-    assertThrows(NotFoundException.class, () -> {
-      postService.createPost(-1L, postCreateRequest, Collections.emptyList());
-    });
+      // when
+      PostUpdateRequest postUpdateRequest = new PostUpdateRequest(newTitle, newContent,
+          newTagNames);
+      PostInfoDto updated = postService.updatePost(writer.getId(), createdPost.getId(), postUpdateRequest, newImages);
+
+      // then
+      assertThat(updated, is(notNullValue()));
+      assertThat(updated.getContent(), is(newContent));
+      assertThat(updated.getWriter().getId(), is(writer.getId()));
+      assertThat(updated.getImages().size(), is(newImages.size()));
+      assertThat(updated.getTags().size(), is(newTagNames.size()));
+      assertThat(extractTagNames(updated.getTags()), is(new HashSet<>(newTagNames)));
+    }
+
+    @Test
+    @DisplayName("잘못된 유저 아이디일 경우 게시물을 생성할 수 없다.")
+    void 포스트_생성_실패_잘못된_유저아이디() {
+      PostCreateRequest postCreateRequest = new PostCreateRequest("title", "body",
+          Collections.emptyList());
+
+      assertThrows(NotFoundException.class, () -> {
+        postService.createPost(-1L, postCreateRequest, Collections.emptyList());
+      });
+    }
   }
 
 

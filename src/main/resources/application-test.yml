@@ -4,16 +4,12 @@ spring:
     url: jdbc:mysql://localhost:3306/sns?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
     username: root
     password: 1234
-  sql:
-    init:
-      mode: always
-      platform: mysql
+
   jpa:
     database: mysql
-    defer-datasource-initialization: true
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true

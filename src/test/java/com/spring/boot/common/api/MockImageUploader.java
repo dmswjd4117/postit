@@ -1,4 +1,4 @@
-package com.spring.boot.common.mock.image;
+package com.spring.boot.common.api;
 
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.spring.boot.image.domain.ImageUploader;

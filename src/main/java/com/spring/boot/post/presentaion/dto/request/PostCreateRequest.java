@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 public class PostCreateRequest {
 
   @NotBlank
