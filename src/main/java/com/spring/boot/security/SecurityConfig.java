@@ -4,7 +4,7 @@ package com.spring.boot.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.role.domain.RoleName;
-import com.spring.boot.member.application.MemberService;
+import com.spring.boot.user.application.UserService;
 import com.spring.boot.security.exception.FormAccessDeniedHandler;
 import com.spring.boot.security.exception.FormAuthenticationEntryPoint;
 import com.spring.boot.security.voter.ConnectionBasedVoter;
@@ -50,8 +50,8 @@ public class SecurityConfig{
     }
 
     @Bean
-    public FormAuthenticationProvider formAuthenticationProvider(MemberService memberService){
-        return new FormAuthenticationProvider(memberService);
+    public FormAuthenticationProvider formAuthenticationProvider(UserService userService){
+        return new FormAuthenticationProvider(userService);
     }
 
     @Bean
@@ -88,7 +88,7 @@ public class SecurityConfig{
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .failureHandler((request, response, exception) -> {
-                    ApiResult<?> LOGIN_FAIL_EXCEPTION = ApiResult.error("login failed", HttpStatus.NOT_FOUND);
+                    ApiResult<?> LOGIN_FAIL_EXCEPTION = ApiResult.error(exception.getMessage(), HttpStatus.NOT_FOUND);
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     writeResponse(response, LOGIN_FAIL_EXCEPTION);
                 })

@@ -1,10 +1,9 @@
 package com.spring.boot.common.mock;
 
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.user.domain.User;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.image.PostImages;
 import com.spring.boot.post.domain.like.PostLike;
-import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.domain.tag.PostTags;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockPost {
 
-  public static Builder builder(String title, String content, Member writer) {
+  public static Builder builder(String title, String content, User writer) {
     return new Builder()
         .title(title)
         .content(content)
@@ -26,7 +25,7 @@ public class MockPost {
     private Long id;
     private String title;
     private String content;
-    private Member writer;
+    private User writer;
     private PostImages postImages = new PostImages();
     private PostTags postTags = new PostTags();
     private List<PostLike> postLikes = new ArrayList<>();
@@ -47,7 +46,7 @@ public class MockPost {
       return this;
     }
 
-    public Builder writer(Member writer) {
+    public Builder writer(User writer) {
       this.writer = writer;
       return this;
     }

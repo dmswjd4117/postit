@@ -1,21 +1,22 @@
-package com.spring.boot.member.presentaion;
+package com.spring.boot.user.presentaion;
 
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.member.application.dto.MemberInfoDto;
+import com.spring.boot.user.application.dto.UserInfoDto;
 import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.infrastructure.UploadFile;
-import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.presentaion.dto.request.MemberMapper;
-import com.spring.boot.member.presentaion.dto.request.MemberRegisterReques;
-import com.spring.boot.member.presentaion.dto.response.MemberResponse;
+import com.spring.boot.user.application.UserService;
+import com.spring.boot.user.presentaion.dto.request.UserRegisterRequest;
+import com.spring.boot.user.presentaion.dto.response.UserResponse;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +26,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/member")
-public class MemberController {
+public class UserController {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
   private final ImageUploader imageUploader;
-  private final MemberService memberService;
+  private final UserService userService;
 
-  public MemberController(ImageUploader imageUploader, MemberService memberService) {
+  public UserController(ImageUploader imageUploader, UserService userService) {
     this.imageUploader = imageUploader;
-    this.memberService = memberService;
+    this.userService = userService;
   }
 
   private Optional<String> uploadProfileImage(UploadFile uploadFile) {
@@ -49,12 +50,12 @@ public class MemberController {
   }
 
   @PostMapping
-  private ApiResult<MemberResponse> register(
-      @ModelAttribute MemberRegisterReques registerRequest,
+  private ApiResult<UserResponse> register(
+      @ModelAttribute @Valid UserRegisterRequest registerRequest,
       @RequestPart(required = false, name = "profileImage") MultipartFile file
   ) {
 
-    MemberInfoDto memberInfoDto = memberService.register(
+    UserInfoDto userInfoDto = userService.register(
         registerRequest.getName(),
         registerRequest.getEmail(),
         registerRequest.getPassword(),
@@ -65,12 +66,12 @@ public class MemberController {
         .ifPresent(uploadFile -> {
           supplyAsync(() -> uploadProfileImage(uploadFile))
               .thenAccept(image -> image.ifPresent(imagePath -> {
-                memberService.updateProfileImage(memberInfoDto.getId(), imagePath);
+                userService.updateProfileImage(userInfoDto.getId(), imagePath);
               }));
         });
 
 
-    return ApiResult.success(MemberMapper.memberResponse(memberInfoDto));
+    return ApiResult.success(UserResponse.from(userInfoDto));
   }
 
 }

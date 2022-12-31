@@ -14,7 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.role.domain.Role;
+import com.spring.boot.role.domain.RoleName;
+import com.spring.boot.user.domain.User;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
@@ -57,8 +59,8 @@ class PostControllerTest {
   void 포스트_생성_실패(String title) throws Exception {
     // given
     String content = "content";
-    Member member = new Member("email", "password", "name");
-    PostInfoDto post = PostInfoDto.from(new Post(title, content, member));
+    User user = new User("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
+    PostInfoDto post = PostInfoDto.from(new Post(title, content, user));
 
     given(postService.createPost(any(), any(), any()))
         .willReturn(post);
@@ -88,8 +90,8 @@ class PostControllerTest {
     // given
     String title = "title";
     String content = "content";
-    Member member = new Member("email", "password", "name");
-    PostInfoDto post = PostInfoDto.from(new Post(title, content, member));
+    User user = new User("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
+    PostInfoDto post = PostInfoDto.from(new Post(title, content, user));
 
     given(postService.createPost(any(), any(), any()))
         .willReturn(post);

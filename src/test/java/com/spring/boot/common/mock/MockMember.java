@@ -1,7 +1,7 @@
 package com.spring.boot.common.mock;
 
 import com.spring.boot.connection.domain.Connection;
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.user.domain.User;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.role.domain.Role;
 import java.util.ArrayList;
@@ -78,8 +78,8 @@ public class MockMember {
     }
 
 
-    public Member build() {
-      return new Member(
+    public User build() {
+      return new User(
           id,
           email,
           password,

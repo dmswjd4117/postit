@@ -10,7 +10,7 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
-import com.spring.boot.member.domain.Member;
+import com.spring.boot.user.domain.User;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.application.dto.PostInfoDto.PostTagInfoDto;
@@ -55,11 +55,11 @@ class PostServiceTest extends IntegrationTest {
     @DisplayName("글 작성자는 게시물을 지울 수 있다")
     void 포스트_삭제() {
       // given
-      Member member = saveMember("email");
-      Post createdPost = savePost(member);
+      User user = saveMember("email");
+      Post createdPost = savePost(user);
 
       // when
-      postService.deletePost(member.getId(), createdPost.getId());
+      postService.deletePost(user.getId(), createdPost.getId());
 
       // then
       assertFalse(postRepository.findByPostId(createdPost.getId()).isPresent());
@@ -69,13 +69,13 @@ class PostServiceTest extends IntegrationTest {
     @DisplayName("글 작성자가 아니면 포스트를 지울 수 없다")
     void 포스트_삭제_실패() {
       // given
-      Member writer = saveMember("email@naver.com");
-      Member member = saveMember("member@naver.com");
+      User writer = saveMember("email@naver.com");
+      User user = saveMember("member@naver.com");
       Post createdPost = savePost(writer);
 
       // when
       assertThrows(AccessDeniedException.class, () -> {
-        postService.deletePost(member.getId(), createdPost.getId());
+        postService.deletePost(user.getId(), createdPost.getId());
       });
     }
 
@@ -90,7 +90,7 @@ class PostServiceTest extends IntegrationTest {
           new MockMultipartFile("new", "new.jpg", IMAGE_PNG_VALUE, "new".getBytes())
       );
 
-      Member writer = saveMember("email@naver.com");
+      User writer = saveMember("email@naver.com");
       Post createdPost = savePost(writer);
 
       // when

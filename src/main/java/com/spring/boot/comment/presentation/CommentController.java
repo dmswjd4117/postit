@@ -5,6 +5,7 @@ import com.spring.boot.comment.presentation.dto.CommentRequest;
 import com.spring.boot.comment.presentation.dto.CommentResponse;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.security.FormAuthentication;
+import javax.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,7 @@ public class CommentController {
     @PostMapping
     public ApiResult<CommentResponse> createComment(
             @AuthenticationPrincipal FormAuthentication formAuthentication,
-            @RequestBody CommentRequest commentRequest){
+            @RequestBody @Valid CommentRequest commentRequest){
         return ApiResult.success(
                 CommentResponse.from(commentService.createComment(
                         formAuthentication.id,

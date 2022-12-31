@@ -1,13 +1,11 @@
 package com.spring.boot.post.infrastructure;
 
 import static com.spring.boot.connection.domain.QConnection.connection;
-import static com.spring.boot.member.domain.QMember.member;
+import static com.spring.boot.user.domain.QMember.member;
 import static com.spring.boot.post.domain.QPost.post;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;

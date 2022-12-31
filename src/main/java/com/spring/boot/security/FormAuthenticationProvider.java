@@ -1,6 +1,9 @@
 package com.spring.boot.security;
 
-import com.spring.boot.member.application.MemberService;
+import com.spring.boot.common.exception.AuthenticationFailException;
+import com.spring.boot.user.application.UserService;
+import com.spring.boot.user.application.dto.UserInfoDto;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,43 +11,39 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-
 public class FormAuthenticationProvider implements AuthenticationProvider {
-    private final MemberService memberService;
-    private final NullAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-    public FormAuthenticationProvider(MemberService memberService) {
-        this.memberService = memberService;
-    }
+  private final UserService userService;
+  private final NullAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-    @Transactional
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String email = (String) authentication.getPrincipal();
-        String password = (String) authentication.getCredentials();
+  public FormAuthenticationProvider(UserService userService) {
+    this.userService = userService;
+  }
 
-        return memberService.login(email, password)
-                .map(findMember->{
+  @Transactional
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    String email = (String) authentication.getPrincipal();
+    String password = (String) authentication.getCredentials();
 
-                    FormAuthentication formAuthentication = new FormAuthentication(
-                            findMember.getId(),
-                            findMember.getEmail(),
-                            findMember.getName()
-                    );
+    UserInfoDto findMember = userService.login(email, password);
 
-                    Collection<? extends GrantedAuthority> auths = List.of(findMember.getGrantedAuthority());
+    FormAuthentication formAuthentication = new FormAuthentication(
+        findMember.getId(),
+        findMember.getEmail(),
+        findMember.getName()
+    );
 
-                    return new FormAuthenticationToken(formAuthentication, null, authoritiesMapper.mapAuthorities(auths));
-                })
-                .orElseThrow(()->new UsernameNotFoundException("not found exception"));
-    }
+    Collection<? extends GrantedAuthority> auths = List.of(findMember.getGrantedAuthority());
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
-    }
+    return new FormAuthenticationToken(formAuthentication, null,
+        authoritiesMapper.mapAuthorities(auths));
+  }
+
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+  }
 }
