@@ -1,13 +1,10 @@
 package com.spring.boot.role.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Role {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "role_id")
@@ -35,6 +33,7 @@ public class Role {
   public GrantedAuthority getGrantedAuthority() {
     return new SimpleGrantedAuthority(getRoleName());
   }
+
   public String getRoleName() {
     return roleName;
   }
