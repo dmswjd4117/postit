@@ -13,8 +13,10 @@ import com.spring.boot.user.application.UserService;
 import com.spring.boot.user.presentaion.dto.request.UserRegisterRequest;
 import com.spring.boot.user.presentaion.dto.response.UserResponse;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +51,7 @@ public class UserController {
 
   @PostMapping
   private ApiResult<UserResponse> register(
-      @ModelAttribute UserRegisterRequest registerRequest,
+      @ModelAttribute @Valid UserRegisterRequest registerRequest,
       @RequestPart(required = false, name = "profileImage") MultipartFile file
   ) {
 

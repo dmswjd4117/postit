@@ -15,7 +15,7 @@ public class RoleService {
   }
 
   public Role getRole(RoleName roleName) {
-    return roleRepository.findByRoleName(roleName.name())
-        .orElse(roleRepository.save(new Role(RoleName.MEMBER.getValue(), "member role")));
+    return roleRepository.findByRoleName(roleName.getValue())
+        .orElseGet(()->roleRepository.save(new Role(RoleName.MEMBER.getValue(), "member role")));
   }
 }
