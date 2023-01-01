@@ -37,6 +37,7 @@ public class LikeService {
     if(findLike.isPresent()){
       throw new DuplicatedException(Like.class, "중복된 좋아요입니다");
     }
+    post.plusLikeCount();
     return likeRepository.save(new Like(member, post)).getId();
   }
 
@@ -46,6 +47,7 @@ public class LikeService {
     Post post = postService.findByPostId(postId);
     Like findLike = likeRepository.findByMemberAndPost(member, post)
         .orElseThrow(()->new NotFoundException(Like.class, "좋아요가 존재하지 않습니다"));
+    post.minusLikeCount();
     likeRepository.delete(findLike);
     return findLike.getId();
   }

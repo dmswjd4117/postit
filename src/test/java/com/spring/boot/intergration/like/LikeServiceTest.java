@@ -2,9 +2,11 @@ package com.spring.boot.intergration.like;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.spring.boot.common.exception.DuplicatedException;
+import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.like.application.LikeService;
 import com.spring.boot.like.application.dto.LikeDto;
@@ -31,9 +33,23 @@ class LikeServiceTest extends IntegrationTest {
 
   @Nested
   @DisplayName("좋아요가 이미 눌러져 있을 때")
-  class 좋아요_눌러져있을때{
+  class 좋아요_눌러져있을때 {
+
     @Test
-    @DisplayName("한번 누르면 좋아요 최종 개수 0개")
+    @DisplayName("중복해서 좋아요 요청하면 예외가 발생한다")
+    public void 중복_좋아요_요청() {
+      Member member = saveMember("member@email.com");
+      Member writer = saveMember("writer@email.com");
+      Post post = savePost(writer);
+      likeService.like(member.getId(), post.getId());
+
+      assertThrows(DuplicatedException.class, () -> {
+        likeService.like(member.getId(), post.getId());
+      });
+    }
+
+    @Test
+    @DisplayName("취소 요청하면 좋아요 최종 개수 0개")
     public void 한번_누름() {
       // given
       Member member = saveMember("member@email.com");
@@ -50,7 +66,7 @@ class LikeServiceTest extends IntegrationTest {
     }
 
     @Test
-    @DisplayName("동시에 좋아요 누를 경우 좋아요 최종 개수 0개")
+    @DisplayName("동시에 여러번 취소 요청해도 좋아요 최종 개수 0개")
     public void 동시에_누름() throws InterruptedException {
       // given
       Member member = saveMember("member@email.com");
@@ -83,8 +99,20 @@ class LikeServiceTest extends IntegrationTest {
   class 좋아요가_눌러져있지_않을때 {
 
     @Test
-    @DisplayName("한번 누르면 좋아요 최종 개수 1개")
-    public void 한번_좋아요() {
+    @DisplayName("취소 요청하면 예외 발생한다.")
+    public void 취소_요청(){
+      Member member = saveMember("member@email.com");
+      Member writer = saveMember("writer@email.com");
+      Post post = savePost(writer);
+
+      assertThrows(NotFoundException.class, ()->{
+        likeService.unlike(member.getId(), post.getId());
+      });
+    }
+
+    @Test
+    @DisplayName("좋아요 요청하면 좋아요 최종 개수 0개")
+    public void 한번요청() {
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
       Post post = savePost(writer);
@@ -99,8 +127,8 @@ class LikeServiceTest extends IntegrationTest {
     }
 
     @Test
-    @DisplayName("동시에 100번 누르면 좋아요 최종 개수 1개")
-    public void 동시에_좋아요() throws InterruptedException {
+    @DisplayName("동시에 여러번 좋아요 요청해도 좋아요 최종 개수 1개")
+    public void 동시에_여러개_요청() throws InterruptedException {
       // given
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
@@ -113,7 +141,7 @@ class LikeServiceTest extends IntegrationTest {
         executorService.submit(() -> {
           try {
             likeService.like(member.getId(), post.getId());
-          } finally {
+          }finally {
             latch.countDown();
           }
         });
