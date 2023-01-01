@@ -34,9 +34,9 @@ public class PostQueryService {
   }
 
   @Transactional
-  public List<PostInfoDto> getPostByMemberId(Long memberId) {
+  public List<PostInfoDto> getPostByMemberId(Long memberId, Pageable pageable) {
     Member member = userService.findById(memberId);
-    List<Post> posts = postRepository.findAllByMemberId(member.getId());
+    List<Post> posts = postRepository.findAllByMemberId(member.getId(), pageable);
     return PostInfoDto.from(posts);
   }
 
@@ -48,8 +48,8 @@ public class PostQueryService {
   }
 
   @Transactional
-  public List<PostInfoDto> getAllPost() {
-    return postRepository.findAll()
+  public List<PostInfoDto> getAllPost(Pageable pageable) {
+    return postRepository.findAll(pageable)
         .stream()
         .map(PostInfoDto::from)
         .collect(Collectors.toList());

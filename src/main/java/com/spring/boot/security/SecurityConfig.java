@@ -68,7 +68,6 @@ public class SecurityConfig{
     public AccessDecisionManager accessDecisionManager(){
         List<AccessDecisionVoter<?>> decisionVoters = new ArrayList<>();
         decisionVoters.add(new WebExpressionVoter());
-        decisionVoters.add(connectionBasedVoter());
         return new UnanimousBased(decisionVoters);
     }
 

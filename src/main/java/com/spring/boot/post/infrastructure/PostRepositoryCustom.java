@@ -7,12 +7,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostRepositoryCustom {
 
-  List<Post> findAll();
+  Optional<Post> findByPostId(Long postId);
 
   List<Post> findAllFollowingsPost(Long memberId, Pageable pageable);
 
-  Optional<Post> findByPostId(Long postId);
-
-  List<Post> findAllByMemberId(Long memberId);
+  List<Post> findAllByMemberId(Long memberId, Pageable pageable);
 
 }
