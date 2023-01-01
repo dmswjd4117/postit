@@ -4,8 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
-import com.spring.boot.connection.domain.Connection;
-import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.dto.PostInfoDto;
@@ -13,44 +11,19 @@ import com.spring.boot.post.domain.Post;
 import com.spring.boot.user.domain.Member;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 public class PostQueryServiceTest extends IntegrationTest {
 
   @Autowired
   private PostQueryService postQueryService;
-  @Autowired
-  private ConnectionRepository connectionRepository;
 
   @Test
-  @DisplayName("팔로잉하고 있는 멤버들의 게시물들을 조회한다")
-  void 팔로잉들의_게시물_조회() {
-    // given
-    Member member = saveMember("member@naver.com");
-
-    for (int i = 0; i < 4; i++) {
-      Member targetMember = saveMember(i + "email@naver.com");
-
-      connectionRepository.save(new Connection(member, targetMember));
-      for (int j = 0; j < 2; j++) {
-        savePost(targetMember);
-      }
-    }
-
-    // when
-    Pageable pageable = Pageable.ofSize(2);
-    List<PostInfoDto> findPosts = postQueryService.getAllFollowingsPost(member.getId(),
-        pageable);
-
-    // then
-    assertThat(findPosts.size(), is(8));
-  }
-
-  @Test
-  @DisplayName("포스트 아이디로 포스트를 조회할 수 있다.")
-  void 게시물_게시물아이디로_조회() {
+  @DisplayName("포스팅 아이디로 조회성공")
+  void 게시물아이디로_조회() {
     // given
     Member member = saveMember("email@naver.com");
     Post post = savePost(member);
@@ -64,49 +37,101 @@ public class PostQueryServiceTest extends IntegrationTest {
     assertThat(post.getWriter().getId(), is(findPost.getWriter().getId()));
     assertThat(post.getPostImages().size(), is(findPost.getImages().size()));
     assertThat(post.getPostTags().size(), is(findPost.getTags().size()));
-//    assertThat(extractTagNames(post.getTags()), is(extractTagNames(origin.getTags())));
   }
 
-  @Test
-  @DisplayName("멤버 아이디로 글들을 조회한다")
-  void 게시물_멤버아이디로_조회() {
-    int DUMMY_POST_CNT = 3;
+  @Nested
+  @DisplayName("멤버 아이디로 조회할 때")
+  class 멤버_아이디로_조회 {
 
-    // given
-    Member member = saveMember("email@naver.com");
+    @Test
+    @DisplayName("조회 성공")
+    void 게시물_조회() {
+      int DUMMY_POST_CNT = 3;
 
-    for (int i = 0; i < DUMMY_POST_CNT; i++) {
-      savePost(member);
+      // given
+      Member member = saveMember("email@naver.com");
+
+      for (int i = 0; i < DUMMY_POST_CNT; i++) {
+        savePost(member);
+      }
+
+      // when
+      List<PostInfoDto> findPosts = postQueryService.getPostByMemberId(
+          member.getId(), PageRequest.ofSize(DUMMY_POST_CNT));
+
+      // then
+      assertThat(findPosts.size(), is(DUMMY_POST_CNT));
     }
 
-    // when
-    List<PostInfoDto> findPosts = postQueryService.getPostByMemberId(
-        member.getId());
+    @Test
+    @DisplayName("글 2개 조회 성공")
+    void 게시물_2개_조회() {
+      int DUMMY_POST_CNT = 3;
 
-    // then
-    assertThat(findPosts.size(), is(DUMMY_POST_CNT));
+      // given
+      Member member = saveMember("email@naver.com");
+
+      for (int i = 0; i < DUMMY_POST_CNT; i++) {
+        savePost(member);
+      }
+
+      // when
+      List<PostInfoDto> findPosts = postQueryService.getPostByMemberId(
+          member.getId(), PageRequest.ofSize(2));
+
+      // then
+      assertThat(findPosts.size(), is(2));
+    }
   }
 
-  @Test
-  @DisplayName("모든 게시물 조회한다")
-  void 모든_게시물_조회() {
-    // given
-    Member member = saveMember("email@naver.com");
 
-    for (int i = 0; i < 2; i++) {
-      savePost(member);
+  @Nested
+  @DisplayName("팔로잉하고 있는 멤버들의 게시물 조회할 때")
+  class 팔로잉멤버들의_게시물_조회 {
+
+    @Test
+    @DisplayName("조회 성공")
+    void 게시물_조회() {
+      // given
+      Member member = saveMember("email@naver.com");
+
+      for (int i = 0; i < 2; i++) {
+        savePost(member);
+      }
+
+      Member member2 = saveMember("email2@naver.com");
+      for (int i = 0; i < 3; i++) {
+        savePost(member2);
+      }
+
+      // when
+      List<PostInfoDto> posts = postQueryService.getAllPost(PageRequest.ofSize(6));
+
+      // then
+      assertThat(posts.size(), is(5));
     }
 
-    Member member2 = saveMember("email2@naver.com");
-    for (int i = 0; i < 3; i++) {
-      savePost(member2);
+    @Test
+    @DisplayName("글 2개 조회 성공")
+    void 게시물_2개_조회() {
+      // given
+      Member member = saveMember("email@naver.com");
+
+      for (int i = 0; i < 2; i++) {
+        savePost(member);
+      }
+
+      Member member2 = saveMember("email2@naver.com");
+      for (int i = 0; i < 3; i++) {
+        savePost(member2);
+      }
+
+      // when
+      List<PostInfoDto> posts = postQueryService.getAllPost(PageRequest.ofSize(2));
+
+      // then
+      assertThat(posts.size(), is(2));
     }
-
-    // when
-    List<PostInfoDto> posts = postQueryService.getAllPost();
-
-    // then
-    assertThat(posts.size(), is(5));
   }
 
 

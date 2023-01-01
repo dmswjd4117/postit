@@ -78,10 +78,11 @@ public class PostController {
 
   @GetMapping("/member/{memberId}")
   public ApiResult<List<PostInfoResponse>> getPostByMemberId(
-      @PathVariable Long memberId
+      @PathVariable Long memberId,
+      Pageable pageable
   ) {
     return ApiResult.success(
-        postQueryService.getPostByMemberId(memberId)
+        postQueryService.getPostByMemberId(memberId, pageable)
             .stream()
             .map(PostInfoResponse::from)
             .collect(Collectors.toList())
@@ -98,7 +99,7 @@ public class PostController {
     );
   }
 
-  @GetMapping("/all")
+  @GetMapping("/following")
   public ApiResult<List<PostInfoResponse>> findAllFollowingsPost(
       @AuthenticationPrincipal FormAuthentication authentication,
       Pageable pageable

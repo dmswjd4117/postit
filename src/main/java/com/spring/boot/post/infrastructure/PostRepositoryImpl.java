@@ -1,8 +1,8 @@
 package com.spring.boot.post.infrastructure;
 
 import static com.spring.boot.connection.domain.QConnection.connection;
-import static com.spring.boot.user.domain.QMember.member;
 import static com.spring.boot.post.domain.QPost.post;
+import static com.spring.boot.user.domain.QMember.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.boot.post.domain.Post;
@@ -19,12 +19,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   }
 
   @Override
-  public List<Post> findAll() {
-    return queryFactory.selectFrom(post)
-        .fetch();
-  }
-
-  @Override
   public List<Post> findAllFollowingsPost(Long memberId, Pageable pageable) {
 
     List<Long> followings = queryFactory
@@ -38,12 +32,26 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         .join(post.writer)
         .fetchJoin()
         .where(post.writer.id.in(followings))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
+  }
+
+  @Override
+  public List<Post> findAllByMemberId(Long memberId, Pageable pageable) {
+    return queryFactory
+        .selectFrom(post)
+        .join(post.writer, member)
+        .fetchJoin()
+        .where(post.writer.id.eq(memberId))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
         .fetch();
   }
 
   @Override
   public Optional<Post> findByPostId(Long postId) {
-    if(postId == null){
+    if (postId == null) {
       throw new IllegalArgumentException("postId가 null입니다");
     }
     return Optional.ofNullable(queryFactory
@@ -52,15 +60,5 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         .fetchJoin()
         .where(post.id.eq(postId))
         .fetchOne());
-  }
-
-  @Override
-  public List<Post> findAllByMemberId(Long memberId) {
-    return queryFactory
-        .selectFrom(post)
-        .join(post.writer, member)
-        .fetchJoin()
-        .where(post.writer.id.eq(memberId))
-        .fetch();
   }
 }
