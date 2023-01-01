@@ -1,6 +1,6 @@
 package com.spring.boot.user.application.dto;
 
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,13 +15,13 @@ public class UserInfoDto {
   private GrantedAuthority grantedAuthority;
 
   public static UserInfoDto from(
-      User user){
+      Member member){
     return UserInfoDto.builder()
-        .id(user.getId())
-        .email(user.getEmail())
-        .name(user.getName())
-        .profileImagePath(user.getProfileImagePath())
-        .grantedAuthority(user.getGrantedAuthority())
+        .id(member.getId())
+        .email(member.getEmail())
+        .name(member.getName())
+        .profileImagePath(member.getProfileImagePath())
+        .grantedAuthority(member.getGrantedAuthority())
         .build();
   }
 }

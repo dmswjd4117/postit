@@ -1,6 +1,6 @@
 package com.spring.boot.comment.domain;
 
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import com.spring.boot.post.domain.Post;
 import lombok.Getter;
 
@@ -19,7 +19,7 @@ public class Comment {
 
     @JoinColumn(name = "writer_id")
     @ManyToOne
-    private User writer;
+    private Member writer;
 
     @JoinColumn(name = "post_id")
     @ManyToOne
@@ -28,7 +28,7 @@ public class Comment {
     @Column
     private String body;
 
-    public Comment(User writer, Post post, String body) {
+    public Comment(Member writer, Post post, String body) {
         this.writer = writer;
         this.post = post;
         this.body = body;

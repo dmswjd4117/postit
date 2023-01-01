@@ -28,7 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class User extends BaseTime {
+public class Member extends BaseTime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,10 +47,10 @@ public class User extends BaseTime {
   @Column
   private String profileImagePath;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(mappedBy = "member")
   private List<Connection> following;
 
-  @OneToMany(mappedBy = "targetUser")
+  @OneToMany(mappedBy = "targetMember")
   private List<Connection> followers;
 
   @Column
@@ -60,7 +60,7 @@ public class User extends BaseTime {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   private Role role;
 
-  public User(String email, String password, String name, Role role) {
+  public Member(String email, String password, String name, Role role) {
     this.email = email;
     this.password = password;
     this.name = name;
@@ -98,11 +98,11 @@ public class User extends BaseTime {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof User)) {
+    if (!(o instanceof Member)) {
       return false;
     }
-    User user = (User) o;
-    return id.equals(user.getId()) && email.equals(user.email);
+    Member member = (Member) o;
+    return id.equals(member.getId()) && email.equals(member.email);
   }
 
   @Override

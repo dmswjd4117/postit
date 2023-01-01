@@ -16,7 +16,7 @@ import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;
@@ -40,7 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(InfrastructureTestConfiguration.class)
 class CommentControllerTest {
 
-  private final User POST_WRITER = new User("email@gmail.com", "password", "name", new Role(
+  private final Member POST_WRITER = new Member("email@gmail.com", "password", "name", new Role(
       RoleName.MEMBER.getValue(), "member"));
   private final Post POST = new Post("title", "post-content", POST_WRITER);
   @MockBean
@@ -58,7 +58,7 @@ class CommentControllerTest {
     // given
     FormAuthentication principal = (FormAuthentication) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
-    User commentWriter = new User(principal.email, "password", principal.name, new Role(RoleName.MEMBER.getValue(), "role"));
+    Member commentWriter = new Member(principal.email, "password", principal.name, new Role(RoleName.MEMBER.getValue(), "role"));
 
     Comment comment = new Comment(
         commentWriter,

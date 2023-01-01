@@ -1,6 +1,6 @@
 package com.spring.boot.sampleData;
 
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import com.spring.boot.role.application.RoleService;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
@@ -44,8 +44,8 @@ public class initUser {
     public void init() {
       Role role = roleService.getRole(RoleName.MEMBER);
       for (int i = 0; i < 10; i++) {
-        User user = new User(i + "email@gmail.com", passwordEncoder.encode("password"), "name", role);
-        entityManager.persist(user);
+        Member member = new Member(i + "email@gmail.com", passwordEncoder.encode("password"), "name", role);
+        entityManager.persist(member);
       }
     }
   }

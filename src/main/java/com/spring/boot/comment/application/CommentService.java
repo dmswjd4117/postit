@@ -6,7 +6,7 @@ import com.spring.boot.common.exception.NotConnectedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.user.application.UserService;
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import org.springframework.stereotype.Service;
@@ -30,14 +30,14 @@ public class CommentService {
 
   @Transactional
   public Comment createComment(Long writerId, String body, Long postId) {
-    User commentWriter = userService.findById(writerId);
+    Member commentWriter = userService.findById(writerId);
 
     return postRepository.findById(postId)
         .map(findPost -> {
-          User postWriter = findPost.getWriter();
+          Member postWriter = findPost.getWriter();
           if (!postWriter.getId().equals(writerId) &&
               !connectionService.checkMemberFollowsTargetMember(writerId, postWriter.getId())) {
-            throw new NotConnectedException(User.class, writerId, "doesn't follow",
+            throw new NotConnectedException(Member.class, writerId, "doesn't follow",
                 postWriter.getId());
           }
           return commentRepository.save(new Comment(commentWriter, findPost, body));

@@ -1,6 +1,6 @@
 package com.spring.boot.connection.domain;
 
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,26 +27,26 @@ public class Connection {
 
   @ManyToOne
   @JoinColumn(name = "member_id")
-  private User user;
+  private Member member;
 
   @ManyToOne
   @JoinColumn(name = "target_member_id")
-  private User targetUser;
+  private Member targetMember;
 
   @CreatedDate
   private LocalDateTime createdDate;
 
-  public Connection(User user, User targetUser) {
-    this.user = user;
-    this.targetUser = targetUser;
+  public Connection(Member member, Member targetMember) {
+    this.member = member;
+    this.targetMember = targetMember;
   }
 
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
         .append("connection_id", id)
-        .append("member", user)
-        .append("targetMember", targetUser)
+        .append("member", member)
+        .append("targetMember", targetMember)
         .append("createdDate", createdDate)
         .toString();
   }

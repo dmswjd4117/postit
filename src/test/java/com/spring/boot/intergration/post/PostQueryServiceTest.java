@@ -10,7 +10,7 @@ import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,20 +28,20 @@ public class PostQueryServiceTest extends IntegrationTest {
   @DisplayName("팔로잉하고 있는 멤버들의 게시물들을 조회한다")
   void 팔로잉들의_게시물_조회() {
     // given
-    User user = saveMember("member@naver.com");
+    Member member = saveMember("member@naver.com");
 
     for (int i = 0; i < 4; i++) {
-      User targetUser = saveMember(i + "email@naver.com");
+      Member targetMember = saveMember(i + "email@naver.com");
 
-      connectionRepository.save(new Connection(user, targetUser));
+      connectionRepository.save(new Connection(member, targetMember));
       for (int j = 0; j < 2; j++) {
-        savePost(targetUser);
+        savePost(targetMember);
       }
     }
 
     // when
     Pageable pageable = Pageable.ofSize(2);
-    List<PostInfoDto> findPosts = postQueryService.getAllFollowingsPost(user.getId(),
+    List<PostInfoDto> findPosts = postQueryService.getAllFollowingsPost(member.getId(),
         pageable);
 
     // then
@@ -52,8 +52,8 @@ public class PostQueryServiceTest extends IntegrationTest {
   @DisplayName("포스트 아이디로 포스트를 조회할 수 있다.")
   void 게시물_게시물아이디로_조회() {
     // given
-    User user = saveMember("email@naver.com");
-    Post post = savePost(user);
+    Member member = saveMember("email@naver.com");
+    Post post = savePost(member);
 
     // when
     PostInfoDto findPost = postQueryService.getPostByPostId(post.getId());
@@ -73,15 +73,15 @@ public class PostQueryServiceTest extends IntegrationTest {
     int DUMMY_POST_CNT = 3;
 
     // given
-    User user = saveMember("email@naver.com");
+    Member member = saveMember("email@naver.com");
 
     for (int i = 0; i < DUMMY_POST_CNT; i++) {
-      savePost(user);
+      savePost(member);
     }
 
     // when
     List<PostInfoDto> findPosts = postQueryService.getPostByMemberId(
-        user.getId());
+        member.getId());
 
     // then
     assertThat(findPosts.size(), is(DUMMY_POST_CNT));
@@ -91,15 +91,15 @@ public class PostQueryServiceTest extends IntegrationTest {
   @DisplayName("모든 게시물 조회한다")
   void 모든_게시물_조회() {
     // given
-    User user = saveMember("email@naver.com");
+    Member member = saveMember("email@naver.com");
 
     for (int i = 0; i < 2; i++) {
-      savePost(user);
+      savePost(member);
     }
 
-    User user2 = saveMember("email2@naver.com");
+    Member member2 = saveMember("email2@naver.com");
     for (int i = 0; i < 3; i++) {
-      savePost(user2);
+      savePost(member2);
     }
 
     // when

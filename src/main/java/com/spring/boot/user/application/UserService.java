@@ -4,7 +4,7 @@ import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.user.application.dto.UserInfoDto;
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import com.spring.boot.user.domain.UserRepository;
 import com.spring.boot.role.application.RoleService;
 import com.spring.boot.role.domain.Role;
@@ -30,12 +30,12 @@ public class UserService {
 
   @Transactional
   public UserInfoDto register(String name, String email, String password, RoleName roleName) {
-    User user = saveMember(name, email, password, roleName);
-    user.initRole(roleService.getRole(roleName));
-    return UserInfoDto.from(user);
+    Member member = saveMember(name, email, password, roleName);
+    member.initRole(roleService.getRole(roleName));
+    return UserInfoDto.from(member);
   }
 
-  private User saveMember(String name, String email, String password, RoleName roleName) {
+  private Member saveMember(String name, String email, String password, RoleName roleName) {
     userRepository.findByEmail(email)
         .ifPresent(find -> {
           throw new DuplicatedException("email", email);
@@ -43,15 +43,15 @@ public class UserService {
 
     Role role = roleService.getRole(roleName);
 
-    User user = new User(
+    Member member = new Member(
         email,
         passwordEncoder.encode(password),
         name,
         role);
-    return userRepository.save(user);
+    return userRepository.save(member);
   }
 
-  private Optional<User> findByEmail(String email) {
+  private Optional<Member> findByEmail(String email) {
     return userRepository.findByEmail(email);
   }
 
@@ -75,8 +75,8 @@ public class UserService {
         });
   }
 
-  public User findById(Long id) {
-    return userRepository.findById(id).orElseThrow(() -> new NotFoundException(User.class, id));
+  public Member findById(Long id) {
+    return userRepository.findById(id).orElseThrow(() -> new NotFoundException(Member.class, id));
   }
 
 }

@@ -1,7 +1,7 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.BaseTime;
-import com.spring.boot.user.domain.User;
+import com.spring.boot.user.domain.Member;
 import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.image.PostImages;
 import com.spring.boot.post.domain.like.PostLike;
@@ -46,7 +46,7 @@ public class Post extends BaseTime {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)
-  private User writer;
+  private Member writer;
 
   @Embedded
   private PostImages postImages = new PostImages();
@@ -58,7 +58,7 @@ public class Post extends BaseTime {
   @OneToMany(mappedBy = "post")
   private List<PostLike> postLikes = new ArrayList<>();
 
-  public Post(String title, String content, User writer) {
+  public Post(String title, String content, Member writer) {
     this.title = title;
     this.content = content;
     this.writer = writer;
@@ -72,8 +72,8 @@ public class Post extends BaseTime {
     postImages.init(imagePaths, this);
   }
 
-  public boolean isWrittenBy(User user) {
-    return writer.equals(user);
+  public boolean isWrittenBy(Member member) {
+    return writer.equals(member);
   }
 
   public void updatePost(String title, String content, Set<Tag> tags) {
