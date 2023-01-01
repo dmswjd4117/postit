@@ -1,7 +1,7 @@
 package com.spring.boot.common.mock;
 
 import com.spring.boot.connection.domain.Connection;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.role.domain.Role;
 import java.util.ArrayList;
@@ -12,11 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MockMember {
 
-  public static Builder builder(String email, String name, String password, Role role) {
+  public static Builder builder(String email, Role role) {
     return new Builder()
         .email(email)
-        .name(name)
-        .password(password)
         .role(role);
   }
 
@@ -24,7 +22,7 @@ public class MockMember {
 
     private Long id;
     private String email;
-    private String password;
+    private String password = "password";
     private Role role;
     private String name = "test";
     private String profileImagePath = "https://i.ibb.co/4M4JvyT/2022-12-30-1-58-57.png";

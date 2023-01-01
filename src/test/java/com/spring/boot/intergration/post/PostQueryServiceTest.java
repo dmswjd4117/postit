@@ -8,7 +8,7 @@ import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

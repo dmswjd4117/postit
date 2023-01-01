@@ -1,4 +1,4 @@
-package com.spring.boot.post.presentaion.dto.request;
+package com.spring.boot.post.presentation.dto.request;
 
 import java.util.List;
 import javax.validation.constraints.NotBlank;

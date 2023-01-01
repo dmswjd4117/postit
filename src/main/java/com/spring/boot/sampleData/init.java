@@ -7,7 +7,7 @@ import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.tag.application.TagService;
 import com.spring.boot.tag.domain.Tag;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.PostConstruct;

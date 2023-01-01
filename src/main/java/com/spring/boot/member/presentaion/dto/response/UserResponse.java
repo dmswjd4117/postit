@@ -1,6 +1,6 @@
-package com.spring.boot.user.presentaion.dto.response;
+package com.spring.boot.member.presentaion.dto.response;
 
-import com.spring.boot.user.application.dto.UserInfoDto;
+import com.spring.boot.member.application.dto.UserInfoDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

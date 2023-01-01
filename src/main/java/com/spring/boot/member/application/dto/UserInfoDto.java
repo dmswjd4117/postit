@@ -1,6 +1,6 @@
-package com.spring.boot.user.application.dto;
+package com.spring.boot.member.application.dto;
 
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

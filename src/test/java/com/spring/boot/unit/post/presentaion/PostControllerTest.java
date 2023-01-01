@@ -16,11 +16,11 @@ import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticatio
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
+import com.spring.boot.post.presentation.dto.response.PostInfoResponse;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

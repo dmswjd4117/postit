@@ -1,10 +1,10 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.BaseTime;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.image.PostImages;
-import com.spring.boot.post.domain.like.PostLike;
+import com.spring.boot.like.domain.Like;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.domain.tag.PostTags;
 import com.spring.boot.tag.domain.Tag;
@@ -56,7 +56,9 @@ public class Post extends BaseTime {
 
   @BatchSize(size = 1000)
   @OneToMany(mappedBy = "post")
-  private List<PostLike> postLikes = new ArrayList<>();
+  private List<Like> likes = new ArrayList<>();
+
+  private int postLikeCnt;
 
   public Post(String title, String content, Member writer) {
     this.title = title;

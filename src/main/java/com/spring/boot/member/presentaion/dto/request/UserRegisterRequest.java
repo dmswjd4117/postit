@@ -1,4 +1,4 @@
-package com.spring.boot.user.presentaion.dto.request;
+package com.spring.boot.member.presentaion.dto.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

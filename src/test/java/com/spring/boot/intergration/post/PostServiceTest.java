@@ -10,14 +10,14 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.application.dto.PostInfoDto.PostTagInfoDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
-import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
-import com.spring.boot.post.presentaion.dto.request.PostUpdateRequest;
+import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
+import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;

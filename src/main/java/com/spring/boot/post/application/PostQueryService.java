@@ -1,8 +1,8 @@
 package com.spring.boot.post.application;
 
 import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.user.application.UserService;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.application.MemberService;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
@@ -17,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class PostQueryService {
 
-  private final UserService userService;
+  private final MemberService memberService;
   private final PostRepository postRepository;
 
-  public PostQueryService(UserService userService,
+  public PostQueryService(MemberService memberService,
       PostRepository postRepository) {
-    this.userService = userService;
+    this.memberService = memberService;
     this.postRepository = postRepository;
   }
 
@@ -35,7 +35,7 @@ public class PostQueryService {
 
   @Transactional
   public List<PostInfoDto> getPostByMemberId(Long memberId, Pageable pageable) {
-    Member member = userService.findById(memberId);
+    Member member = memberService.findByMemberId(memberId);
     List<Post> posts = postRepository.findAllByMemberId(member.getId(), pageable);
     return PostInfoDto.from(posts);
   }

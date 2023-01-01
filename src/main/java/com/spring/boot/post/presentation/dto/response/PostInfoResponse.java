@@ -1,4 +1,4 @@
-package com.spring.boot.post.presentaion.dto.response;
+package com.spring.boot.post.presentation.dto.response;
 
 import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.application.dto.PostInfoDto.PostImageInfoDto;

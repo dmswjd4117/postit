@@ -1,4 +1,4 @@
-package com.spring.boot.user.domain;
+package com.spring.boot.member.domain;
 
 import com.spring.boot.common.BaseTime;
 import com.spring.boot.connection.domain.Connection;

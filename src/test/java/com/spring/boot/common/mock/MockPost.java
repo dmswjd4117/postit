@@ -1,9 +1,9 @@
 package com.spring.boot.common.mock;
 
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.like.domain.Like;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.image.PostImages;
-import com.spring.boot.post.domain.like.PostLike;
 import com.spring.boot.post.domain.tag.PostTags;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class MockPost {
     private Member writer;
     private PostImages postImages = new PostImages();
     private PostTags postTags = new PostTags();
-    private List<PostLike> postLikes = new ArrayList<>();
+    private List<Like> likes = new ArrayList<>();
 
     public Builder id(Long id) {
       this.id = id;
@@ -61,8 +61,8 @@ public class MockPost {
       return this;
     }
 
-    public Builder postLikes(List<PostLike> postLikes) {
-      this.postLikes = postLikes;
+    public Builder postLikes(List<Like> likes) {
+      this.likes = likes;
       return this;
     }
 

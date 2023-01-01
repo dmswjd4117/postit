@@ -1,12 +1,12 @@
-package com.spring.boot.post.presentaion;
+package com.spring.boot.post.presentation;
 
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.PostInfoDto;
-import com.spring.boot.post.presentaion.dto.request.PostCreateRequest;
-import com.spring.boot.post.presentaion.dto.request.PostUpdateRequest;
-import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
+import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
+import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
+import com.spring.boot.post.presentation.dto.response.PostInfoResponse;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;

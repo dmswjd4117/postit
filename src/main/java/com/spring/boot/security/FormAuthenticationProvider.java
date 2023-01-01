@@ -1,8 +1,7 @@
 package com.spring.boot.security;
 
-import com.spring.boot.common.exception.AuthenticationFailException;
-import com.spring.boot.user.application.UserService;
-import com.spring.boot.user.application.dto.UserInfoDto;
+import com.spring.boot.member.application.MemberService;
+import com.spring.boot.member.application.dto.UserInfoDto;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class FormAuthenticationProvider implements AuthenticationProvider {
 
-  private final UserService userService;
+  private final MemberService memberService;
   private final NullAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-  public FormAuthenticationProvider(UserService userService) {
-    this.userService = userService;
+  public FormAuthenticationProvider(MemberService memberService) {
+    this.memberService = memberService;
   }
 
   @Transactional
@@ -28,7 +27,7 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
     String email = (String) authentication.getPrincipal();
     String password = (String) authentication.getCredentials();
 
-    UserInfoDto findMember = userService.login(email, password);
+    UserInfoDto findMember = memberService.login(email, password);
 
     FormAuthentication formAuthentication = new FormAuthentication(
         findMember.getId(),

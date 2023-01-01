@@ -1,4 +1,4 @@
-package com.spring.boot.post.presentaion.dto.request;
+package com.spring.boot.post.presentation.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

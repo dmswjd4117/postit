@@ -1,4 +1,4 @@
-package com.spring.boot.user.domain;
+package com.spring.boot.member.domain;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

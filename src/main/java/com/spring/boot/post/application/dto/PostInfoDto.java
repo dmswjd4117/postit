@@ -1,7 +1,7 @@
 package com.spring.boot.post.application.dto;
 
 
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.tag.PostTag;
@@ -41,7 +41,7 @@ public class PostInfoDto {
         .title(post.getTitle())
         .content(post.getContent())
         .writer(postWriter)
-        .likeCount(post.getPostLikes().size())
+        .likeCount(post.getLikes().size())
         .images(postImageInfo)
         .tags(postTagInfo)
         .createdDate(post.getCreatedDate())

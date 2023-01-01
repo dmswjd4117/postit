@@ -1,22 +1,21 @@
-package com.spring.boot.user.presentaion;
+package com.spring.boot.member.presentaion;
 
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.user.application.dto.UserInfoDto;
+import com.spring.boot.member.application.dto.UserInfoDto;
 import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.infrastructure.UploadFile;
-import com.spring.boot.user.application.UserService;
-import com.spring.boot.user.presentaion.dto.request.UserRegisterRequest;
-import com.spring.boot.user.presentaion.dto.response.UserResponse;
+import com.spring.boot.member.application.MemberService;
+import com.spring.boot.member.presentaion.dto.request.UserRegisterRequest;
+import com.spring.boot.member.presentaion.dto.response.UserResponse;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +29,11 @@ public class UserController {
 
   private final Logger log = LoggerFactory.getLogger(getClass());
   private final ImageUploader imageUploader;
-  private final UserService userService;
+  private final MemberService memberService;
 
-  public UserController(ImageUploader imageUploader, UserService userService) {
+  public UserController(ImageUploader imageUploader, MemberService memberService) {
     this.imageUploader = imageUploader;
-    this.userService = userService;
+    this.memberService = memberService;
   }
 
   private Optional<String> uploadProfileImage(UploadFile uploadFile) {
@@ -55,7 +54,7 @@ public class UserController {
       @RequestPart(required = false, name = "profileImage") MultipartFile file
   ) {
 
-    UserInfoDto userInfoDto = userService.register(
+    UserInfoDto userInfoDto = memberService.register(
         registerRequest.getName(),
         registerRequest.getEmail(),
         registerRequest.getPassword(),
@@ -66,7 +65,7 @@ public class UserController {
         .ifPresent(uploadFile -> {
           supplyAsync(() -> uploadProfileImage(uploadFile))
               .thenAccept(image -> image.ifPresent(imagePath -> {
-                userService.updateProfileImage(userInfoDto.getId(), imagePath);
+                memberService.updateProfileImage(userInfoDto.getId(), imagePath);
               }));
         });
 

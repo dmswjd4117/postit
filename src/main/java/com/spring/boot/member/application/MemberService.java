@@ -1,11 +1,11 @@
-package com.spring.boot.user.application;
+package com.spring.boot.member.application;
 
 import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.user.application.dto.UserInfoDto;
-import com.spring.boot.user.domain.Member;
-import com.spring.boot.user.domain.UserRepository;
+import com.spring.boot.member.application.dto.UserInfoDto;
+import com.spring.boot.member.domain.Member;
+import com.spring.boot.member.domain.UserRepository;
 import com.spring.boot.role.application.RoleService;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserService {
+public class MemberService {
 
   private final UserRepository userRepository;
   private final RoleService roleService;
   private final PasswordEncoder passwordEncoder;
 
-  public UserService(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
+  public MemberService(UserRepository userRepository, RoleService roleService, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.roleService = roleService;
     this.passwordEncoder = passwordEncoder;
@@ -75,7 +75,7 @@ public class UserService {
         });
   }
 
-  public Member findById(Long id) {
+  public Member findByMemberId(Long id) {
     return userRepository.findById(id).orElseThrow(() -> new NotFoundException(Member.class, id));
   }
 
