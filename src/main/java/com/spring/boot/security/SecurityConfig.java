@@ -80,7 +80,7 @@ public class SecurityConfig {
           registry
               .accessDecisionManager(accessDecisionManager())
               .antMatchers("/api/admin/**").hasRole(RoleName.ADMIN.name())
-              .antMatchers("/api/post/**").hasAnyRole(RoleName.ADMIN.name(), RoleName.MEMBER.name())
+//              .antMatchers("/api/post/**").hasAnyRole(RoleName.ADMIN.name(), RoleName.MEMBER.name())
               .antMatchers("/api/connection/**").hasAnyRole(RoleName.MEMBER.name())
               .antMatchers("/api/like/post/**").hasAnyRole(RoleName.MEMBER.name())
               .anyRequest().permitAll();

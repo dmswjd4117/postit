@@ -12,12 +12,12 @@ import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostInfoDto;
-import com.spring.boot.post.application.dto.PostInfoDto.PostTagInfoDto;
+import com.spring.boot.post.application.dto.request.PostCreateRequestDto;
+import com.spring.boot.post.application.dto.response.PostResponseDto;
+import com.spring.boot.post.application.dto.response.PostTagResponseDto;
+import com.spring.boot.post.application.dto.request.PostUpdateRequestDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
-import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
-import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,9 +41,9 @@ class PostServiceTest extends IntegrationTest {
   private PostRepository postRepository;
 
 
-  public Set<String> extractTagNames(Set<PostTagInfoDto> postTagInfoDtos) {
+  public Set<String> extractTagNames(Set<PostTagResponseDto> postTagInfoDtos) {
     return postTagInfoDtos.stream()
-        .map(PostTagInfoDto::getName)
+        .map(PostTagResponseDto::getName)
         .collect(Collectors.toSet());
   }
 
@@ -94,14 +94,21 @@ class PostServiceTest extends IntegrationTest {
       Post createdPost = savePost(writer);
 
       // when
-      PostUpdateRequest postUpdateRequest = new PostUpdateRequest(newTitle, newContent,
-          newTagNames);
-      PostInfoDto updated = postService.updatePost(writer.getId(), createdPost.getId(), postUpdateRequest, newImages);
+      PostUpdateRequestDto postUpdateRequestDto = PostUpdateRequestDto.builder()
+          .writerId(writer.getId())
+          .postId(createdPost.getId())
+          .content(newContent)
+          .title(newTitle)
+          .multipartFiles(newImages)
+          .tagNames(newTagNames)
+          .build();
+
+      PostResponseDto updated = postService.updatePost(postUpdateRequestDto);
 
       // then
       assertThat(updated, is(notNullValue()));
       assertThat(updated.getContent(), is(newContent));
-      assertThat(updated.getWriter().getId(), is(writer.getId()));
+      assertThat(updated.getWriterId(), is(writer.getId()));
       assertThat(updated.getImages().size(), is(newImages.size()));
       assertThat(updated.getTags().size(), is(newTagNames.size()));
       assertThat(extractTagNames(updated.getTags()), is(new HashSet<>(newTagNames)));
@@ -110,11 +117,16 @@ class PostServiceTest extends IntegrationTest {
     @Test
     @DisplayName("잘못된 유저 아이디일 경우 게시물을 생성할 수 없다.")
     void 포스트_생성_실패_잘못된_유저아이디() {
-      PostCreateRequest postCreateRequest = new PostCreateRequest("title", "body",
-          Collections.emptyList());
+      PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+          .writerId(-1L)
+          .content("content")
+          .title("title")
+          .multipartFiles(Collections.emptyList())
+          .tagNames(Collections.emptyList())
+          .build();
 
       assertThrows(NotFoundException.class, () -> {
-        postService.createPost(-1L, postCreateRequest, Collections.emptyList());
+        postService.createPost(postCreateDto);
       });
     }
   }

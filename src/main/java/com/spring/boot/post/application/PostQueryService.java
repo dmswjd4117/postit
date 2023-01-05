@@ -3,7 +3,7 @@ package com.spring.boot.post.application;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.application.dto.PostInfoDto;
+import com.spring.boot.post.application.dto.response.PostResponseDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import java.util.List;
@@ -27,31 +27,31 @@ public class PostQueryService {
   }
 
   @Transactional
-  public PostInfoDto getPostByPostId(Long postId) {
+  public PostResponseDto getPostByPostId(Long postId) {
     return postRepository.findByPostId(postId)
-        .map(PostInfoDto::from)
+        .map(PostResponseDto::from)
         .orElseThrow(() -> new NotFoundException(Post.class, "post does not exist by id", postId));
   }
 
   @Transactional
-  public List<PostInfoDto> getPostByMemberId(Long memberId, Pageable pageable) {
+  public List<PostResponseDto> getPostByMemberId(Long memberId, Pageable pageable) {
     Member member = memberService.findByMemberId(memberId);
     List<Post> posts = postRepository.findAllByMemberId(member.getId(), pageable);
-    return PostInfoDto.from(posts);
+    return PostResponseDto.from(posts);
   }
 
   @Transactional(readOnly = true)
-  public List<PostInfoDto> getAllFollowingsPost(Long memberId, Pageable pageable) {
+  public List<PostResponseDto> getAllFollowingsPost(Long memberId, Pageable pageable) {
     return postRepository.findAllFollowingsPost(memberId, pageable).stream()
-        .map(PostInfoDto::from)
+        .map(PostResponseDto::from)
         .collect(Collectors.toList());
   }
 
   @Transactional
-  public List<PostInfoDto> getAllPost(Pageable pageable) {
+  public List<PostResponseDto> getAllPost(Pageable pageable) {
     return postRepository.findAll(pageable)
         .stream()
-        .map(PostInfoDto::from)
+        .map(PostResponseDto::from)
         .collect(Collectors.toList());
   }
 

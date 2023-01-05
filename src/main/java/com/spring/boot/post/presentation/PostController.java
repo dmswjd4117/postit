@@ -3,10 +3,11 @@ package com.spring.boot.post.presentation;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostInfoDto;
+import com.spring.boot.post.application.dto.response.PostResponseDto;
+import com.spring.boot.post.presentation.dto.PostAssembler;
 import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
 import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
-import com.spring.boot.post.presentation.dto.response.PostInfoResponse;
+import com.spring.boot.post.presentation.dto.response.PostResponse;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,18 +39,16 @@ public class PostController {
   }
 
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  public ApiResult<PostInfoResponse> createPost(
+  public ApiResult<PostResponse> createPost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @ModelAttribute @Valid PostCreateRequest postCreateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
 
-    PostInfoDto post = postService.createPost(
-        authentication.id,
-        postCreateRequest,
-        multipartFiles);
+    PostResponseDto postResponseDto = postService.createPost(
+        PostAssembler.toPostCreateRequestDto(authentication.id, postCreateRequest, multipartFiles));
 
-    return ApiResult.success(PostInfoResponse.from(post));
+    return ApiResult.success(PostAssembler.toPostInfoResponse(postResponseDto));
   }
 
   @DeleteMapping("/{postId}")
@@ -61,53 +60,50 @@ public class PostController {
   }
 
   @PutMapping("/{postId}")
-  public ApiResult<PostInfoResponse> updatePost(
+  public ApiResult<PostResponse> updatePost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId,
       @ModelAttribute @Valid PostUpdateRequest postUpdateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
-    PostInfoDto updatedPost = postService.updatePost(
-        authentication.id,
-        postId,
-        postUpdateRequest,
-        multipartFiles
-    );
-    return ApiResult.success(PostInfoResponse.from(updatedPost));
+    PostResponseDto updatedPost = postService.updatePost(
+        PostAssembler.toPostUpdateRequestDto(authentication.id, postId, postUpdateRequest,
+            multipartFiles));
+    return ApiResult.success(PostAssembler.toPostInfoResponse(updatedPost));
   }
 
   @GetMapping("/member/{memberId}")
-  public ApiResult<List<PostInfoResponse>> getPostByMemberId(
+  public ApiResult<List<PostResponse>> getPostByMemberId(
       @PathVariable Long memberId,
       Pageable pageable
   ) {
     return ApiResult.success(
         postQueryService.getPostByMemberId(memberId, pageable)
             .stream()
-            .map(PostInfoResponse::from)
+            .map(PostAssembler::toPostInfoResponse)
             .collect(Collectors.toList())
     );
   }
 
   @GetMapping("/{postId}")
-  public ApiResult<PostInfoResponse> getPostByPostId(
+  public ApiResult<PostResponse> getPostByPostId(
       @PathVariable Long postId
   ) {
-    PostInfoDto postInfoDto = postQueryService.getPostByPostId(postId);
+    PostResponseDto postResponseDto = postQueryService.getPostByPostId(postId);
     return ApiResult.success(
-        PostInfoResponse.from(postInfoDto)
+        PostAssembler.toPostInfoResponse(postResponseDto)
     );
   }
 
   @GetMapping("/following")
-  public ApiResult<List<PostInfoResponse>> findAllFollowingsPost(
+  public ApiResult<List<PostResponse>> findAllFollowingsPost(
       @AuthenticationPrincipal FormAuthentication authentication,
       Pageable pageable
   ) {
     return ApiResult.success(
         postQueryService.getAllFollowingsPost(authentication.id, pageable)
             .stream()
-            .map(PostInfoResponse::from)
+            .map(PostAssembler::toPostInfoResponse)
             .collect(Collectors.toList())
     );
   }

@@ -81,11 +81,11 @@ public class Post extends BaseTime {
     initPostTags(tags);
   }
 
-  public void plusLikeCount() {
+  public void like() {
     this.postLikeCount += 1;
   }
 
-  public void minusLikeCount(){
+  public void unlike(){
     if(this.postLikeCount - 1 < 0){
       throw new IllegalStateException();
     }
