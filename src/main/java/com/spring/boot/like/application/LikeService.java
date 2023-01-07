@@ -3,6 +3,7 @@ package com.spring.boot.like.application;
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.like.application.dto.LikeDto;
+import com.spring.boot.like.application.dto.LikeResponseDto;
 import com.spring.boot.like.domain.Like;
 import com.spring.boot.like.domain.LikeRepository;
 import com.spring.boot.member.application.MemberService;
@@ -10,8 +11,9 @@ import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,24 +32,32 @@ public class LikeService {
   }
 
   @Transactional
-  public Long like(Long memberId, Long postId) {
+  public LikeResponseDto like(Long memberId, Long postId) {
     Member member = memberService.findByMemberId(memberId);
     Post post = postService.findByPostId(postId);
-    Optional<Like> findLike = likeRepository.findByMemberAndPost(member, post);
-    if(findLike.isPresent()){
-      throw new DuplicatedException(Like.class, "중복된 좋아요입니다");
+
+    try {
+      likeRepository.save(new Like(member, post));
+      post.like();
+    }catch (DataIntegrityViolationException exception){
+      throw new DuplicatedException(Like.class, "좋아요가 이미 존재합니다");
     }
-    return likeRepository.save(new Like(member, post)).getId();
+
+    return new LikeResponseDto(post.getLikeTotalCount(), false);
   }
 
   @Transactional
-  public Long unlike(Long memberId, Long postId) {
+  public LikeResponseDto unlike(Long memberId, Long postId) {
     Member member = memberService.findByMemberId(memberId);
     Post post = postService.findByPostId(postId);
+
     Like findLike = likeRepository.findByMemberAndPost(member, post)
-        .orElseThrow(()->new NotFoundException(Like.class, "좋아요가 존재하지 않습니다"));
+        .orElseThrow(() -> new NotFoundException(Like.class, "좋아요가 존재하지 않습니다"));
+
     likeRepository.delete(findLike);
-    return findLike.getId();
+    post.unlike();
+
+    return new LikeResponseDto(post.getLikeTotalCount(), false);
   }
 
   @Transactional(readOnly = true)

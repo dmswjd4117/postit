@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.hibernate.NonUniqueResultException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -35,12 +34,20 @@ class LikeServiceTest extends IntegrationTest {
   @Autowired
   private PostRepository postRepository;
 
+  private void checkLikeCount(Long postId, int count) {
+    List<LikeDto> likes = likeService.getLikes(postId);
+    assertThat(likes.size(), is(count));
+
+    Post findPost = postRepository.findById(postId).orElseThrow();
+    assertThat(findPost.getLikeTotalCount(), is(count));
+  }
+
   @Nested
-  @DisplayName("좋아요가 이미 눌러져 있을 때")
+  @DisplayName("좋아요가 눌러져 있을 때")
   class 좋아요_눌러져있을때 {
 
     @Test
-    @DisplayName("중복해서 좋아요 요청하면 예외가 발생한다")
+    @DisplayName("좋아요 요청하면 예외발생& 좋아요 최종 개수 1개")
     public void 중복_좋아요_요청() {
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
@@ -50,6 +57,8 @@ class LikeServiceTest extends IntegrationTest {
       assertThrows(DuplicatedException.class, () -> {
         likeService.like(member.getId(), post.getId());
       });
+
+      checkLikeCount(post.getId(), 1);
     }
 
     @Test
@@ -69,11 +78,11 @@ class LikeServiceTest extends IntegrationTest {
       assertThat(likes.size(), is(0));
 
       Post findPost = postRepository.findById(post.getId()).orElseThrow();
-      assertThat(findPost.getPostLikeCount(), is(0));
+      assertThat(findPost.getLikeTotalCount(), is(0));
     }
 
     @Test
-    @DisplayName("동시에 여러번 취소 요청해도 좋아요 최종 개수 0개")
+    @DisplayName("동시에 여러번 취소 요청하면 좋아요 최종 개수 0개")
     public void 동시에_누름() throws InterruptedException {
       // given
       Member member = saveMember("member@email.com");
@@ -96,11 +105,7 @@ class LikeServiceTest extends IntegrationTest {
 
       // then
       latch.await();
-      List<LikeDto> likes = likeService.getLikes(post.getId());
-      assertThat(likes.size(), is(0));
-
-      Post findPost = postRepository.findById(post.getId()).orElseThrow();
-      assertThat(findPost.getPostLikeCount(), is(0));
+      checkLikeCount(post.getId(), 0);
     }
   }
 
@@ -109,7 +114,7 @@ class LikeServiceTest extends IntegrationTest {
   class 좋아요가_눌러져있지_않을때 {
 
     @Test
-    @DisplayName("취소 요청하면 예외 발생한다.")
+    @DisplayName("취소 요청하면 예외 발생 & 좋아요 최종 개수 0개")
     public void 취소_요청() {
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
@@ -118,10 +123,12 @@ class LikeServiceTest extends IntegrationTest {
       assertThrows(NotFoundException.class, () -> {
         likeService.unlike(member.getId(), post.getId());
       });
+
+      checkLikeCount(post.getId(), 0);
     }
 
     @Test
-    @DisplayName("좋아요 요청하면 좋아요 최종 개수 0개")
+    @DisplayName("좋아요 요청하면 좋아요 최종 개수 1개")
     public void 한번요청() {
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
@@ -135,12 +142,12 @@ class LikeServiceTest extends IntegrationTest {
       assertThat(findLike.getMember().getId(), is(member.getId()));
       assertThat(findLike.getPost().getId(), is(post.getId()));
 
-      Post findPost = postRepository.findById(post.getId()).orElseThrow();
-      assertThat(findPost.getPostLikeCount(), is(1));
+      checkLikeCount(post.getId(), 1);
+
     }
 
     @Test
-    @DisplayName("동시에 좋아요 요청했을 때 좋아요 한 개만 저장된다.(중복 저장 x)")
+    @DisplayName("동시에 좋아요 여러번 요청하면 좋아요 최종 개수 1개")
     public void 동시에_여러개_요청() throws InterruptedException {
       // given
       Member member = saveMember("member@email.com");
@@ -155,7 +162,11 @@ class LikeServiceTest extends IntegrationTest {
         executorService.submit(() -> {
           try {
             likeService.like(member.getId(), post.getId());
-          } finally {
+          } catch (Exception exception){
+            if(!exception.getClass().isAssignableFrom(DuplicatedException.class)){
+              exception.printStackTrace();
+            }
+          }finally {
             latch.countDown();
           }
         });
@@ -163,11 +174,7 @@ class LikeServiceTest extends IntegrationTest {
 
       // then
       latch.await();
-      List<LikeDto> likes = likeService.getLikes(post.getId());
-      assertThat(likes.size(), is(1));
-
-      Post findPost = postRepository.findById(post.getId()).orElseThrow();
-      assertThat(findPost.getPostLikeCount(), is(1));
+      checkLikeCount(post.getId(), 1);
     }
 
   }

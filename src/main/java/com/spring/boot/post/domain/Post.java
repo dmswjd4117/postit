@@ -55,7 +55,7 @@ public class Post extends BaseTime {
   @Embedded
   private Likes likes = new Likes();
 
-  private int postLikeCount;
+  private int likeTotalCount;
 
   public Post(String title, String content, Member writer) {
     this.title = title;
@@ -82,14 +82,14 @@ public class Post extends BaseTime {
   }
 
   public void like() {
-    this.postLikeCount += 1;
+    this.likeTotalCount += 1;
   }
 
   public void unlike(){
-    if(this.postLikeCount - 1 < 0){
+    if(this.likeTotalCount - 1 < 0){
       throw new IllegalStateException();
     }
-    this.postLikeCount -= 1;
+    this.likeTotalCount -= 1;
   }
 
   public Set<PostTag> getPostTags() {

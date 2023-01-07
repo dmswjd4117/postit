@@ -2,6 +2,8 @@ package com.spring.boot.like.presentation;
 
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.like.application.LikeService;
+import com.spring.boot.like.application.dto.LikeResponseDto;
+import com.spring.boot.like.presentation.dto.LikeResponse;
 import com.spring.boot.security.FormAuthentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,16 +24,18 @@ public class LikeController {
   }
 
   @PostMapping("/{postId}")
-  public ApiResult<Long> like(
+  public ApiResult<LikeResponse> like(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId) {
-    return ApiResult.success(likeService.like(authentication.id, postId));
+    LikeResponseDto likeResponseDto = likeService.like(authentication.id, postId);
+    return ApiResult.success(LikeResponse.from(likeService.unlike(authentication.id, postId)));
   }
 
   @DeleteMapping("/{postId}")
-  public ApiResult<Long> unlike(
+  public ApiResult<LikeResponse> unlike(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId) {
-    return ApiResult.success(likeService.unlike(authentication.id, postId));
+    LikeResponseDto likeResponseDto = likeService.unlike(authentication.id, postId);
+    return ApiResult.success(LikeResponse.from(likeService.unlike(authentication.id, postId)));
   }
 }
