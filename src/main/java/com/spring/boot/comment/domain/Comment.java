@@ -1,6 +1,6 @@
 package com.spring.boot.comment.domain;
 
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import lombok.Getter;
 

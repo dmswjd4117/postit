@@ -14,13 +14,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.post.application.dto.response.PostResponseDto;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.PostInfoDto;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.presentaion.dto.response.PostInfoResponse;
+import com.spring.boot.post.presentation.dto.response.PostResponse;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,9 +60,9 @@ class PostControllerTest {
     // given
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostInfoDto post = PostInfoDto.from(new Post(title, content, member));
+    PostResponseDto post = PostResponseDto.from(new Post(title, content, member));
 
-    given(postService.createPost(any(), any(), any()))
+    given(postService.createPost(any()))
         .willReturn(post);
 
     // when
@@ -73,9 +73,9 @@ class PostControllerTest {
     ).andReturn().getResponse();
 
     // then
-    TypeReference<ApiResult<PostInfoResponse>> responseType = new TypeReference<ApiResult<PostInfoResponse>>() {
+    TypeReference<ApiResult<PostResponse>> responseType = new TypeReference<ApiResult<PostResponse>>() {
     };
-    ApiResult<PostInfoResponse> apiResult = objectMapper.readValue(
+    ApiResult<PostResponse> apiResult = objectMapper.readValue(
         response.getContentAsString(), responseType);
 
     assertEquals(response.getStatus(), HttpStatus.BAD_REQUEST.value());
@@ -91,9 +91,9 @@ class PostControllerTest {
     String title = "title";
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostInfoDto post = PostInfoDto.from(new Post(title, content, member));
+    PostResponseDto post = PostResponseDto.from(new Post(title, content, member));
 
-    given(postService.createPost(any(), any(), any()))
+    given(postService.createPost(any()))
         .willReturn(post);
 
     // then
@@ -105,9 +105,9 @@ class PostControllerTest {
     ).andReturn().getResponse();
 
     // then
-    TypeReference<ApiResult<PostInfoResponse>> responseType = new TypeReference<>() {
+    TypeReference<ApiResult<PostResponse>> responseType = new TypeReference<>() {
     };
-    ApiResult<PostInfoResponse> ApiResultResponse = objectMapper.readValue(
+    ApiResult<PostResponse> ApiResultResponse = objectMapper.readValue(
         response.getContentAsString(), responseType);
 
     assertAll(
@@ -117,9 +117,9 @@ class PostControllerTest {
           assertThat(ApiResultResponse.isSuccess()).isTrue();
 
           assertAll(() -> {
-            PostInfoResponse postInfoResponse = ApiResultResponse.getResponse();
-            assertThat(postInfoResponse.getContent()).isEqualTo(post.getContent());
-            assertThat(postInfoResponse.getTitle()).isEqualTo(post.getTitle());
+            PostResponse postResponse = ApiResultResponse.getResponse();
+            assertThat(postResponse.getContent()).isEqualTo(post.getContent());
+            assertThat(postResponse.getTitle()).isEqualTo(post.getTitle());
           });
         }
     );

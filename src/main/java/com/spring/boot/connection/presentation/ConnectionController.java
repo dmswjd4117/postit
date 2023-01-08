@@ -3,7 +3,7 @@ package com.spring.boot.connection.presentation;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.connection.presentation.dto.ConnectionDto;
-import com.spring.boot.user.presentaion.dto.response.UserResponse;
+import com.spring.boot.member.presentaion.dto.response.UserResponse;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -2,7 +2,7 @@ package com.spring.boot.post.infrastructure;
 
 import static com.spring.boot.connection.domain.QConnection.connection;
 import static com.spring.boot.post.domain.QPost.post;
-import static com.spring.boot.user.domain.QMember.member;
+import static com.spring.boot.member.domain.QMember.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.boot.post.domain.Post;

@@ -6,9 +6,9 @@ import static org.hamcrest.core.Is.is;
 
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.post.application.PostQueryService;
-import com.spring.boot.post.application.dto.PostInfoDto;
+import com.spring.boot.post.application.dto.response.PostResponseDto;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,12 +29,12 @@ public class PostQueryServiceTest extends IntegrationTest {
     Post post = savePost(member);
 
     // when
-    PostInfoDto findPost = postQueryService.getPostByPostId(post.getId());
+    PostResponseDto findPost = postQueryService.getPostByPostId(post.getId());
 
     // then
     assertThat(post, is(notNullValue()));
     assertThat(post.getContent(), is(findPost.getContent()));
-    assertThat(post.getWriter().getId(), is(findPost.getWriter().getId()));
+    assertThat(post.getWriter().getId(), is(findPost.getWriterId()));
     assertThat(post.getPostImages().size(), is(findPost.getImages().size()));
     assertThat(post.getPostTags().size(), is(findPost.getTags().size()));
   }
@@ -56,7 +56,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostInfoDto> findPosts = postQueryService.getPostByMemberId(
+      List<PostResponseDto> findPosts = postQueryService.getPostByMemberId(
           member.getId(), PageRequest.ofSize(DUMMY_POST_CNT));
 
       // then
@@ -76,7 +76,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostInfoDto> findPosts = postQueryService.getPostByMemberId(
+      List<PostResponseDto> findPosts = postQueryService.getPostByMemberId(
           member.getId(), PageRequest.ofSize(2));
 
       // then
@@ -105,7 +105,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostInfoDto> posts = postQueryService.getAllPost(PageRequest.ofSize(6));
+      List<PostResponseDto> posts = postQueryService.getAllPost(PageRequest.ofSize(6));
 
       // then
       assertThat(posts.size(), is(5));
@@ -127,7 +127,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostInfoDto> posts = postQueryService.getAllPost(PageRequest.ofSize(2));
+      List<PostResponseDto> posts = postQueryService.getAllPost(PageRequest.ofSize(2));
 
       // then
       assertThat(posts.size(), is(2));

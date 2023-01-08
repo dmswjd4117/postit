@@ -5,8 +5,8 @@ import com.spring.boot.comment.domain.CommentRepository;
 import com.spring.boot.common.exception.NotConnectedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.application.ConnectionService;
-import com.spring.boot.user.application.UserService;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.application.MemberService;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import org.springframework.stereotype.Service;
@@ -18,19 +18,19 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final PostRepository postRepository;
   private final ConnectionService connectionService;
-  private final UserService userService;
+  private final MemberService memberService;
 
   public CommentService(CommentRepository commentRepository, PostRepository postRepository,
-      ConnectionService connectionService, UserService userService) {
+      ConnectionService connectionService, MemberService memberService) {
     this.commentRepository = commentRepository;
     this.postRepository = postRepository;
     this.connectionService = connectionService;
-    this.userService = userService;
+    this.memberService = memberService;
   }
 
   @Transactional
   public Comment createComment(Long writerId, String body, Long postId) {
-    Member commentWriter = userService.findById(writerId);
+    Member commentWriter = memberService.findByMemberId(writerId);
 
     return postRepository.findById(postId)
         .map(findPost -> {

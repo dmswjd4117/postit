@@ -16,7 +16,7 @@ import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;

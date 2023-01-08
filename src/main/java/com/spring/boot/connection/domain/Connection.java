@@ -1,6 +1,6 @@
 package com.spring.boot.connection.domain;
 
-import com.spring.boot.user.domain.Member;
+import com.spring.boot.member.domain.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
