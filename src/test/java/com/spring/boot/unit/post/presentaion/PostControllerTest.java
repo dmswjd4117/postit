@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
-import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;
+import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.role.domain.Role;

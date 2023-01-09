@@ -168,7 +168,20 @@ class LikeServiceTest extends IntegrationTest {
       latch.await();
       checkLikeCount(post.getId(), 1);
     }
+  }
 
+  @Test
+  @DisplayName("여러명이 좋아요를 누를 수 있다.")
+  void 여러명이_좋아요_누름(){
+    Member writer = saveMember("writer@gmail.com");
+    Post post = savePost(writer);
+
+    for(int i=0; i<4; i++){
+      Member member = saveMember(i+"@gmail.com");
+      likeService.like(member.getId(), post.getId());
+    }
+
+    checkLikeCount(post.getId(), 4);
   }
 
 }

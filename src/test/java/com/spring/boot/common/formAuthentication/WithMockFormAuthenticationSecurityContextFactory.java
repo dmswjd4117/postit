@@ -1,4 +1,4 @@
-package com.spring.boot.intergration.formAuthentication;
+package com.spring.boot.common.formAuthentication;
 
 import com.spring.boot.security.FormAuthentication;
 import com.spring.boot.security.FormAuthenticationToken;

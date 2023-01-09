@@ -1,4 +1,4 @@
-package com.spring.boot.intergration.formAuthentication;
+package com.spring.boot.common.formAuthentication;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
