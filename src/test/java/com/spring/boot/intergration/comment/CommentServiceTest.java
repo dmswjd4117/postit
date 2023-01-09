@@ -18,19 +18,19 @@ class CommentServiceTest extends IntegrationTest {
 //    MemberDto postWriter = saveMember();
 //    MemberDto commentWriter = saveMember();
 //    PostCreateRequest postCreateRequest = new PostCreateRequest(TITLE, CONTENT, TAG_NAMES);
-//    PostDto postInfoDto = savePost(postWriter.getId(), postCreateRequest, IMAGES);
-//    connectionService.follow(commentWriter.getId(), postWriter.getId());
+//    PostDto postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
+//    connectionService.follow(commentWriter.getMemberId(), postWriter.getMemberId());
 //
 //    // when
-//    Comment comment = commentService.createComment(commentWriter.getId(), COMMENT_CONTENT,
-//        postInfoDto.getId());
+//    Comment comment = commentService.createComment(commentWriter.getMemberId(), COMMENT_CONTENT,
+//        postInfoDto.getMemberId());
 //
 //    // then
 //    assertAll(
 //        () -> {
 //          assertEquals(comment.getBody(), COMMENT_CONTENT);
-//          assertEquals(comment.getWriter().getId(), commentWriter.getId());
-//          assertEquals(comment.getPost().getId(), postInfoDto.getId());
+//          assertEquals(comment.getWriter().getMemberId(), commentWriter.getMemberId());
+//          assertEquals(comment.getPost().getMemberId(), postInfoDto.getMemberId());
 //        }
 //    );
 //  }
@@ -42,10 +42,10 @@ class CommentServiceTest extends IntegrationTest {
 //    MemberDto postWriter = saveMember();
 //    MemberDto commentWriter = saveMember();
 //    PostCreateRequest postCreateRequest = new PostCreateRequest(TITLE, CONTENT, TAG_NAMES);
-//    PostDto postInfoDto = savePost(postWriter.getId(), postCreateRequest, IMAGES);
+//    PostDto postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
 //
 //    assertThrows(NotConnectedException.class, () -> {
-//      commentService.createComment(commentWriter.getId(), COMMENT_CONTENT, postInfoDto.getId());
+//      commentService.createComment(commentWriter.getMemberId(), COMMENT_CONTENT, postInfoDto.getMemberId());
 //    });
 //  }
 //
@@ -54,9 +54,9 @@ class CommentServiceTest extends IntegrationTest {
 //  void 댓글달기_실패() {
 //    MemberDto postWriter = saveMember();
 //    PostCreateRequest postCreateRequest = new PostCreateRequest(TITLE, CONTENT, TAG_NAMES);
-//    PostDto postInfoDto = savePost(postWriter.getId(), postCreateRequest, IMAGES);
+//    PostDto postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
 //    assertThrows(NotFoundException.class, () -> {
-//      commentService.createComment(-1L, "body", postInfoDto.getId());
+//      commentService.createComment(-1L, "body", postInfoDto.getMemberId());
 //    });
 //  }
 //
@@ -65,7 +65,7 @@ class CommentServiceTest extends IntegrationTest {
 //  void 댓글달기_실패2() {
 //    MemberDto commentWriter = saveMember();
 //    assertThrows(NotFoundException.class, () -> {
-//      commentService.createComment(commentWriter.getId(), "body", -1L);
+//      commentService.createComment(commentWriter.getMemberId(), "body", -1L);
 //    });
 //  }
 

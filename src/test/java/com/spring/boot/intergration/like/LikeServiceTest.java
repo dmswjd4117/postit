@@ -9,7 +9,7 @@ import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.like.application.LikeService;
-import com.spring.boot.like.application.dto.LikeDto;
+import com.spring.boot.like.application.dto.LikeMemberDto;
 import com.spring.boot.like.domain.Like;
 import com.spring.boot.like.domain.LikeRepository;
 import com.spring.boot.member.domain.Member;
@@ -35,7 +35,7 @@ class LikeServiceTest extends IntegrationTest {
   private PostRepository postRepository;
 
   private void checkLikeCount(Long postId, int count) {
-    List<LikeDto> likes = likeService.getLikes(postId);
+    List<LikeMemberDto> likes = likeService.getLikeMembers(postId);
     assertThat(likes.size(), is(count));
 
     Post findPost = postRepository.findById(postId).orElseThrow();
@@ -74,11 +74,7 @@ class LikeServiceTest extends IntegrationTest {
       likeService.unlike(member.getId(), post.getId());
 
       // then
-      List<LikeDto> likes = likeService.getLikes(post.getId());
-      assertThat(likes.size(), is(0));
-
-      Post findPost = postRepository.findById(post.getId()).orElseThrow();
-      assertThat(findPost.getLikeTotalCount(), is(0));
+      checkLikeCount(post.getId(), 0);
     }
 
     @Test
@@ -162,11 +158,7 @@ class LikeServiceTest extends IntegrationTest {
         executorService.submit(() -> {
           try {
             likeService.like(member.getId(), post.getId());
-          } catch (Exception exception){
-            if(!exception.getClass().isAssignableFrom(DuplicatedException.class)){
-              exception.printStackTrace();
-            }
-          }finally {
+          } finally {
             latch.countDown();
           }
         });

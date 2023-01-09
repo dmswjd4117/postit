@@ -22,7 +22,7 @@ public class PostDto {
   private Long id;
   private String title;
   private String content;
-  private Long likeCount;
+  private int likeCount;
   private List<PostImageDto> images;
   private Set<PostTagDto> tags;
   private LocalDateTime createdDate;
@@ -43,7 +43,7 @@ public class PostDto {
         .content(post.getContent())
         .writerId(writer.getId())
         .writerName(writer.getName())
-        .likeCount((long) post.getLikes().size())
+        .likeCount(post.getLikeTotalCount())
         .images(postImageInfo)
         .tags(postTagInfo)
         .createdDate(post.getCreatedDate())
