@@ -18,7 +18,7 @@ public class PostResponse {
   private Set<PostTagResponse> tags;
   private LocalDateTime createdDate;
   private LocalDateTime modifiedDate;
-  private Long likeCount;
+  private int likeCount;
 
 
   @Getter

@@ -16,11 +16,15 @@ public class TagService {
     this.tagRepository = tagRepository;
   }
 
-  public Set<Tag> getTags(List<String> tagNames) {
+  public Set<Tag> saveTags(List<String> tagNames) {
     return tagNames
         .stream()
         .distinct()
         .map(name -> tagRepository.findByTagName(name).orElseGet(()->tagRepository.save(new Tag(name))))
         .collect(Collectors.toSet());
+  }
+
+  public Set<Tag> searchTags(List<String> tagNames) {
+    return tagRepository.getTagsByTagNames(tagNames);
   }
 }

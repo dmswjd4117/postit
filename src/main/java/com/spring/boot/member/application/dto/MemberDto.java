@@ -7,16 +7,16 @@ import org.springframework.security.core.GrantedAuthority;
 
 @Builder
 @Getter
-public class UserInfoDto {
+public class MemberDto {
   private Long id;
   private String name;
   private String email;
   private String profileImagePath;
   private GrantedAuthority grantedAuthority;
 
-  public static UserInfoDto from(
+  public static MemberDto from(
       Member member){
-    return UserInfoDto.builder()
+    return MemberDto.builder()
         .id(member.getId())
         .email(member.getEmail())
         .name(member.getName())

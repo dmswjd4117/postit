@@ -52,9 +52,6 @@ public class Post extends BaseTime {
   @Embedded
   private PostTags postTags = new PostTags();
 
-  @Embedded
-  private Likes likes = new Likes();
-
   private int likeTotalCount;
 
   public Post(String title, String content, Member writer) {
@@ -100,9 +97,6 @@ public class Post extends BaseTime {
     return postImages.getPostImages();
   }
 
-  public List<Like> getLikes() {
-    return likes.getLikes();
-  }
 
   @Override
   public String toString() {

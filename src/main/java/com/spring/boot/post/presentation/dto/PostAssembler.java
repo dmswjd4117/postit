@@ -1,8 +1,8 @@
 package com.spring.boot.post.presentation.dto;
 
-import com.spring.boot.post.application.dto.request.PostCreateRequestDto;
-import com.spring.boot.post.application.dto.response.PostResponseDto;
-import com.spring.boot.post.application.dto.request.PostUpdateRequestDto;
+import com.spring.boot.post.application.dto.request.PostCreateDto;
+import com.spring.boot.post.application.dto.request.PostUpdateDto;
+import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
 import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
 import com.spring.boot.post.presentation.dto.response.PostResponse;
@@ -19,9 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostAssembler {
 
-  public static PostCreateRequestDto toPostCreateRequestDto(Long writerId,
+  public static PostCreateDto toPostCreateRequestDto(Long writerId,
       PostCreateRequest postCreateRequest, List<MultipartFile> multipartFiles) {
-    return PostCreateRequestDto.builder()
+    return PostCreateDto.builder()
         .writerId(writerId)
         .content(postCreateRequest.getContent())
         .title(postCreateRequest.getTitle())
@@ -30,9 +30,9 @@ public class PostAssembler {
         .build();
   }
 
-  public static PostUpdateRequestDto toPostUpdateRequestDto(Long writerId, Long postId,
+  public static PostUpdateDto toPostUpdateRequestDto(Long writerId, Long postId,
       PostUpdateRequest postUpdateRequest, List<MultipartFile> multipartFiles) {
-    return PostUpdateRequestDto.builder()
+    return PostUpdateDto.builder()
         .postId(postId)
         .writerId(writerId)
         .content(postUpdateRequest.getContent())
@@ -42,32 +42,32 @@ public class PostAssembler {
         .build();
   }
 
-  public static PostResponse toPostInfoResponse(PostResponseDto postResponseDto) {
+  public static PostResponse toPostInfoResponse(PostDto postDto) {
 
-    PostWriter postWriter = new PostWriter(postResponseDto.getWriterId(), postResponseDto.getWriterName());
+    PostWriter postWriter = new PostWriter(postDto.getWriterId(),
+        postDto.getWriterName());
 
-    List<PostImageResponse> postImageResponses = postResponseDto.getImages()
+    List<PostImageResponse> postImageResponses = postDto.getImages()
         .stream()
         .map(dto -> new PostImageResponse(dto.getId(), dto.getImagePath()))
         .collect(Collectors.toList());
 
-    Set<PostTagResponse> postTagResponses = postResponseDto.getTags()
+    Set<PostTagResponse> postTagResponses = postDto.getTags()
         .stream()
         .map(dto -> new PostTagResponse(dto.getId(), dto.getName()))
         .collect(Collectors.toSet());
 
     return PostResponse.builder()
-        .id(postResponseDto.getId())
-        .title(postResponseDto.getTitle())
-        .content(postResponseDto.getContent())
+        .id(postDto.getId())
+        .title(postDto.getTitle())
+        .content(postDto.getContent())
         .postWriter(postWriter)
         .images(postImageResponses)
         .tags(postTagResponses)
-        .createdDate(postResponseDto.getCreatedDate())
-        .modifiedDate(postResponseDto.getModifiedDate())
-        .likeCount(postResponseDto.getLikeCount())
+        .createdDate(postDto.getCreatedDate())
+        .modifiedDate(postDto.getModifiedDate())
+        .likeCount(postDto.getLikeCount())
         .build();
 
   }
-
 }

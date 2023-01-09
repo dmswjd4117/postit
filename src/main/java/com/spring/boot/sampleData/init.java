@@ -54,7 +54,7 @@ public class init {
     @Transactional
     public void init() {
       Role role = roleService.getRole(RoleName.MEMBER);
-      Set<Tag> tags = tagService.getTags(List.of("tag1", "tag2", "tag3"));
+      Set<Tag> tags = tagService.saveTags(List.of("tag1", "tag2", "tag3"));
       List<String> images = List.of("image_url1", "image_url2");
       for (int i = 0; i < 5; i++) {
         // member

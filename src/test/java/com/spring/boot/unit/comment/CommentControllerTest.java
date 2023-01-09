@@ -19,7 +19,7 @@ import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
-import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;
+import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

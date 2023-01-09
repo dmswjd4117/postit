@@ -6,7 +6,7 @@ import static org.hamcrest.core.Is.is;
 
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.post.application.PostQueryService;
-import com.spring.boot.post.application.dto.response.PostResponseDto;
+import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.member.domain.Member;
 import java.util.List;
@@ -29,7 +29,7 @@ public class PostQueryServiceTest extends IntegrationTest {
     Post post = savePost(member);
 
     // when
-    PostResponseDto findPost = postQueryService.getPostByPostId(post.getId());
+    PostDto findPost = postQueryService.getPostByPostId(post.getId());
 
     // then
     assertThat(post, is(notNullValue()));
@@ -56,7 +56,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostResponseDto> findPosts = postQueryService.getPostByMemberId(
+      List<PostDto> findPosts = postQueryService.getPostByMemberId(
           member.getId(), PageRequest.ofSize(DUMMY_POST_CNT));
 
       // then
@@ -76,7 +76,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostResponseDto> findPosts = postQueryService.getPostByMemberId(
+      List<PostDto> findPosts = postQueryService.getPostByMemberId(
           member.getId(), PageRequest.ofSize(2));
 
       // then
@@ -105,7 +105,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostResponseDto> posts = postQueryService.getAllPost(PageRequest.ofSize(6));
+      List<PostDto> posts = postQueryService.getPost(PageRequest.ofSize(6));
 
       // then
       assertThat(posts.size(), is(5));
@@ -127,7 +127,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostResponseDto> posts = postQueryService.getAllPost(PageRequest.ofSize(2));
+      List<PostDto> posts = postQueryService.getPost(PageRequest.ofSize(2));
 
       // then
       assertThat(posts.size(), is(2));
