@@ -10,7 +10,7 @@ import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.application.dto.MemberDto;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.request.PostCreateRequestDto;
+import com.spring.boot.post.application.dto.request.PostCreateDto;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class PostSearchServiceTest extends IntegrationTest {
   void 태그_검색() {
     MemberDto member = memberService.register("name", "email@email.com", "password");
     for (int i = 0; i < 3; i++) {
-      PostCreateRequestDto postCreateRequest = PostCreateRequestDto.builder()
+      PostCreateDto postCreateRequest = PostCreateDto.builder()
           .content("content")
           .title("title")
           .writerId(member.getId())
@@ -42,7 +42,7 @@ public class PostSearchServiceTest extends IntegrationTest {
     }
 
     for (int i = 0; i < 4; i++) {
-      PostCreateRequestDto postCreateRequest = PostCreateRequestDto.builder()
+      PostCreateDto postCreateRequest = PostCreateDto.builder()
           .content("content")
           .title("title")
           .writerId(member.getId())

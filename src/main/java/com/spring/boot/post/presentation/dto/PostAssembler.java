@@ -1,7 +1,7 @@
 package com.spring.boot.post.presentation.dto;
 
-import com.spring.boot.post.application.dto.request.PostCreateRequestDto;
-import com.spring.boot.post.application.dto.request.PostUpdateRequestDto;
+import com.spring.boot.post.application.dto.request.PostCreateDto;
+import com.spring.boot.post.application.dto.request.PostUpdateDto;
 import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
 import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
@@ -19,9 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostAssembler {
 
-  public static PostCreateRequestDto toPostCreateRequestDto(Long writerId,
+  public static PostCreateDto toPostCreateRequestDto(Long writerId,
       PostCreateRequest postCreateRequest, List<MultipartFile> multipartFiles) {
-    return PostCreateRequestDto.builder()
+    return PostCreateDto.builder()
         .writerId(writerId)
         .content(postCreateRequest.getContent())
         .title(postCreateRequest.getTitle())
@@ -30,9 +30,9 @@ public class PostAssembler {
         .build();
   }
 
-  public static PostUpdateRequestDto toPostUpdateRequestDto(Long writerId, Long postId,
+  public static PostUpdateDto toPostUpdateRequestDto(Long writerId, Long postId,
       PostUpdateRequest postUpdateRequest, List<MultipartFile> multipartFiles) {
-    return PostUpdateRequestDto.builder()
+    return PostUpdateDto.builder()
         .postId(postId)
         .writerId(writerId)
         .content(postUpdateRequest.getContent())

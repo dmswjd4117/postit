@@ -23,8 +23,8 @@ public class PostDto {
   private String title;
   private String content;
   private Long likeCount;
-  private List<PostImageResponseDto> images;
-  private Set<PostTagResponseDto> tags;
+  private List<PostImageDto> images;
+  private Set<PostTagDto> tags;
   private LocalDateTime createdDate;
   private LocalDateTime modifiedDate;
   private Long writerId;
@@ -34,8 +34,8 @@ public class PostDto {
       Post post) {
 
     Member writer = post.getWriter();
-    Set<PostTagResponseDto> postTagInfo = PostTagResponseDto.from(post.getPostTags());
-    List<PostImageResponseDto> postImageInfo = PostImageResponseDto.from(post.getPostImages());
+    Set<PostTagDto> postTagInfo = PostTagDto.from(post.getPostTags());
+    List<PostImageDto> postImageInfo = PostImageDto.from(post.getPostImages());
 
     return PostDto.builder()
         .id(post.getId())

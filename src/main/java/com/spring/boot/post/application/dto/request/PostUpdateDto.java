@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
-public class PostUpdateRequestDto {
+public class PostUpdateDto {
 
   private Long writerId;
   private Long postId;

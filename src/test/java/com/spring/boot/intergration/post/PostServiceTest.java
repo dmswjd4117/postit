@@ -12,10 +12,10 @@ import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.request.PostCreateRequestDto;
+import com.spring.boot.post.application.dto.request.PostCreateDto;
 import com.spring.boot.post.application.dto.response.PostDto;
-import com.spring.boot.post.application.dto.response.PostTagResponseDto;
-import com.spring.boot.post.application.dto.request.PostUpdateRequestDto;
+import com.spring.boot.post.application.dto.response.PostTagDto;
+import com.spring.boot.post.application.dto.request.PostUpdateDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import java.util.Arrays;
@@ -41,9 +41,9 @@ class PostServiceTest extends IntegrationTest {
   private PostRepository postRepository;
 
 
-  public Set<String> extractTagNames(Set<PostTagResponseDto> postTagInfoDtos) {
+  public Set<String> extractTagNames(Set<PostTagDto> postTagInfoDtos) {
     return postTagInfoDtos.stream()
-        .map(PostTagResponseDto::getName)
+        .map(PostTagDto::getName)
         .collect(Collectors.toSet());
   }
 
@@ -94,7 +94,7 @@ class PostServiceTest extends IntegrationTest {
       Post createdPost = savePost(writer);
 
       // when
-      PostUpdateRequestDto postUpdateRequestDto = PostUpdateRequestDto.builder()
+      PostUpdateDto postUpdateDto = PostUpdateDto.builder()
           .writerId(writer.getId())
           .postId(createdPost.getId())
           .content(newContent)
@@ -103,7 +103,7 @@ class PostServiceTest extends IntegrationTest {
           .tagNames(newTagNames)
           .build();
 
-      PostDto updated = postService.updatePost(postUpdateRequestDto);
+      PostDto updated = postService.updatePost(postUpdateDto);
 
       // then
       assertThat(updated, is(notNullValue()));
@@ -117,7 +117,7 @@ class PostServiceTest extends IntegrationTest {
     @Test
     @DisplayName("잘못된 유저 아이디일 경우 게시물을 생성할 수 없다.")
     void 포스트_생성_실패_잘못된_유저아이디() {
-      PostCreateRequestDto postCreateDto = PostCreateRequestDto.builder()
+      PostCreateDto postCreateDto = PostCreateDto.builder()
           .writerId(-1L)
           .content("content")
           .title("title")

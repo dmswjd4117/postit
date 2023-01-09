@@ -6,20 +6,20 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 
 @Getter
-public class PostImageResponseDto {
+public class PostImageDto {
 
   private Long id;
   private String imagePath;
 
-  private PostImageResponseDto(Long id, String imagePath) {
+  private PostImageDto(Long id, String imagePath) {
     this.id = id;
     this.imagePath = imagePath;
   }
 
-  public static List<PostImageResponseDto> from(List<PostImage> postImages) {
+  public static List<PostImageDto> from(List<PostImage> postImages) {
     return postImages
         .stream()
-        .map(postImage -> new PostImageResponseDto(postImage.getId(), postImage.getImagePath()))
+        .map(postImage -> new PostImageDto(postImage.getId(), postImage.getImagePath()))
         .collect(Collectors.toList());
   }
 }
