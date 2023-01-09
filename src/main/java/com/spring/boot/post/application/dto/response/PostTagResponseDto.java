@@ -4,7 +4,9 @@ import com.spring.boot.post.domain.tag.PostTag;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class PostTagResponseDto {
 

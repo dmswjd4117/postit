@@ -13,7 +13,7 @@ import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.request.PostCreateRequestDto;
-import com.spring.boot.post.application.dto.response.PostResponseDto;
+import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.post.application.dto.response.PostTagResponseDto;
 import com.spring.boot.post.application.dto.request.PostUpdateRequestDto;
 import com.spring.boot.post.domain.Post;
@@ -103,7 +103,7 @@ class PostServiceTest extends IntegrationTest {
           .tagNames(newTagNames)
           .build();
 
-      PostResponseDto updated = postService.updatePost(postUpdateRequestDto);
+      PostDto updated = postService.updatePost(postUpdateRequestDto);
 
       // then
       assertThat(updated, is(notNullValue()));

@@ -3,10 +3,13 @@ package com.spring.boot.post.application;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.application.dto.response.PostResponseDto;
+import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
+import com.spring.boot.tag.application.TagService;
+import com.spring.boot.tag.domain.Tag;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -19,40 +22,48 @@ public class PostQueryService {
 
   private final MemberService memberService;
   private final PostRepository postRepository;
+  private final TagService tagService;
 
   public PostQueryService(MemberService memberService,
-      PostRepository postRepository) {
+      PostRepository postRepository, TagService tagService) {
     this.memberService = memberService;
     this.postRepository = postRepository;
+    this.tagService = tagService;
   }
 
-  @Transactional
-  public PostResponseDto getPostByPostId(Long postId) {
+
+  @Transactional(readOnly = true)
+  public PostDto getPostByPostId(Long postId) {
     return postRepository.findByPostId(postId)
-        .map(PostResponseDto::from)
-        .orElseThrow(() -> new NotFoundException(Post.class, "post does not exist by id", postId));
-  }
-
-  @Transactional
-  public List<PostResponseDto> getPostByMemberId(Long memberId, Pageable pageable) {
-    Member member = memberService.findByMemberId(memberId);
-    List<Post> posts = postRepository.findAllByMemberId(member.getId(), pageable);
-    return PostResponseDto.from(posts);
+        .map(PostDto::from)
+        .orElseThrow(() -> new NotFoundException(Post.class, "not found with post id", postId));
   }
 
   @Transactional(readOnly = true)
-  public List<PostResponseDto> getAllFollowingsPost(Long memberId, Pageable pageable) {
+  public List<PostDto> getPostByMemberId(Long memberId, Pageable pageable) {
+    Member member = memberService.findByMemberId(memberId);
+    List<Post> posts = postRepository.findAllByMemberId(member.getId(), pageable);
+    return PostDto.from(posts);
+  }
+
+  @Transactional(readOnly = true)
+  public List<PostDto> getFollowingsPost(Long memberId, Pageable pageable) {
     return postRepository.findAllFollowingsPost(memberId, pageable).stream()
-        .map(PostResponseDto::from)
+        .map(PostDto::from)
         .collect(Collectors.toList());
   }
 
-  @Transactional
-  public List<PostResponseDto> getAllPost(Pageable pageable) {
+  @Transactional(readOnly = true)
+  public List<PostDto> getPost(Pageable pageable) {
     return postRepository.findAll(pageable)
         .stream()
-        .map(PostResponseDto::from)
+        .map(PostDto::from)
         .collect(Collectors.toList());
   }
 
+  @Transactional(readOnly = true)
+  public List<PostDto> getPostByTags(List<String> tagNames, Pageable pageable) {
+    Set<Tag> tags = tagService.searchTags(tagNames);
+    return PostDto.from(postRepository.searchByTags(tags, pageable));
+  }
 }

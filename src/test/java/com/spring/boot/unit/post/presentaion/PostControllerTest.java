@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.intergration.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.post.application.dto.response.PostResponseDto;
+import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.member.domain.Member;
@@ -60,7 +60,7 @@ class PostControllerTest {
     // given
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostResponseDto post = PostResponseDto.from(new Post(title, content, member));
+    PostDto post = PostDto.from(new Post(title, content, member));
 
     given(postService.createPost(any()))
         .willReturn(post);
@@ -91,7 +91,7 @@ class PostControllerTest {
     String title = "title";
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostResponseDto post = PostResponseDto.from(new Post(title, content, member));
+    PostDto post = PostDto.from(new Post(title, content, member));
 
     given(postService.createPost(any()))
         .willReturn(post);

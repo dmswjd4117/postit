@@ -2,6 +2,7 @@ package com.spring.boot.intergration.tag;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
 
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.tag.application.TagService;
@@ -26,12 +27,33 @@ public class TagServiceTest extends IntegrationTest {
   @Nested
   class crud{
     @Test
-    @DisplayName("tag 저장한다.")
+    @DisplayName("태그 저장")
     void save_tag(){
       List<String> names = Arrays.asList("A", "A", "B", "C");
-      Set<Tag> tags = tagService.getTags(names);
+      Set<Tag> tags = tagService.saveTags(names);
       assertThat(tags.stream().map(Tag::getTagName).collect(Collectors.toSet()),
           Is.is(equalTo(new HashSet<>(names))));
     }
   }
+
+  @Test
+  @DisplayName("태그 검색")
+  void search_tag(){
+    List<String> names = Arrays.asList("A", "A", "B", "C");
+    Set<Tag> tags = tagService.saveTags(names);
+
+    assertThat(tagService.searchTags(names).size(), is(3));
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+

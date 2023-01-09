@@ -11,11 +11,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class PostResponseDto {
+public class PostDto {
 
   private Long id;
   private String title;
@@ -28,14 +30,14 @@ public class PostResponseDto {
   private Long writerId;
   private String writerName;
 
-  public static PostResponseDto from(
+  public static PostDto from(
       Post post) {
 
     Member writer = post.getWriter();
     Set<PostTagResponseDto> postTagInfo = PostTagResponseDto.from(post.getPostTags());
     List<PostImageResponseDto> postImageInfo = PostImageResponseDto.from(post.getPostImages());
 
-    return PostResponseDto.builder()
+    return PostDto.builder()
         .id(post.getId())
         .title(post.getTitle())
         .content(post.getContent())
@@ -49,9 +51,9 @@ public class PostResponseDto {
         .build();
   }
 
-  public static List<PostResponseDto> from(List<Post> posts) {
+  public static List<PostDto> from(List<Post> posts) {
     return posts.stream()
-        .map(PostResponseDto::from)
+        .map(PostDto::from)
         .collect(Collectors.toList());
   }
 
