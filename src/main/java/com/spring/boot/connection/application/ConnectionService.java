@@ -63,11 +63,16 @@ public class ConnectionService {
   }
 
   @Transactional
-  public boolean checkMemberFollowsTargetMember(Long memberId, Long targetMemberId) {
+  public boolean isMemberFollowTarget(Long memberId, Long targetMemberId) {
     Member targetMember = userRepository.findById(targetMemberId)
         .orElseThrow(() -> new NotFoundException(Member.class, targetMemberId));
     Member member = userRepository.findById(memberId)
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
     return connectionRepository.findByMemberAndTargetMember(member, targetMember).isPresent();
+  }
+
+  @Transactional(readOnly = true)
+  public boolean isMemberFollowTarget(Member member, Member targetMember) {
+    return isMemberFollowTarget(member.getId(), targetMember.getId());
   }
 }

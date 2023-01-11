@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
-@Builder
 @Getter
+@Builder
 public class PostCreateDto {
 
   private Long writerId;
@@ -14,4 +14,6 @@ public class PostCreateDto {
   private String content;
   private List<String> tagNames;
   private List<MultipartFile> multipartFiles;
+  private boolean isPrivate;
+
 }

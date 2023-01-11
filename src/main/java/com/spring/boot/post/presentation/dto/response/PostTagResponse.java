@@ -1,4 +1,4 @@
-package com.spring.boot.post.application.dto.response;
+package com.spring.boot.post.presentation.dto.response;
 
 import com.spring.boot.post.domain.tag.PostTag;
 import java.util.Set;
@@ -8,20 +8,20 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class PostTagDto {
+public class PostTagResponse {
 
   private Long id;
   private String name;
 
-  private PostTagDto(Long id, String name) {
+  private PostTagResponse(Long id, String name) {
     this.id = id;
     this.name = name;
   }
 
-  public static Set<PostTagDto> from(Set<PostTag> postTags) {
+  public static Set<PostTagResponse> from(Set<PostTag> postTags) {
     return postTags
         .stream()
-        .map(postTag -> new PostTagDto(postTag.getId(), postTag.getTagName()))
+        .map(postTag -> new PostTagResponse(postTag.getId(), postTag.getTagName()))
         .collect(Collectors.toSet());
   }
 }

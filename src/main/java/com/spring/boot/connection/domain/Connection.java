@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,6 +19,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Entity
 @Getter
 @Table(name = "connections")
+@NoArgsConstructor
 public class Connection {
 
   @Id

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.like.application.LikeService;
 import com.spring.boot.like.application.dto.LikeMemberDto;
@@ -51,7 +52,7 @@ class LikeServiceTest extends IntegrationTest {
     public void 중복_좋아요_요청() {
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
-      Post post = savePost(writer);
+      Post post = MockPost.create(writer);
       likeService.like(member.getId(), post.getId());
 
       assertThrows(DuplicatedException.class, () -> {
@@ -67,7 +68,7 @@ class LikeServiceTest extends IntegrationTest {
       // given
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
-      Post post = savePost(writer);
+      Post post = MockPost.create(writer);
       likeService.like(member.getId(), post.getId());
 
       // when
@@ -83,7 +84,7 @@ class LikeServiceTest extends IntegrationTest {
       // given
       Member member = saveMember("member@email.com");
       Member writer = saveMember("를riter@email.com");
-      Post post = savePost(writer);
+      Post post = MockPost.create(writer);
       likeService.like(member.getId(), post.getId());
 
       // when
@@ -114,7 +115,7 @@ class LikeServiceTest extends IntegrationTest {
     public void 취소_요청() {
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
-      Post post = savePost(writer);
+      Post post = MockPost.create(writer);
 
       assertThrows(NotFoundException.class, () -> {
         likeService.unlike(member.getId(), post.getId());
@@ -128,7 +129,7 @@ class LikeServiceTest extends IntegrationTest {
     public void 한번요청() {
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
-      Post post = savePost(writer);
+      Post post = MockPost.create(writer);
 
       likeService.like(member.getId(), post.getId());
 
@@ -148,7 +149,7 @@ class LikeServiceTest extends IntegrationTest {
       // given
       Member member = saveMember("member@email.com");
       Member writer = saveMember("writer@email.com");
-      Post post = savePost(writer);
+      Post post = MockPost.create(writer);
 
       // when
       ExecutorService executorService = Executors.newFixedThreadPool(30);
@@ -174,7 +175,7 @@ class LikeServiceTest extends IntegrationTest {
   @DisplayName("여러명이 좋아요를 누를 수 있다.")
   void 여러명이_좋아요_누름(){
     Member writer = saveMember("writer@gmail.com");
-    Post post = savePost(writer);
+    Post post = MockPost.create(writer);
 
     for(int i=0; i<4; i++){
       Member member = saveMember(i+"@gmail.com");

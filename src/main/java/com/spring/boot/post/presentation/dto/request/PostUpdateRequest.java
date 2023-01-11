@@ -16,11 +16,13 @@ public class PostUpdateRequest {
   private String content;
   @NotNull
   private List<String> tagNames;
-
-  public PostUpdateRequest(String title, String content, List<String> tagNames) {
+  @NotNull
+  private boolean isPrivate;
+  public PostUpdateRequest(String title, String content, List<String> tagNames, boolean isPrivate) {
     this.title = title;
     this.content = content;
     this.tagNames = tagNames;
+    this.isPrivate = isPrivate;
   }
 
   @Override

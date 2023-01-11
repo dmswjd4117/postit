@@ -47,12 +47,7 @@ public abstract class IntegrationTest {
     return userRepository.save(member);
   }
 
-  protected Post savePost(Member writer) {
-    Post post = MockPost.builder("title", "content", writer)
-        .build();
 
-    return postRepository.save(post);
-  }
 
 }
 

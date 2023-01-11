@@ -1,8 +1,6 @@
 package com.spring.boot.post.domain;
 
 import com.spring.boot.common.BaseTime;
-import com.spring.boot.like.domain.Like;
-import com.spring.boot.like.domain.Likes;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.image.PostImages;
@@ -53,11 +51,17 @@ public class Post extends BaseTime {
   private PostTags postTags = new PostTags();
 
   private int likeTotalCount;
+  private boolean isPrivate;
 
-  public Post(String title, String content, Member writer) {
+  private Post(String title, String content, Member writer, PostImages postImages,
+      PostTags postTags, boolean isPrivate) {
     this.title = title;
     this.content = content;
     this.writer = writer;
+    this.postImages = postImages;
+    this.postTags = postTags;
+    this.isPrivate = isPrivate;
+    this.likeTotalCount = 0;
   }
 
   public void initPostTags(Set<Tag> tags) {
@@ -69,7 +73,7 @@ public class Post extends BaseTime {
   }
 
   public boolean isWrittenBy(Member member) {
-    return writer.equals(member);
+    return writer.getId().equals(member.getId());
   }
 
   public void updatePost(String title, String content, Set<Tag> tags) {
@@ -82,8 +86,8 @@ public class Post extends BaseTime {
     this.likeTotalCount += 1;
   }
 
-  public void unlike(){
-    if(this.likeTotalCount - 1 < 0){
+  public void unlike() {
+    if (this.likeTotalCount - 1 < 0) {
       throw new IllegalStateException();
     }
     this.likeTotalCount -= 1;
@@ -106,4 +110,65 @@ public class Post extends BaseTime {
         .append("body", content)
         .toString();
   }
+
+
+  public static class Builder {
+
+    private Long id;
+    private String title;
+    private String content;
+    private Member writer;
+    private PostImages postImages = new PostImages();
+    private PostTags postTags = new PostTags();
+    private boolean isPrivate = false;
+
+    public Builder(String title, String content, Member writer) {
+      this.title = title;
+      this.content = content;
+      this.writer = writer;
+    }
+
+    public Builder id(Long id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder title(String title) {
+      this.title = title;
+      return this;
+    }
+
+
+    public Builder content(String content) {
+      this.content = content;
+      return this;
+    }
+
+    public Builder writer(Member writer) {
+      this.writer = writer;
+      return this;
+    }
+
+    public Builder postImages(PostImages postImages) {
+      this.postImages = postImages;
+      return this;
+    }
+
+    public Builder postTags(PostTags postTags) {
+      this.postTags = postTags;
+      return this;
+    }
+
+    public Builder isPrivate(boolean isPrivate) {
+      this.isPrivate = isPrivate;
+      return this;
+    }
+
+    public Post build() {
+      return new Post(
+          title, content, writer, postImages, postTags, isPrivate
+      );
+    }
+  }
+
 }

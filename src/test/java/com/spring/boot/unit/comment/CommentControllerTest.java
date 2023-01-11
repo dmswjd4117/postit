@@ -13,13 +13,13 @@ import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.presentation.dto.CommentRequest;
 import com.spring.boot.comment.presentation.dto.CommentResponse;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
+import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
+import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
-import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.domain.Post;
 import com.spring.boot.security.FormAuthentication;
-import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @Import(InfrastructureTestConfiguration.class)
 class CommentControllerTest {
 
-  private final Member POST_WRITER = new Member("email@gmail.com", "password", "name", new Role(
-      RoleName.MEMBER.getValue(), "member"));
-  private final Post POST = new Post("title", "post-content", POST_WRITER);
+
   @MockBean
   private CommentService commentService;
   @Autowired
@@ -58,11 +56,12 @@ class CommentControllerTest {
     // given
     FormAuthentication principal = (FormAuthentication) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
-    Member commentWriter = new Member(principal.email, "password", principal.name, new Role(RoleName.MEMBER.getValue(), "role"));
+    Member commentWriter = new Member(principal.email, "password", principal.name,
+        new Role(RoleName.MEMBER.getValue(), "role"));
 
     Comment comment = new Comment(
         commentWriter,
-        POST,
+        MockPost.create(commentWriter),
         "comment-content"
     );
 
