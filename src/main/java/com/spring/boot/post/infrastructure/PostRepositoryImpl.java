@@ -23,7 +23,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   }
 
   @Override
-  public List<Post> findAllFollowingsPost(Long memberId, Pageable pageable) {
+  public List<Post> findFollowingsPost(Long memberId, Pageable pageable) {
 
     List<Long> followings = queryFactory
         .select(connection.targetMember.id)
@@ -42,7 +42,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   }
 
   @Override
-  public List<Post> findAllByMemberId(Long memberId, Pageable pageable) {
+  public List<Post> findByMemberId(Long memberId, Pageable pageable) {
     return queryFactory
         .selectFrom(post)
         .join(post.writer, member)
@@ -54,7 +54,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
   }
 
   @Override
-  public List<Post> searchByTags(Set<Tag> tags,  Pageable pageable) {
+  public List<Post> findByTags(Set<Tag> tags,  Pageable pageable) {
     return queryFactory
         .selectFrom(post)
         .join(post.writer, member).fetchJoin()

@@ -13,14 +13,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
+import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.post.application.dto.response.PostDto;
+import com.spring.boot.post.presentation.dto.response.PostResponse;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.post.presentation.dto.response.PostResponse;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class PostControllerTest {
     // given
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostDto post = PostDto.from(new Post(title, content, member));
+    PostResponse post = PostResponse.from(MockPost.create(member));
 
     given(postService.createPost(any()))
         .willReturn(post);
@@ -91,7 +91,7 @@ class PostControllerTest {
     String title = "title";
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostDto post = PostDto.from(new Post(title, content, member));
+    PostResponse post = PostResponse.from(MockPost.create(member));
 
     given(postService.createPost(any()))
         .willReturn(post);
@@ -102,6 +102,7 @@ class PostControllerTest {
             .param("title", title)
             .param("content", content)
             .param("tagNames", String.valueOf(new ArrayList<>()))
+            .param("isPrivate", String.valueOf(false))
     ).andReturn().getResponse();
 
     // then

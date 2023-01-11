@@ -1,10 +1,13 @@
 package com.spring.boot.post.presentation;
 
+import static com.spring.boot.post.presentation.dto.PostAssembler.toPostCreateDto;
+import static com.spring.boot.post.presentation.dto.PostAssembler.toPostUpdateDto;
+
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.response.PostDto;
-import com.spring.boot.post.presentation.dto.PostAssembler;
+import com.spring.boot.post.application.dto.request.PostCreateDto;
+import com.spring.boot.post.application.dto.request.PostUpdateDto;
 import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
 import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
 import com.spring.boot.post.presentation.dto.response.PostResponse;
@@ -41,11 +44,10 @@ public class PostController {
       @ModelAttribute @Valid PostCreateRequest postCreateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
+    PostResponse postResponse = postService.createPost(
+        toPostCreateDto(authentication.id, postCreateRequest, multipartFiles));
 
-    PostDto postDto = postService.createPost(
-        PostAssembler.toPostCreateRequestDto(authentication.id, postCreateRequest, multipartFiles));
-
-    return ApiResult.success(PostAssembler.toPostInfoResponse(postDto));
+    return ApiResult.success(postResponse);
   }
 
   @DeleteMapping("/{postId}")
@@ -63,10 +65,10 @@ public class PostController {
       @ModelAttribute @Valid PostUpdateRequest postUpdateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
-    PostDto updatedPost = postService.updatePost(
-        PostAssembler.toPostUpdateRequestDto(authentication.id, postId, postUpdateRequest,
-            multipartFiles));
-    return ApiResult.success(PostAssembler.toPostInfoResponse(updatedPost));
+    PostResponse updatedPost = postService.updatePost(
+        toPostUpdateDto(authentication.id, postUpdateRequest, multipartFiles, postId));
+
+    return ApiResult.success(updatedPost);
   }
 
 }

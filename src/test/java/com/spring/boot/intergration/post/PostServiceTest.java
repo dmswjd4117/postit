@@ -9,21 +9,25 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.common.mock.MockPost;
+import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
+import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.request.PostCreateDto;
-import com.spring.boot.post.application.dto.response.PostDto;
-import com.spring.boot.post.application.dto.response.PostTagDto;
 import com.spring.boot.post.application.dto.request.PostUpdateDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
+import com.spring.boot.post.presentation.dto.response.PostResponse;
+import com.spring.boot.post.presentation.dto.response.PostTagResponse;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,12 +43,65 @@ class PostServiceTest extends IntegrationTest {
   private PostService postService;
   @Autowired
   private PostRepository postRepository;
+  @Autowired
+  private ConnectionService connectionService;
+  @Autowired
+  private PostQueryService postQueryService;
 
 
-  public Set<String> extractTagNames(Set<PostTagDto> postTagInfoDtos) {
+  public Set<String> extractTagNames(Set<PostTagResponse> postTagInfoDtos) {
     return postTagInfoDtos.stream()
-        .map(PostTagDto::getName)
+        .map(PostTagResponse::getName)
         .collect(Collectors.toSet());
+  }
+
+  @Nested
+  @DisplayName("비공개 게시물일때 게시물 조회한다")
+  class 비공개_게시물 {
+
+    private Member writer;
+    private Post post;
+
+
+    @BeforeEach
+    void before() {
+      writer = saveMember("writer@gmail.com");
+      post = postRepository.save(
+          new Post.Builder("title", "content", writer)
+              .isPrivate(true)
+              .build()
+      );
+    }
+
+    @Test
+    @DisplayName("팔로워면 조회 가능")
+    void 팔로워() {
+      Member follower = saveMember("1@gmail.com");
+      connectionService.follow(follower.getId(), writer.getId());
+
+      PostResponse findPost = postQueryService.getPostByPostId(post.getId(), follower.getId());
+      assertThat(findPost.getContent(), is("content"));
+      assertThat(findPost.getTitle(), is("title"));
+    }
+
+
+    @Test
+    @DisplayName("팔로워 아니면 예외발생")
+    void 팔로워_아님() {
+      Member member = saveMember("1@gmail.com");
+
+      assertThrows(AccessDeniedException.class, () -> {
+        postQueryService.getPostByPostId(post.getId(), member.getId());
+      });
+    }
+
+    @Test
+    @DisplayName("익명 사용자면 예외발생")
+    void 익명사용자() {
+      assertThrows(AccessDeniedException.class, () -> {
+        postQueryService.getPostByPostId(post.getId(), null);
+      });
+    }
   }
 
   @Nested
@@ -56,7 +113,7 @@ class PostServiceTest extends IntegrationTest {
     void 포스트_삭제() {
       // given
       Member member = saveMember("email");
-      Post createdPost = savePost(member);
+      Post createdPost = postRepository.save(MockPost.create(member));
 
       // when
       postService.deletePost(member.getId(), createdPost.getId());
@@ -71,7 +128,7 @@ class PostServiceTest extends IntegrationTest {
       // given
       Member writer = saveMember("email@naver.com");
       Member member = saveMember("member@naver.com");
-      Post createdPost = savePost(writer);
+      Post createdPost = postRepository.save(MockPost.create(writer));
 
       // when
       assertThrows(AccessDeniedException.class, () -> {
@@ -91,7 +148,7 @@ class PostServiceTest extends IntegrationTest {
       );
 
       Member writer = saveMember("email@naver.com");
-      Post createdPost = savePost(writer);
+      Post createdPost = postRepository.save(MockPost.create(writer));
 
       // when
       PostUpdateDto postUpdateDto = PostUpdateDto.builder()
@@ -103,7 +160,7 @@ class PostServiceTest extends IntegrationTest {
           .tagNames(newTagNames)
           .build();
 
-      PostDto updated = postService.updatePost(postUpdateDto);
+      PostResponse updated = postService.updatePost(postUpdateDto);
 
       // then
       assertThat(updated, is(notNullValue()));

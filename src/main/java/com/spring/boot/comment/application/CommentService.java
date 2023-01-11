@@ -36,7 +36,7 @@ public class CommentService {
         .map(findPost -> {
           Member postWriter = findPost.getWriter();
           if (!postWriter.getId().equals(writerId) &&
-              !connectionService.checkMemberFollowsTargetMember(writerId, postWriter.getId())) {
+              !connectionService.isMemberFollowTarget(writerId, postWriter.getId())) {
             throw new NotConnectedException(Member.class, writerId, "doesn't follow",
                 postWriter.getId());
           }

@@ -2,13 +2,11 @@ package com.spring.boot.post.presentation;
 
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
-import com.spring.boot.post.application.dto.response.PostDto;
-import com.spring.boot.post.presentation.dto.PostAssembler;
 import com.spring.boot.post.presentation.dto.request.PostSearchRequest;
 import com.spring.boot.post.presentation.dto.response.PostResponse;
 import com.spring.boot.security.FormAuthentication;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,24 +30,21 @@ public class PostQueryController {
   @GetMapping("/member/{memberId}")
   public ApiResult<List<PostResponse>> getPostByMemberId(
       @PathVariable Long memberId,
+      @AuthenticationPrincipal FormAuthentication authentication,
       Pageable pageable
   ) {
     return ApiResult.success(
-        postQueryService.getPostByMemberId(memberId, pageable)
-            .stream()
-            .map(PostAssembler::toPostInfoResponse)
-            .collect(Collectors.toList())
+        new ArrayList<>(postQueryService.getPostByWriterId(memberId,authentication.id, pageable))
     );
   }
 
   @GetMapping("/{postId}")
   public ApiResult<PostResponse> getPostByPostId(
+      @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId
   ) {
-    PostDto postDto = postQueryService.getPostByPostId(postId);
-    return ApiResult.success(
-        PostAssembler.toPostInfoResponse(postDto)
-    );
+    PostResponse postResponse = postQueryService.getPostByPostId(postId, authentication.id);
+    return ApiResult.success(postResponse);
   }
 
   @GetMapping("/following")
@@ -58,10 +53,7 @@ public class PostQueryController {
       Pageable pageable
   ) {
     return ApiResult.success(
-        postQueryService.getFollowingsPost(authentication.id, pageable)
-            .stream()
-            .map(PostAssembler::toPostInfoResponse)
-            .collect(Collectors.toList())
+        new ArrayList<>(postQueryService.getFollowingsPost(authentication.id, pageable))
     );
   }
 
@@ -70,10 +62,7 @@ public class PostQueryController {
       @RequestBody @Valid PostSearchRequest postSearchRequest,
       Pageable pageable) {
     return ApiResult.success(
-        postQueryService.getPostByTags(postSearchRequest.getTags(), pageable)
-            .stream()
-            .map(PostAssembler::toPostInfoResponse)
-            .collect(Collectors.toList())
+        new ArrayList<>(postQueryService.getPostByTags(postSearchRequest.getTags(), pageable))
     );
   }
 }

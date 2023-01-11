@@ -62,7 +62,7 @@ public class ConnectionBasedVoter implements AccessDecisionVoter<FilterInvocatio
         }
 
         try {
-            if(connectionService.checkMemberFollowsTargetMember(memberId, targetMemberId)){
+            if(connectionService.isMemberFollowTarget(memberId, targetMemberId)){
                 return ACCESS_GRANTED;
             }
         }catch (Exception exception){

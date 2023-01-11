@@ -11,10 +11,10 @@ public interface PostRepositoryCustom {
 
   Optional<Post> findByPostId(Long postId);
 
-  List<Post> findAllFollowingsPost(Long memberId, Pageable pageable);
+  List<Post> findFollowingsPost(Long memberId, Pageable pageable);
 
-  List<Post> findAllByMemberId(Long memberId, Pageable pageable);
+  List<Post> findByMemberId(Long memberId, Pageable pageable);
 
-  List<Post> searchByTags(Set<Tag> tags, Pageable pageable);
+  List<Post> findByTags(Set<Tag> tags, Pageable pageable);
 
 }

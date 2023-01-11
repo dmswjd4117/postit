@@ -70,7 +70,7 @@ public class init {
 
         // post
         for (int j = 0; j < 3; j++) {
-          Post post = new Post(j+"", j+"", member);
+          Post post = new Post.Builder(j+"", j+"", member).build();
           post.initPostTags(tags);
           post.initImages(images);
           entityManager.persist(post);

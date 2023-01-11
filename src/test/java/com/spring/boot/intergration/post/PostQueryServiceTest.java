@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
+import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.post.application.PostQueryService;
-import com.spring.boot.post.application.dto.response.PostDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.member.domain.Member;
+import com.spring.boot.post.infrastructure.PostRepository;
+import com.spring.boot.post.presentation.dto.response.PostResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,16 +22,18 @@ public class PostQueryServiceTest extends IntegrationTest {
 
   @Autowired
   private PostQueryService postQueryService;
+  @Autowired
+  private PostRepository postRepository;
 
   @Test
   @DisplayName("포스팅 아이디로 조회성공")
   void 게시물아이디로_조회() {
     // given
     Member member = saveMember("email@naver.com");
-    Post post = savePost(member);
+    Post post = postRepository.save(MockPost.create(member));
 
     // when
-    PostDto findPost = postQueryService.getPostByPostId(post.getId());
+    PostResponse findPost = postQueryService.getPostByPostId(post.getId(), member.getId());
 
     // then
     assertThat(post, is(notNullValue()));
@@ -52,12 +56,14 @@ public class PostQueryServiceTest extends IntegrationTest {
       Member member = saveMember("email@naver.com");
 
       for (int i = 0; i < DUMMY_POST_CNT; i++) {
-        savePost(member);
+        Post post = new Post.Builder("title", "content", member)
+            .build();
+        postRepository.save(post);
       }
 
       // when
-      List<PostDto> findPosts = postQueryService.getPostByMemberId(
-          member.getId(), PageRequest.ofSize(DUMMY_POST_CNT));
+      List<PostResponse> findPosts = postQueryService.getPostByWriterId(
+          member.getId(), null, PageRequest.ofSize(DUMMY_POST_CNT));
 
       // then
       assertThat(findPosts.size(), is(DUMMY_POST_CNT));
@@ -72,12 +78,12 @@ public class PostQueryServiceTest extends IntegrationTest {
       Member member = saveMember("email@naver.com");
 
       for (int i = 0; i < DUMMY_POST_CNT; i++) {
-        savePost(member);
+        postRepository.save(MockPost.create(member));
       }
 
       // when
-      List<PostDto> findPosts = postQueryService.getPostByMemberId(
-          member.getId(), PageRequest.ofSize(2));
+      List<PostResponse> findPosts = postQueryService.getPostByWriterId(
+          member.getId(), null, PageRequest.ofSize(2));
 
       // then
       assertThat(findPosts.size(), is(2));
@@ -96,16 +102,16 @@ public class PostQueryServiceTest extends IntegrationTest {
       Member member = saveMember("email@naver.com");
 
       for (int i = 0; i < 2; i++) {
-        savePost(member);
+        postRepository.save(MockPost.create(member));
       }
 
       Member member2 = saveMember("email2@naver.com");
       for (int i = 0; i < 3; i++) {
-        savePost(member2);
+        postRepository.save(MockPost.create(member2));
       }
 
       // when
-      List<PostDto> posts = postQueryService.getPost(PageRequest.ofSize(6));
+      List<PostResponse> posts = postQueryService.getPost(PageRequest.ofSize(6));
 
       // then
       assertThat(posts.size(), is(5));
@@ -118,16 +124,16 @@ public class PostQueryServiceTest extends IntegrationTest {
       Member member = saveMember("email@naver.com");
 
       for (int i = 0; i < 2; i++) {
-        savePost(member);
+        postRepository.save(MockPost.create(member));
       }
 
       Member member2 = saveMember("email2@naver.com");
       for (int i = 0; i < 3; i++) {
-        savePost(member2);
+        MockPost.create(member2);
       }
 
       // when
-      List<PostDto> posts = postQueryService.getPost(PageRequest.ofSize(2));
+      List<PostResponse> posts = postQueryService.getPost(PageRequest.ofSize(2));
 
       // then
       assertThat(posts.size(), is(2));
