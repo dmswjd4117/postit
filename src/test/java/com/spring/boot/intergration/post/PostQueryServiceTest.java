@@ -6,11 +6,11 @@ import static org.hamcrest.core.Is.is;
 
 import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.intergration.IntegrationTest;
+import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.domain.Post;
-import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.infrastructure.PostRepository;
-import com.spring.boot.post.presentation.dto.response.PostResponse;
+import com.spring.boot.post.application.dto.response.PostInfo;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,7 +33,7 @@ public class PostQueryServiceTest extends IntegrationTest {
     Post post = postRepository.save(MockPost.create(member));
 
     // when
-    PostResponse findPost = postQueryService.getPostByPostId(post.getId(), member.getId());
+    PostInfo findPost = postQueryService.getPostByPostId(post.getId(), member.getId());
 
     // then
     assertThat(post, is(notNullValue()));
@@ -62,8 +62,8 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostResponse> findPosts = postQueryService.getPostByWriterId(
-          member.getId(), null, PageRequest.ofSize(DUMMY_POST_CNT));
+      List<PostInfo> findPosts = postQueryService.getPostByWriterId(member.getId(),
+          PageRequest.ofSize(DUMMY_POST_CNT), null);
 
       // then
       assertThat(findPosts.size(), is(DUMMY_POST_CNT));
@@ -82,8 +82,8 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostResponse> findPosts = postQueryService.getPostByWriterId(
-          member.getId(), null, PageRequest.ofSize(2));
+      List<PostInfo> findPosts = postQueryService.getPostByWriterId(member.getId(),
+          PageRequest.ofSize(2), null);
 
       // then
       assertThat(findPosts.size(), is(2));
@@ -111,7 +111,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       }
 
       // when
-      List<PostResponse> posts = postQueryService.getPost(PageRequest.ofSize(6));
+      List<Post> posts = postRepository.findAll();
 
       // then
       assertThat(posts.size(), is(5));
@@ -129,14 +129,14 @@ public class PostQueryServiceTest extends IntegrationTest {
 
       Member member2 = saveMember("email2@naver.com");
       for (int i = 0; i < 3; i++) {
-        MockPost.create(member2);
+        postRepository.save(MockPost.create(member2));
       }
 
       // when
-      List<PostResponse> posts = postQueryService.getPost(PageRequest.ofSize(2));
+      List<Post> posts = postRepository.findAll();
 
       // then
-      assertThat(posts.size(), is(2));
+      assertThat(posts.size(), is(5));
     }
   }
 

@@ -17,10 +17,10 @@ import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.request.PostCreateDto;
 import com.spring.boot.post.application.dto.request.PostUpdateDto;
+import com.spring.boot.post.application.dto.response.PostInfo;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
-import com.spring.boot.post.presentation.dto.response.PostResponse;
-import com.spring.boot.post.presentation.dto.response.PostTagResponse;
+import com.spring.boot.post.application.dto.response.PostTag;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,9 +49,9 @@ class PostServiceTest extends IntegrationTest {
   private PostQueryService postQueryService;
 
 
-  public Set<String> extractTagNames(Set<PostTagResponse> postTagInfoDtos) {
+  public Set<String> extractTagNames(Set<PostTag> postTagInfoDtos) {
     return postTagInfoDtos.stream()
-        .map(PostTagResponse::getName)
+        .map(PostTag::getName)
         .collect(Collectors.toSet());
   }
 
@@ -79,7 +79,7 @@ class PostServiceTest extends IntegrationTest {
       Member follower = saveMember("1@gmail.com");
       connectionService.follow(follower.getId(), writer.getId());
 
-      PostResponse findPost = postQueryService.getPostByPostId(post.getId(), follower.getId());
+      PostInfo findPost = postQueryService.getPostByPostId(post.getId(), follower.getId());
       assertThat(findPost.getContent(), is("content"));
       assertThat(findPost.getTitle(), is("title"));
     }
@@ -160,7 +160,7 @@ class PostServiceTest extends IntegrationTest {
           .tagNames(newTagNames)
           .build();
 
-      PostResponse updated = postService.updatePost(postUpdateDto);
+      PostInfo updated = postService.updatePost(postUpdateDto);
 
       // then
       assertThat(updated, is(notNullValue()));

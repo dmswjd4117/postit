@@ -6,11 +6,9 @@ import static com.spring.boot.post.presentation.dto.PostAssembler.toPostUpdateDt
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.application.dto.request.PostCreateDto;
-import com.spring.boot.post.application.dto.request.PostUpdateDto;
 import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
 import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
-import com.spring.boot.post.presentation.dto.response.PostResponse;
+import com.spring.boot.post.application.dto.response.PostInfo;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import javax.validation.Valid;
@@ -39,15 +37,15 @@ public class PostController {
   }
 
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  public ApiResult<PostResponse> createPost(
+  public ApiResult<PostInfo> createPost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @ModelAttribute @Valid PostCreateRequest postCreateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
-    PostResponse postResponse = postService.createPost(
+    PostInfo postInfo = postService.createPost(
         toPostCreateDto(authentication.id, postCreateRequest, multipartFiles));
 
-    return ApiResult.success(postResponse);
+    return ApiResult.success(postInfo);
   }
 
   @DeleteMapping("/{postId}")
@@ -59,13 +57,13 @@ public class PostController {
   }
 
   @PutMapping("/{postId}")
-  public ApiResult<PostResponse> updatePost(
+  public ApiResult<PostInfo> updatePost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId,
       @ModelAttribute @Valid PostUpdateRequest postUpdateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
-    PostResponse updatedPost = postService.updatePost(
+    PostInfo updatedPost = postService.updatePost(
         toPostUpdateDto(authentication.id, postUpdateRequest, multipartFiles, postId));
 
     return ApiResult.success(updatedPost);
