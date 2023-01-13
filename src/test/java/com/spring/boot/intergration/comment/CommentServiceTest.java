@@ -18,7 +18,7 @@ class CommentServiceTest extends IntegrationTest {
 //    MemberDto postWriter = saveMember();
 //    MemberDto commentWriter = saveMember();
 //    PostCreateRequest postCreateRequest = new PostCreateRequest(TITLE, CONTENT, TAG_NAMES);
-//    PostResponse postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
+//    PostInfo postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
 //    connectionService.follow(commentWriter.getMemberId(), postWriter.getMemberId());
 //
 //    // when
@@ -42,7 +42,7 @@ class CommentServiceTest extends IntegrationTest {
 //    MemberDto postWriter = saveMember();
 //    MemberDto commentWriter = saveMember();
 //    PostCreateRequest postCreateRequest = new PostCreateRequest(TITLE, CONTENT, TAG_NAMES);
-//    PostResponse postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
+//    PostInfo postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
 //
 //    assertThrows(NotConnectedException.class, () -> {
 //      commentService.createComment(commentWriter.getMemberId(), COMMENT_CONTENT, postInfoDto.getMemberId());
@@ -54,7 +54,7 @@ class CommentServiceTest extends IntegrationTest {
 //  void 댓글달기_실패() {
 //    MemberDto postWriter = saveMember();
 //    PostCreateRequest postCreateRequest = new PostCreateRequest(TITLE, CONTENT, TAG_NAMES);
-//    PostResponse postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
+//    PostInfo postInfoDto = savePost(postWriter.getMemberId(), postCreateRequest, IMAGES);
 //    assertThrows(NotFoundException.class, () -> {
 //      commentService.createComment(-1L, "body", postInfoDto.getMemberId());
 //    });

@@ -1,9 +1,10 @@
 package com.spring.boot.security;
 
+import java.io.Serializable;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class FormAuthentication {
+public class FormAuthentication implements Serializable {
 
     public final Long id;
     public final String email;

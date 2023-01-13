@@ -15,12 +15,11 @@ import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.post.presentation.dto.response.PostResponse;
+import com.spring.boot.post.application.dto.response.PostInfo;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostService;
-import com.spring.boot.post.domain.Post;
 import java.util.ArrayList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,7 +59,7 @@ class PostControllerTest {
     // given
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostResponse post = PostResponse.from(MockPost.create(member));
+    PostInfo post = PostInfo.from(MockPost.create(member));
 
     given(postService.createPost(any()))
         .willReturn(post);
@@ -73,9 +72,9 @@ class PostControllerTest {
     ).andReturn().getResponse();
 
     // then
-    TypeReference<ApiResult<PostResponse>> responseType = new TypeReference<ApiResult<PostResponse>>() {
+    TypeReference<ApiResult<PostInfo>> responseType = new TypeReference<ApiResult<PostInfo>>() {
     };
-    ApiResult<PostResponse> apiResult = objectMapper.readValue(
+    ApiResult<PostInfo> apiResult = objectMapper.readValue(
         response.getContentAsString(), responseType);
 
     assertEquals(response.getStatus(), HttpStatus.BAD_REQUEST.value());
@@ -91,7 +90,7 @@ class PostControllerTest {
     String title = "title";
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostResponse post = PostResponse.from(MockPost.create(member));
+    PostInfo post = PostInfo.from(MockPost.create(member));
 
     given(postService.createPost(any()))
         .willReturn(post);
@@ -106,9 +105,9 @@ class PostControllerTest {
     ).andReturn().getResponse();
 
     // then
-    TypeReference<ApiResult<PostResponse>> responseType = new TypeReference<>() {
+    TypeReference<ApiResult<PostInfo>> responseType = new TypeReference<>() {
     };
-    ApiResult<PostResponse> ApiResultResponse = objectMapper.readValue(
+    ApiResult<PostInfo> ApiResultResponse = objectMapper.readValue(
         response.getContentAsString(), responseType);
 
     assertAll(
@@ -118,9 +117,9 @@ class PostControllerTest {
           assertThat(ApiResultResponse.isSuccess()).isTrue();
 
           assertAll(() -> {
-            PostResponse postResponse = ApiResultResponse.getResponse();
-            assertThat(postResponse.getContent()).isEqualTo(post.getContent());
-            assertThat(postResponse.getTitle()).isEqualTo(post.getTitle());
+            PostInfo postInfo = ApiResultResponse.getResponse();
+            assertThat(postInfo.getContent()).isEqualTo(post.getContent());
+            assertThat(postInfo.getTitle()).isEqualTo(post.getTitle());
           });
         }
     );

@@ -52,16 +52,16 @@ public class PostSearchServiceTest extends IntegrationTest {
     }
 
     // one, two
-    assertThat(postQueryService.getPostByTags(List.of("one", "two"), Pageable.ofSize(10)).size(), is(3));
+    assertThat(postQueryService.getPostByTags(List.of("one", "two"), Pageable.ofSize(10), null).size(), is(3));
 
     // one, content
-    assertThat(postQueryService.getPostByTags(List.of("one", "content"),  Pageable.ofSize(10)).size(), is(7));
+    assertThat(postQueryService.getPostByTags(List.of("one", "content"),  Pageable.ofSize(10), null).size(), is(7));
 
     // content
-    assertThat(postQueryService.getPostByTags(List.of("content"),  Pageable.ofSize(10)).size(), is(4));
+    assertThat(postQueryService.getPostByTags(List.of("content"),  Pageable.ofSize(10), null).size(), is(4));
 
     // one, two, content
-    assertThat(postQueryService.getPostByTags(List.of("one", "two", "content"), Pageable.ofSize(10)).size(), is(7));
+    assertThat(postQueryService.getPostByTags(List.of("one", "two", "content"), Pageable.ofSize(10), null).size(), is(7));
   }
 
 

@@ -7,6 +7,11 @@ spring:
       hibernate:
         use_sql_comments: true
 
+  redis:
+    session:
+     host: localhost
+     port: 6379
+
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
@@ -15,3 +20,4 @@ logging.level:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
