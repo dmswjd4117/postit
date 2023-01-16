@@ -2,6 +2,7 @@ package com.spring.boot.member.application;
 
 import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.DuplicatedException;
+import com.spring.boot.common.exception.MemberNotFoundException;
 import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.member.application.dto.MemberDto;
 import com.spring.boot.member.domain.Member;
@@ -78,7 +79,7 @@ public class MemberService {
   }
 
   public Member findByMemberId(Long id) {
-    return userRepository.findById(id).orElseThrow(() -> new NotFoundException(Member.class, id));
+    return userRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(id));
   }
 
 }

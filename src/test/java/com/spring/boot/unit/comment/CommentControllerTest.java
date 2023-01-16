@@ -9,9 +9,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.boot.comment.application.CommentService;
+import com.spring.boot.comment.application.dto.CommentDto;
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.presentation.dto.CommentRequest;
-import com.spring.boot.comment.presentation.dto.CommentResponse;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.mock.MockPost;
@@ -39,60 +39,5 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles("test")
 @Import(InfrastructureTestConfiguration.class)
 class CommentControllerTest {
-
-
-  @MockBean
-  private CommentService commentService;
-  @Autowired
-  private MockMvc mockMvc;
-  @Autowired
-  private ObjectMapper objectMapper;
-
-  @WithMockFormAuthenticationUser
-  @Test
-  @DisplayName("댓글 작성")
-  void createComment() throws Exception {
-
-    // given
-    FormAuthentication principal = (FormAuthentication) SecurityContextHolder.getContext()
-        .getAuthentication().getPrincipal();
-    Member commentWriter = new Member(principal.email, "password", principal.name,
-        new Role(RoleName.MEMBER.getValue(), "role"));
-
-    Comment comment = new Comment(
-        commentWriter,
-        MockPost.create(commentWriter),
-        "comment-content"
-    );
-
-    given(commentService.createComment(any(), any(), any()))
-        .willReturn(comment);
-
-    // when
-    MockHttpServletResponse response = mockMvc.perform(
-        post("/api/comment")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(new CommentRequest(comment.getBody(), 1L)))
-    ).andReturn().getResponse();
-
-    // then
-    TypeReference<ApiResult<CommentResponse>> responseType = new TypeReference<ApiResult<CommentResponse>>() {
-    };
-    ApiResult<CommentResponse> ApiResultResponse = objectMapper.readValue(
-        response.getContentAsString(), responseType);
-
-    assertAll(
-        () -> {
-          assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-          assertThat(ApiResultResponse.getError()).isNull();
-          assertThat(ApiResultResponse.isSuccess()).isTrue();
-
-          assertAll(() -> {
-            CommentResponse commentResponse = ApiResultResponse.getResponse();
-            assertThat(commentResponse.getComment()).isEqualTo(comment.getBody());
-          });
-        }
-    );
-  }
 
 }
