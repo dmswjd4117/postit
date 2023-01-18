@@ -3,7 +3,7 @@ package com.spring.boot.connection.presentation;
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.connection.presentation.dto.ConnectionDto;
-import com.spring.boot.member.presentaion.dto.response.UserResponse;
+import com.spring.boot.member.presentaion.dto.response.MemberResponse;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,25 +34,25 @@ public class ConnectionController {
   }
 
   @GetMapping("/following/{memberId}")
-  private ApiResult<List<UserResponse>> getFollowingList(
+  private ApiResult<List<MemberResponse>> getFollowingList(
       @PathVariable Long memberId
   ) {
     return ApiResult.success(
         connectionService.getFollowing(memberId)
             .stream()
-            .map(UserResponse::from)
+            .map(MemberResponse::from)
             .collect(Collectors.toList())
     );
   }
 
   @GetMapping("/followers/{memberId}")
-  private ApiResult<List<UserResponse>> getFollowerList(
+  private ApiResult<List<MemberResponse>> getFollowerList(
       @PathVariable Long memberId
   ) {
     return ApiResult.success(
         connectionService.getFollowers(memberId)
             .stream()
-            .map(UserResponse::from)
+            .map(MemberResponse::from)
             .collect(Collectors.toList())
     );
   }

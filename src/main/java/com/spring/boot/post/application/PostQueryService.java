@@ -68,7 +68,6 @@ public class PostQueryService {
 
   @Transactional(readOnly = true)
   public List<PostResponseDto> getPostByWriterId(Long writerId, Pageable pageable, Long readerId) {
-
     Member member = memberService.findByMemberId(writerId);
     List<Post> posts = postRepository.findByMemberId(member.getId(), pageable).stream()
         .filter(post -> checkMemberAccessAuth(post.getId(), readerId))

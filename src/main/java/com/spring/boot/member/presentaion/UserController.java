@@ -10,7 +10,7 @@ import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.infrastructure.UploadFile;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.presentaion.dto.request.UserRegisterRequest;
-import com.spring.boot.member.presentaion.dto.response.UserResponse;
+import com.spring.boot.member.presentaion.dto.response.MemberResponse;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class UserController {
   }
 
   @PostMapping
-  private ApiResult<UserResponse> register(
+  private ApiResult<MemberResponse> register(
       @ModelAttribute @Valid UserRegisterRequest registerRequest,
       @RequestPart(required = false, name = "profileImage") MultipartFile file
   ) {
@@ -68,7 +68,7 @@ public class UserController {
         });
 
 
-    return ApiResult.success(UserResponse.from(userInfoDto));
+    return ApiResult.success(MemberResponse.from(userInfoDto));
   }
 
 }
