@@ -17,10 +17,10 @@ import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.request.PostCreateDto;
 import com.spring.boot.post.application.dto.request.PostUpdateDto;
-import com.spring.boot.post.application.dto.response.PostInfoDto;
+import com.spring.boot.post.application.dto.response.PostResponseDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
-import com.spring.boot.post.application.dto.response.PostInfoDto.PostTag;
+import com.spring.boot.tag.application.dto.TagResponseDto;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,9 +49,9 @@ class PostServiceTest extends IntegrationTest {
   private PostQueryService postQueryService;
 
 
-  public Set<String> extractTagNames(Set<PostTag> postTagInfoDtos) {
-    return postTagInfoDtos.stream()
-        .map(PostTag::getName)
+  public Set<String> extractTagNames(Set<TagResponseDto> postTagResponseDtoInfoDtos) {
+    return postTagResponseDtoInfoDtos.stream()
+        .map(TagResponseDto::getName)
         .collect(Collectors.toSet());
   }
 
@@ -79,7 +79,7 @@ class PostServiceTest extends IntegrationTest {
       Member follower = saveMember("1@gmail.com");
       connectionService.follow(follower.getId(), writer.getId());
 
-      PostInfoDto findPost = postQueryService.getPostByPostId(post.getId(), follower.getId());
+      PostResponseDto findPost = postQueryService.getPostByPostId(post.getId(), follower.getId());
       assertThat(findPost.getContent(), is("content"));
       assertThat(findPost.getTitle(), is("title"));
     }
@@ -160,12 +160,12 @@ class PostServiceTest extends IntegrationTest {
           .tagNames(newTagNames)
           .build();
 
-      PostInfoDto updated = postService.updatePost(postUpdateDto);
+      PostResponseDto updated = postService.updatePost(postUpdateDto);
 
       // then
       assertThat(updated, is(notNullValue()));
       assertThat(updated.getContent(), is(newContent));
-      assertThat(updated.getWriterId(), is(writer.getId()));
+      assertThat(updated.getWriter().getId(), is(writer.getId()));
       assertThat(updated.getImages().size(), is(newImages.size()));
       assertThat(updated.getTags().size(), is(newTagNames.size()));
       assertThat(extractTagNames(updated.getTags()), is(new HashSet<>(newTagNames)));

@@ -2,8 +2,8 @@ package com.spring.boot.like.application;
 
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.like.application.dto.LikeDto;
-import com.spring.boot.like.application.dto.LikeMemberDto;
+import com.spring.boot.like.application.dto.LikeResponseDto;
+import com.spring.boot.like.application.dto.LikeMemberResponseDto;
 import com.spring.boot.like.domain.Like;
 import com.spring.boot.like.domain.LikeRepository;
 import com.spring.boot.member.application.MemberService;
@@ -31,7 +31,7 @@ public class LikeService {
   }
 
   @Transactional
-  public LikeDto like(Long memberId, Long postId) {
+  public LikeResponseDto like(Long memberId, Long postId) {
     Member member = memberService.findByMemberId(memberId);
     Post post = postRepository.findByPostId(postId)
         .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"));
@@ -43,11 +43,11 @@ public class LikeService {
       throw new DuplicatedException(Like.class, "좋아요가 이미 존재합니다");
     }
 
-    return new LikeDto(post.getLikeTotalCount(), true);
+    return new LikeResponseDto(post.getLikeTotalCount(), true);
   }
 
   @Transactional
-  public LikeDto unlike(Long memberId, Long postId) {
+  public LikeResponseDto unlike(Long memberId, Long postId) {
     Member member = memberService.findByMemberId(memberId);
     Post post = postRepository.findByPostId(postId)
         .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"));
@@ -58,15 +58,15 @@ public class LikeService {
     likeRepository.delete(findLike);
     post.unlike();
 
-    return new LikeDto(post.getLikeTotalCount(), false);
+    return new LikeResponseDto(post.getLikeTotalCount(), false);
   }
 
   @Transactional(readOnly = true)
-  public List<LikeMemberDto> getLikeMembers(Long postId) {
+  public List<LikeMemberResponseDto> getLikeMembers(Long postId) {
     Post post = postRepository.findByPostId(postId)
         .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"));
     return likeRepository.findByPost(post).stream()
-        .map(like -> LikeMemberDto.from(like, like.getMember()))
+        .map(like -> LikeMemberResponseDto.from(like, like.getMember()))
         .collect(Collectors.toList());
   }
 

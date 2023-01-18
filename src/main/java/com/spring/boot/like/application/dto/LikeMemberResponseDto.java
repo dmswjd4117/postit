@@ -5,18 +5,18 @@ import com.spring.boot.member.domain.Member;
 import lombok.Getter;
 
 @Getter
-public class LikeMemberDto {
+public class LikeMemberResponseDto {
 
   private Long likeId;
   private MemberDto memberDto;
 
-  private LikeMemberDto(Long likeId, MemberDto memberDto) {
+  private LikeMemberResponseDto(Long likeId, MemberDto memberDto) {
     this.likeId = likeId;
     this.memberDto = memberDto;
   }
 
-  public static LikeMemberDto from(Like like, Member member) {
-    return new LikeMemberDto(like.getId(), MemberDto.from(member));
+  public static LikeMemberResponseDto from(Like like, Member member) {
+    return new LikeMemberResponseDto(like.getId(), MemberDto.from(member));
   }
 
   @Getter

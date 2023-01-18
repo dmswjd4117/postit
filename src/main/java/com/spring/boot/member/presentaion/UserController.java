@@ -5,7 +5,7 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.member.application.dto.MemberDto;
+import com.spring.boot.member.application.dto.MemberResponseDto;
 import com.spring.boot.image.domain.ImageUploader;
 import com.spring.boot.image.infrastructure.UploadFile;
 import com.spring.boot.member.application.MemberService;
@@ -53,7 +53,7 @@ public class UserController {
       @RequestPart(required = false, name = "profileImage") MultipartFile file
   ) {
 
-    MemberDto userInfoDto = memberService.register(
+    MemberResponseDto userInfoDto = memberService.register(
         registerRequest.getName(),
         registerRequest.getEmail(),
         registerRequest.getPassword()

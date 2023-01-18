@@ -1,13 +1,12 @@
 package com.spring.boot.comment.application;
 
-import com.spring.boot.comment.application.dto.CommentDto;
+import com.spring.boot.comment.application.dto.CommentResponseDto;
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.domain.CommentRepository;
 import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.MemberNotFoundException;
 import com.spring.boot.common.exception.PostAccessDeniedException;
 import com.spring.boot.common.exception.PostNotFoundException;
-import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.UserRepository;
 import com.spring.boot.post.application.PostQueryService;
@@ -21,22 +20,20 @@ public class CommentService {
 
   private final CommentRepository commentRepository;
   private final PostRepository postRepository;
-  private final ConnectionService connectionService;
   private final UserRepository userRepository;
   private final PostQueryService postQueryService;
 
   public CommentService(CommentRepository commentRepository, PostRepository postRepository,
-      ConnectionService connectionService, UserRepository userRepository,
+      UserRepository userRepository,
       PostQueryService postQueryService) {
     this.commentRepository = commentRepository;
     this.postRepository = postRepository;
-    this.connectionService = connectionService;
     this.userRepository = userRepository;
     this.postQueryService = postQueryService;
   }
 
   @Transactional
-  public CommentDto createComment(Long writerId, String body, Long postId) {
+  public CommentResponseDto createComment(Long writerId, String body, Long postId) {
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new PostNotFoundException(postId));
     Member writer = userRepository.findById(writerId)
@@ -47,7 +44,7 @@ public class CommentService {
     }
 
     Comment comment = commentRepository.save(new Comment(writer, post, body));
-    return CommentDto.from(comment);
+    return CommentResponseDto.from(comment);
   }
 
   @Transactional
@@ -57,4 +54,5 @@ public class CommentService {
     commentRepository.delete(comment);
     return commentId;
   }
+
 }

@@ -1,7 +1,7 @@
 package com.spring.boot.security;
 
 import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.application.dto.MemberDto;
+import com.spring.boot.member.application.dto.MemberResponseDto;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -27,7 +27,7 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
     String email = (String) authentication.getPrincipal();
     String password = (String) authentication.getCredentials();
 
-    MemberDto findMember = memberService.login(email, password);
+    MemberResponseDto findMember = memberService.login(email, password);
 
     FormAuthentication formAuthentication = new FormAuthentication(
         findMember.getId(),

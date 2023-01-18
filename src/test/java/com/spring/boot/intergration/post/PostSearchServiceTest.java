@@ -7,7 +7,7 @@ import static org.hamcrest.core.Is.is;
 
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.application.MemberService;
-import com.spring.boot.member.application.dto.MemberDto;
+import com.spring.boot.member.application.dto.MemberResponseDto;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.application.dto.request.PostCreateDto;
@@ -30,7 +30,7 @@ public class PostSearchServiceTest extends IntegrationTest {
 
   @Test
   void 태그_검색() {
-    MemberDto member = memberService.register("name", "email@email.com", "password");
+    MemberResponseDto member = memberService.register("name", "email@email.com", "password");
     for (int i = 0; i < 3; i++) {
       PostCreateDto postCreateRequest = PostCreateDto.builder()
           .content("content")

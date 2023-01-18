@@ -1,9 +1,9 @@
 package com.spring.boot.connection.application;
 
 import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.connection.domain.Connection;
-import com.spring.boot.member.application.dto.MemberDto;
+import com.spring.boot.connection.domain.ConnectionRepository;
+import com.spring.boot.member.application.dto.MemberResponseDto;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.UserRepository;
 import java.util.List;
@@ -30,10 +30,12 @@ public class ConnectionService {
       throw new IllegalArgumentException("same memberId and targetMemberId error");
     }
 
-    Member sourceMember =  userRepository.findById(memberId)
-        .orElseThrow(()->new NotFoundException(Member.class,"member doesn't exist with id", memberId));
+    Member sourceMember = userRepository.findById(memberId)
+        .orElseThrow(
+            () -> new NotFoundException(Member.class, "member doesn't exist with id", memberId));
     Member targetMember = userRepository.findById(targetMemberId)
-        .orElseThrow(()->new NotFoundException(Member.class,"member doesn't exist with id", targetMemberId));
+        .orElseThrow(() -> new NotFoundException(Member.class, "member doesn't exist with id",
+            targetMemberId));
 
     Connection connection = new Connection(sourceMember, targetMember);
     connectionRepository.save(connection);
@@ -41,23 +43,23 @@ public class ConnectionService {
   }
 
   @Transactional
-  public List<MemberDto> getFollowing(Long memberId) {
+  public List<MemberResponseDto> getFollowing(Long memberId) {
     return userRepository.findById(memberId)
         .map(findMember -> findMember.getFollowing()
             .stream()
             .map(Connection::getTargetMember)
-            .map(MemberDto::from)
+            .map(MemberResponseDto::from)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
   }
 
   @Transactional
-  public List<MemberDto> getFollowers(Long memberId) {
+  public List<MemberResponseDto> getFollowers(Long memberId) {
     return userRepository.findById(memberId)
         .map(findMember -> findMember.getFollowers()
             .stream()
             .map(Connection::getMember)
-            .map(MemberDto::from)
+            .map(MemberResponseDto::from)
             .collect(Collectors.toList()))
         .orElseThrow(() -> new NotFoundException(Member.class, memberId));
   }

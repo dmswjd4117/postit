@@ -10,8 +10,8 @@ import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostQueryService;
-import com.spring.boot.post.application.dto.response.HomeFeedPostDto;
-import com.spring.boot.post.application.dto.response.PostInfoDto;
+import com.spring.boot.post.presentation.dto.response.HomeFeedPostResponse;
+import com.spring.boot.post.application.dto.response.PostResponseDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
 import java.util.ArrayList;
@@ -39,12 +39,12 @@ public class PostQueryServiceTest extends IntegrationTest {
     Post post = postRepository.save(MockPost.create(member));
 
     // when
-    PostInfoDto findPost = postQueryService.getPostByPostId(post.getId(), member.getId());
+    PostResponseDto findPost = postQueryService.getPostByPostId(post.getId(), member.getId());
 
     // then
     assertThat(post, is(notNullValue()));
     assertThat(post.getContent(), is(findPost.getContent()));
-    assertThat(post.getWriter().getId(), is(findPost.getWriterId()));
+    assertThat(post.getWriter().getId(), is(findPost.getWriter().getId()));
     assertThat(post.getPostImages().size(), is(findPost.getImages().size()));
     assertThat(post.getPostTags().size(), is(findPost.getTags().size()));
   }
@@ -88,7 +88,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       int pageSize = 10;
 
       // when
-      List<HomeFeedPostDto> homeFeedPost = postQueryService.getHomeFeedPost(reader.getId(),
+      List<PostResponseDto> homeFeedPost = postQueryService.getHomeFeedPost(reader.getId(),
           pageSize, null);
 
       // then
@@ -99,13 +99,13 @@ public class PostQueryServiceTest extends IntegrationTest {
     @DisplayName("post id 5보다 작은 4개의 최신 게시물조회")
     void 홈피드_조회_페이징() {
 
-      List<HomeFeedPostDto> homeFeedPost = postQueryService.getHomeFeedPost(reader.getId(),
+      List<PostResponseDto> homeFeedPost = postQueryService.getHomeFeedPost(reader.getId(),
           4, 5L);
 
       assertThat(homeFeedPost.size(), is(4));
 
       List<Long> ids = homeFeedPost.stream()
-          .map(HomeFeedPostDto::getPostId)
+          .map(PostResponseDto::getId)
           .collect(Collectors.toList());
 
       assertThat(ids, containsInAnyOrder(4L, 3L, 2L, 1L));
@@ -138,7 +138,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       PageRequest pageRequest = PageRequest.of(0, 3);
 
       // when
-      List<PostInfoDto> findPosts = postQueryService.getPostByWriterId(
+      List<PostResponseDto> findPosts = postQueryService.getPostByWriterId(
           member.getId(),
           pageRequest,
           null);
@@ -154,7 +154,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       PageRequest pageRequest = PageRequest.of(1, 3);
 
       // when
-      List<PostInfoDto> findPosts = postQueryService.getPostByWriterId(member.getId(),
+      List<PostResponseDto> findPosts = postQueryService.getPostByWriterId(member.getId(),
           PageRequest.ofSize(2), null);
 
       // then
@@ -202,7 +202,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       PageRequest pageRequest = PageRequest.of(0, 5);
 
       // when
-      List<PostInfoDto> posts = postQueryService.getFollowingsPost(reader.getId(), pageRequest);
+      List<PostResponseDto> posts = postQueryService.getFollowingsPost(reader.getId(), pageRequest);
 
       // then
       assertThat(posts.size(), is(5));
@@ -215,7 +215,7 @@ public class PostQueryServiceTest extends IntegrationTest {
       PageRequest pageRequest = PageRequest.of(1, 3);
 
       // when
-      List<PostInfoDto> posts = postQueryService.getFollowingsPost(reader.getId(), pageRequest);
+      List<PostResponseDto> posts = postQueryService.getFollowingsPost(reader.getId(), pageRequest);
 
       // then
       assertThat(posts.size(), is(2));

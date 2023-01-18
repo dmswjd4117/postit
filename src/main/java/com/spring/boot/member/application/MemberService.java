@@ -3,8 +3,7 @@ package com.spring.boot.member.application;
 import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.MemberNotFoundException;
-import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.member.application.dto.MemberDto;
+import com.spring.boot.member.application.dto.MemberResponseDto;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.UserRepository;
 import com.spring.boot.role.application.RoleService;
@@ -31,7 +30,7 @@ public class MemberService {
   }
 
   @Transactional
-  public MemberDto register(String name, String email, String password) {
+  public MemberResponseDto register(String name, String email, String password) {
     userRepository.findByEmail(email)
         .ifPresent(find -> {
           throw new DuplicatedException("email", email);
@@ -39,7 +38,7 @@ public class MemberService {
 
     Member member = saveMember(name, email, password);
 
-    return MemberDto.from(member);
+    return MemberResponseDto.from(member);
   }
 
   private Member saveMember(String name, String email, String password) {
@@ -58,7 +57,7 @@ public class MemberService {
     return userRepository.findByEmail(email);
   }
 
-  public MemberDto login(String email, String rawPassword) {
+  public MemberResponseDto login(String email, String rawPassword) {
     return findByEmail(email)
         .map(findMember -> {
           if (!findMember.checkPassword(rawPassword, passwordEncoder)) {
@@ -66,7 +65,7 @@ public class MemberService {
           }
           return findMember;
         })
-        .map(MemberDto::from)
+        .map(MemberResponseDto::from)
         .orElseThrow(() -> new AuthenticationFailException("email is invalid"));
   }
 

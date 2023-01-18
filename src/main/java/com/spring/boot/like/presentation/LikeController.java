@@ -2,7 +2,7 @@ package com.spring.boot.like.presentation;
 
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.like.application.LikeService;
-import com.spring.boot.like.presentation.dto.LikeMember;
+import com.spring.boot.like.presentation.dto.LikeMemberResponse;
 import com.spring.boot.like.presentation.dto.LikeResponse;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
@@ -44,10 +44,10 @@ public class LikeController {
   }
 
   @GetMapping("/list/{postId}")
-  public ApiResult<List<LikeMember>> getLikeMembers(@PathVariable Long postId){
+  public ApiResult<List<LikeMemberResponse>> getLikeMembers(@PathVariable Long postId){
     return ApiResult.success(
         likeService.getLikeMembers(postId).stream()
-            .map(LikeMember::from)
+            .map(LikeMemberResponse::from)
             .collect(Collectors.toList())
     );
   }

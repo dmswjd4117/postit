@@ -1,6 +1,6 @@
 package com.spring.boot.like.presentation.dto;
 
-import com.spring.boot.like.application.dto.LikeDto;
+import com.spring.boot.like.application.dto.LikeResponseDto;
 import lombok.Getter;
 
 @Getter
@@ -14,10 +14,10 @@ public class LikeResponse {
     this.liked = liked;
   }
 
-  public static LikeResponse from(LikeDto likeDto) {
+  public static LikeResponse from(LikeResponseDto likeResponseDto) {
     return new LikeResponse(
-        likeDto.getLikeCount(),
-        likeDto.isLiked()
+        likeResponseDto.getLikeCount(),
+        likeResponseDto.isLiked()
     );
   }
 }

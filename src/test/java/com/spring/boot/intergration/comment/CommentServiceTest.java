@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.spring.boot.comment.application.CommentService;
-import com.spring.boot.comment.application.dto.CommentDto;
+import com.spring.boot.comment.application.dto.CommentResponseDto;
 import com.spring.boot.comment.domain.CommentRepository;
 import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.MemberNotFoundException;
@@ -63,7 +63,7 @@ class CommentServiceTest extends IntegrationTest {
     Member postWriter = saveMember("writer@gmail.com");
     Post post = postRepository.save(MockPost.create(postWriter));
     Member commentWriter = saveMember("commentWriter@gmail.com");
-    CommentDto comment = commentService.createComment(commentWriter.getId(), "body", post.getId());
+    CommentResponseDto comment = commentService.createComment(commentWriter.getId(), "body", post.getId());
 
     // when
     commentService.deleteComment(commentWriter.getId(), comment.getCommentId());
@@ -78,7 +78,7 @@ class CommentServiceTest extends IntegrationTest {
     Member postWriter = saveMember("writer@gmail.com");
     Post post = postRepository.save(MockPost.create(postWriter));
     Member commentWriter = saveMember("commentWriter@gmail.com");
-    CommentDto comment = commentService.createComment(commentWriter.getId(), "body", post.getId());
+    CommentResponseDto comment = commentService.createComment(commentWriter.getId(), "body", post.getId());
 
     assertThrows(AuthenticationFailException.class, () -> {
       commentService.deleteComment(100L, comment.getCommentId());
@@ -111,11 +111,11 @@ class CommentServiceTest extends IntegrationTest {
       connectionService.follow(commentWriter.getId(), postWriter.getId());
 
       // when
-      CommentDto commentDto = commentService.createComment(commentWriter.getId(), "content",
+      CommentResponseDto commentResponseDto = commentService.createComment(commentWriter.getId(), "content",
           post.getId());
 
       // then
-      assertThat(commentDto.getBody(), is("content"));
+      assertThat(commentResponseDto.getBody(), is("content"));
     }
 
     @Test
@@ -150,7 +150,7 @@ class CommentServiceTest extends IntegrationTest {
       connectionService.follow(commentWriter.getId(), postWriter.getId());
 
       // when
-      CommentDto comment = commentService.createComment(commentWriter.getId(), "content",
+      CommentResponseDto comment = commentService.createComment(commentWriter.getId(), "content",
           post.getId());
 
       // then
@@ -161,7 +161,7 @@ class CommentServiceTest extends IntegrationTest {
     @DisplayName("팔로잉하지 않은 블로거의 글에도 댓글 달 수 있다.")
     void createCommentFail_NotConnected() {
       // when
-      CommentDto comment = commentService.createComment(commentWriter.getId(), "content",
+      CommentResponseDto comment = commentService.createComment(commentWriter.getId(), "content",
           post.getId());
 
       // then
