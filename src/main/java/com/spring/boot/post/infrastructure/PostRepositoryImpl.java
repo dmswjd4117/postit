@@ -91,6 +91,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         .distinct()
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
+        .orderBy(post.id.desc())
         .fetch();
   }
 
