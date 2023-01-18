@@ -1,5 +1,6 @@
 package com.spring.boot.post.domain;
 
+import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.common.BaseTime;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.image.PostImage;
@@ -7,6 +8,8 @@ import com.spring.boot.post.domain.image.PostImages;
 import com.spring.boot.post.domain.tag.PostTag;
 import com.spring.boot.post.domain.tag.PostTags;
 import com.spring.boot.tag.domain.Tag;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
@@ -18,6 +21,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +53,9 @@ public class Post extends BaseTime {
 
   @Embedded
   private PostTags postTags = new PostTags();
+
+  @OneToMany
+  private List<Comment> comments = new ArrayList<>();
 
   private int likeTotalCount;
   private boolean isPrivate;
@@ -109,6 +116,10 @@ public class Post extends BaseTime {
         .append("title", title)
         .append("body", content)
         .toString();
+  }
+
+  public List<Comment> getComments() {
+    return comments;
   }
 
 

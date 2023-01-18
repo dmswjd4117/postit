@@ -8,7 +8,7 @@ import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.presentation.dto.request.PostCreateRequest;
 import com.spring.boot.post.presentation.dto.request.PostUpdateRequest;
-import com.spring.boot.post.application.dto.response.PostInfo;
+import com.spring.boot.post.application.dto.response.PostInfoDto;
 import com.spring.boot.security.FormAuthentication;
 import java.util.List;
 import javax.validation.Valid;
@@ -37,15 +37,15 @@ public class PostController {
   }
 
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  public ApiResult<PostInfo> createPost(
+  public ApiResult<PostInfoDto> createPost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @ModelAttribute @Valid PostCreateRequest postCreateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
-    PostInfo postInfo = postService.createPost(
+    PostInfoDto postInfoDto = postService.createPost(
         toPostCreateDto(authentication.id, postCreateRequest, multipartFiles));
 
-    return ApiResult.success(postInfo);
+    return ApiResult.success(postInfoDto);
   }
 
   @DeleteMapping("/{postId}")
@@ -57,13 +57,13 @@ public class PostController {
   }
 
   @PutMapping("/{postId}")
-  public ApiResult<PostInfo> updatePost(
+  public ApiResult<PostInfoDto> updatePost(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId,
       @ModelAttribute @Valid PostUpdateRequest postUpdateRequest,
       @RequestPart(required = false, name = "image") List<MultipartFile> multipartFiles
   ) {
-    PostInfo updatedPost = postService.updatePost(
+    PostInfoDto updatedPost = postService.updatePost(
         toPostUpdateDto(authentication.id, postUpdateRequest, multipartFiles, postId));
 
     return ApiResult.success(updatedPost);

@@ -1,9 +1,14 @@
 spring:
   profiles: local
+#  datasource:
+#    url: ENC(CwKqce1b75zc9TVkHnomhF2enzY1GBxdBMtRpS2dw7q4mRLVJdKlQEMHLEb1kme8eDkdksz9ws6ff/pqudSo/xsR+QVNTCUSxSSi0lgcUDwRR8HLmi1RaZn7ZvVv2l06LxY3qZaYQgeHc5Xvzf4pVnCzpOP9TVxm7eLFvL7AUiFCwwLJLZnWgyTD1XAfzdO1JrIZ2nNkGBgs/LHuAXq6pCdIlfRiRB1GXc+AWiM2JeA=)
+#    username: ENC(9xovSbCV4S3shcksj8mw9A==)
+#    password: ENC(qHrPAvKXlvyohNQL+ItoVVTiyg6AumJS)
   datasource:
-    url: ENC(CwKqce1b75zc9TVkHnomhF2enzY1GBxdBMtRpS2dw7q4mRLVJdKlQEMHLEb1kme8eDkdksz9ws6ff/pqudSo/xsR+QVNTCUSxSSi0lgcUDwRR8HLmi1RaZn7ZvVv2l06LxY3qZaYQgeHc5Xvzf4pVnCzpOP9TVxm7eLFvL7AUiFCwwLJLZnWgyTD1XAfzdO1JrIZ2nNkGBgs/LHuAXq6pCdIlfRiRB1GXc+AWiM2JeA=)
-    username: ENC(9xovSbCV4S3shcksj8mw9A==)
-    password: ENC(qHrPAvKXlvyohNQL+ItoVVTiyg6AumJS)
+    url: jdbc:mysql://localhost:3306/sns?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+    username: root
+    password: 1234
+
 
   sql:
     init:

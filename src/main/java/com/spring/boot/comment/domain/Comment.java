@@ -2,9 +2,14 @@ package com.spring.boot.comment.domain;
 
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.Post;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Getter;
-
-import javax.persistence.*;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -12,27 +17,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Comment {
 
-    @Id
-    @Column(name = "comment_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(name = "comment_id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @JoinColumn(name = "writer_id")
-    @ManyToOne
-    private Member writer;
+  @ManyToOne
+  @JoinColumn(name = "writer_id")
+  private Member writer;
 
-    @JoinColumn(name = "post_id")
-    @ManyToOne
-    private Post post;
+  @ManyToOne
+  @JoinColumn(name = "post_id")
+  private Post post;
 
-    @Column
-    private String body;
+  @Column
+  private String body;
 
-    public Comment(Member writer, Post post, String body) {
-        this.writer = writer;
-        this.post = post;
-        this.body = body;
-    }
+  public Comment(Member writer, Post post, String body) {
+    this.writer = writer;
+    this.post = post;
+    this.body = body;
+  }
 
 }
 

@@ -15,7 +15,7 @@ import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.formAuthentication.WithMockFormAuthenticationUser;
 import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.common.response.ApiResult;
-import com.spring.boot.post.application.dto.response.PostInfo;
+import com.spring.boot.post.application.dto.response.PostInfoDto;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
 import com.spring.boot.member.domain.Member;
@@ -59,7 +59,7 @@ class PostControllerTest {
     // given
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostInfo post = PostInfo.from(MockPost.create(member));
+    PostInfoDto post = PostInfoDto.from(MockPost.create(member));
 
     given(postService.createPost(any()))
         .willReturn(post);
@@ -72,9 +72,9 @@ class PostControllerTest {
     ).andReturn().getResponse();
 
     // then
-    TypeReference<ApiResult<PostInfo>> responseType = new TypeReference<ApiResult<PostInfo>>() {
+    TypeReference<ApiResult<PostInfoDto>> responseType = new TypeReference<ApiResult<PostInfoDto>>() {
     };
-    ApiResult<PostInfo> apiResult = objectMapper.readValue(
+    ApiResult<PostInfoDto> apiResult = objectMapper.readValue(
         response.getContentAsString(), responseType);
 
     assertEquals(response.getStatus(), HttpStatus.BAD_REQUEST.value());
@@ -90,7 +90,7 @@ class PostControllerTest {
     String title = "title";
     String content = "content";
     Member member = new Member("email", "password", "name", new Role(RoleName.MEMBER.getValue(), "role"));
-    PostInfo post = PostInfo.from(MockPost.create(member));
+    PostInfoDto post = PostInfoDto.from(MockPost.create(member));
 
     given(postService.createPost(any()))
         .willReturn(post);
@@ -105,9 +105,9 @@ class PostControllerTest {
     ).andReturn().getResponse();
 
     // then
-    TypeReference<ApiResult<PostInfo>> responseType = new TypeReference<>() {
+    TypeReference<ApiResult<PostInfoDto>> responseType = new TypeReference<>() {
     };
-    ApiResult<PostInfo> ApiResultResponse = objectMapper.readValue(
+    ApiResult<PostInfoDto> ApiResultResponse = objectMapper.readValue(
         response.getContentAsString(), responseType);
 
     assertAll(
@@ -117,9 +117,9 @@ class PostControllerTest {
           assertThat(ApiResultResponse.isSuccess()).isTrue();
 
           assertAll(() -> {
-            PostInfo postInfo = ApiResultResponse.getResponse();
-            assertThat(postInfo.getContent()).isEqualTo(post.getContent());
-            assertThat(postInfo.getTitle()).isEqualTo(post.getTitle());
+            PostInfoDto postInfoDto = ApiResultResponse.getResponse();
+            assertThat(postInfoDto.getContent()).isEqualTo(post.getContent());
+            assertThat(postInfoDto.getTitle()).isEqualTo(post.getTitle());
           });
         }
     );

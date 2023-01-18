@@ -2,7 +2,8 @@ package com.spring.boot.post.presentation;
 
 import com.spring.boot.common.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
-import com.spring.boot.post.application.dto.response.PostInfo;
+import com.spring.boot.post.application.dto.response.HomeFeedPostDto;
+import com.spring.boot.post.application.dto.response.PostInfoDto;
 import com.spring.boot.post.presentation.dto.request.PostSearchRequest;
 import com.spring.boot.security.FormAuthentication;
 import java.util.ArrayList;
@@ -26,8 +27,16 @@ public class PostQueryController {
     this.postQueryService = postQueryService;
   }
 
+  @GetMapping("/home")
+  public ApiResult<List<HomeFeedPostDto>> getHomeFeedPost(
+      @AuthenticationPrincipal FormAuthentication authentication) {
+    return ApiResult.success(
+        postQueryService.getHomeFeedPost(authentication.id, 10, null)
+    );
+  }
+
   @GetMapping("/member/{memberId}")
-  public ApiResult<List<PostInfo>> getPostByMemberId(
+  public ApiResult<List<PostInfoDto>> getPostByMemberId(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long memberId,
       Pageable pageable
@@ -39,13 +48,13 @@ public class PostQueryController {
   }
 
   @GetMapping("/{postId}")
-  public ApiResult<PostInfo> getPostByPostId(
+  public ApiResult<PostInfoDto> getPostByPostId(
       @AuthenticationPrincipal FormAuthentication authentication,
       @PathVariable Long postId
   ) {
     Long readerId = getReaderId(authentication);
-    PostInfo postInfo = postQueryService.getPostByPostId(postId, readerId);
-    return ApiResult.success(postInfo);
+    PostInfoDto postInfoDto = postQueryService.getPostByPostId(postId, readerId);
+    return ApiResult.success(postInfoDto);
   }
 
   private Long getReaderId(FormAuthentication authentication) {
@@ -56,7 +65,7 @@ public class PostQueryController {
   }
 
   @GetMapping("/following")
-  public ApiResult<List<PostInfo>> getFollowingsPost(
+  public ApiResult<List<PostInfoDto>> getFollowingsPost(
       @AuthenticationPrincipal FormAuthentication authentication,
       Pageable pageable
   ) {
@@ -66,7 +75,7 @@ public class PostQueryController {
   }
 
   @GetMapping("/tag")
-  public ApiResult<List<PostInfo>> getPostByTags(
+  public ApiResult<List<PostInfoDto>> getPostByTags(
       @AuthenticationPrincipal FormAuthentication authentication,
       @RequestBody @Valid PostSearchRequest postSearchRequest,
       Pageable pageable) {

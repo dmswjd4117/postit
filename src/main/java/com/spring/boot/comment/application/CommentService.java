@@ -5,7 +5,6 @@ import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.domain.CommentRepository;
 import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.MemberNotFoundException;
-import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.common.exception.PostAccessDeniedException;
 import com.spring.boot.common.exception.PostNotFoundException;
 import com.spring.boot.connection.application.ConnectionService;

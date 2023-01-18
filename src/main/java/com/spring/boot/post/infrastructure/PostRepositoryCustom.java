@@ -17,4 +17,6 @@ public interface PostRepositoryCustom {
 
   List<Post> findByTags(Set<Tag> tags, Pageable pageable);
 
+  List<Post> getHomeFeedPost(Long memberId, int pageSize, Long postId);
+
 }
