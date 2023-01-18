@@ -3,10 +3,8 @@ package com.spring.boot.intergration;
 import com.spring.boot.common.DatabaseCleanUp;
 import com.spring.boot.common.config.InfrastructureTestConfiguration;
 import com.spring.boot.common.mock.MockMember;
-import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.member.domain.UserRepository;
-import com.spring.boot.post.domain.Post;
+import com.spring.boot.member.domain.MemberRepository;
 import com.spring.boot.post.infrastructure.PostRepository;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
@@ -25,7 +23,7 @@ public abstract class IntegrationTest {
   @Autowired
   DatabaseCleanUp databaseCleanUp;
   @Autowired
-  private UserRepository userRepository;
+  private MemberRepository memberRepository;
   @Autowired
   private PostRepository postRepository;
   @Autowired
@@ -44,7 +42,7 @@ public abstract class IntegrationTest {
     Member member = MockMember.builder(email, role)
         .build();
 
-    return userRepository.save(member);
+    return memberRepository.save(member);
   }
 
 

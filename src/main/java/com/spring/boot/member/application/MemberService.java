@@ -3,13 +3,13 @@ package com.spring.boot.member.application;
 import com.spring.boot.common.exception.AuthenticationFailException;
 import com.spring.boot.common.exception.DuplicatedException;
 import com.spring.boot.common.exception.MemberNotFoundException;
+import com.spring.boot.member.application.dto.MemberAuthResponseDto;
 import com.spring.boot.member.application.dto.MemberResponseDto;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.member.domain.UserRepository;
+import com.spring.boot.member.domain.MemberRepository;
 import com.spring.boot.role.application.RoleService;
 import com.spring.boot.role.domain.Role;
 import com.spring.boot.role.domain.RoleName;
-import java.util.Optional;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,20 +18,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MemberService {
 
-  private final UserRepository userRepository;
+  private final MemberRepository memberRepository;
   private final RoleService roleService;
   private final PasswordEncoder passwordEncoder;
 
-  public MemberService(UserRepository userRepository, RoleService roleService,
+  public MemberService(MemberRepository memberRepository, RoleService roleService,
       PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
+    this.memberRepository = memberRepository;
     this.roleService = roleService;
     this.passwordEncoder = passwordEncoder;
   }
 
   @Transactional
   public MemberResponseDto register(String name, String email, String password) {
-    userRepository.findByEmail(email)
+    memberRepository.findByEmail(email)
         .ifPresent(find -> {
           throw new DuplicatedException("email", email);
         });
@@ -50,35 +50,31 @@ public class MemberService {
         name,
         role);
 
-    return userRepository.save(member);
+    return memberRepository.save(member);
   }
 
-  private Optional<Member> findByEmail(String email) {
-    return userRepository.findByEmail(email);
-  }
-
-  public MemberResponseDto login(String email, String rawPassword) {
-    return findByEmail(email)
+  public MemberAuthResponseDto login(String email, String rawPassword) {
+    return  memberRepository.findByEmailWithRole(email)
         .map(findMember -> {
           if (!findMember.checkPassword(rawPassword, passwordEncoder)) {
             throw new BadCredentialsException("password doesn't match");
           }
           return findMember;
         })
-        .map(MemberResponseDto::from)
+        .map(MemberAuthResponseDto::from)
         .orElseThrow(() -> new AuthenticationFailException("email is invalid"));
   }
 
   @Transactional
   public void updateProfileImage(Long id, String profileImagePath) {
-    userRepository.findById(id)
+    memberRepository.findById(id)
         .ifPresent(findMember -> {
           findMember.setProfileImagePath(profileImagePath);
         });
   }
 
   public Member findByMemberId(Long id) {
-    return userRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(id));
+    return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(id));
   }
 
 }

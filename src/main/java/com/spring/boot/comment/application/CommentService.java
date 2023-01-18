@@ -8,7 +8,7 @@ import com.spring.boot.common.exception.MemberNotFoundException;
 import com.spring.boot.common.exception.PostAccessDeniedException;
 import com.spring.boot.common.exception.PostNotFoundException;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.member.domain.UserRepository;
+import com.spring.boot.member.domain.MemberRepository;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
@@ -20,15 +20,15 @@ public class CommentService {
 
   private final CommentRepository commentRepository;
   private final PostRepository postRepository;
-  private final UserRepository userRepository;
+  private final MemberRepository memberRepository;
   private final PostQueryService postQueryService;
 
   public CommentService(CommentRepository commentRepository, PostRepository postRepository,
-      UserRepository userRepository,
+      MemberRepository memberRepository,
       PostQueryService postQueryService) {
     this.commentRepository = commentRepository;
     this.postRepository = postRepository;
-    this.userRepository = userRepository;
+    this.memberRepository = memberRepository;
     this.postQueryService = postQueryService;
   }
 
@@ -36,7 +36,7 @@ public class CommentService {
   public CommentResponseDto createComment(Long writerId, String body, Long postId) {
     Post post = postRepository.findById(postId)
         .orElseThrow(() -> new PostNotFoundException(postId));
-    Member writer = userRepository.findById(writerId)
+    Member writer = memberRepository.findById(writerId)
         .orElseThrow(()->new MemberNotFoundException(writerId));
 
     if (!postQueryService.checkMemberAccessAuth(postId, writerId)) {
