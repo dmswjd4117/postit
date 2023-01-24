@@ -1,4 +1,4 @@
-package com.spring.boot.common;
+package com.spring.boot.exception;
 
 import org.springframework.context.support.MessageSourceAccessor;
 

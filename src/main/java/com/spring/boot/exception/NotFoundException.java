@@ -1,6 +1,5 @@
-package com.spring.boot.common.exception;
+package com.spring.boot.exception;
 
-import com.spring.boot.common.MessageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class NotFoundException extends ServiceRuntimeException{

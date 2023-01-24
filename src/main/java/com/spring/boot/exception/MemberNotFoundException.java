@@ -1,7 +1,6 @@
-package com.spring.boot.common.exception;
+package com.spring.boot.exception;
 
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.domain.Post;
 
 public class MemberNotFoundException extends NotFoundException{
 

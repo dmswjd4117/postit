@@ -1,7 +1,7 @@
 package com.spring.boot.like.application;
 
-import com.spring.boot.common.exception.DuplicatedException;
-import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.exception.DuplicatedException;
+import com.spring.boot.exception.NotFoundException;
 import com.spring.boot.like.application.dto.LikeResponseDto;
 import com.spring.boot.like.application.dto.LikeMemberResponseDto;
 import com.spring.boot.like.domain.Like;

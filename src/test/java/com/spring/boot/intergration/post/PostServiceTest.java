@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
-import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.exception.NotFoundException;
 import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.intergration.IntegrationTest;

@@ -1,6 +1,6 @@
 package com.spring.boot.connection.application;
 
-import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.exception.NotFoundException;
 import com.spring.boot.connection.domain.Connection;
 import com.spring.boot.connection.domain.ConnectionRepository;
 import com.spring.boot.member.application.dto.MemberResponseDto;

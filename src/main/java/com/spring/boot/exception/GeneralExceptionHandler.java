@@ -1,4 +1,4 @@
-package com.spring.boot.common.exception;
+package com.spring.boot.exception;
 
 import com.spring.boot.common.response.ApiResult;
 import org.springframework.validation.BindException;
