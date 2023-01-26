@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -22,11 +20,11 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-@EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(DataSourceProperties.class)
 @Configuration
 @Profile("!test")
 public class DataSourceConfig {
+
   private final DataSourceProperties dataSourceProperties;
   private final JpaProperties jpaProperties;
 
@@ -52,10 +50,9 @@ public class DataSourceConfig {
     Map<Object, Object> dataSources = new HashMap<>();
     DataSource master = createDataSource(dataSourceProperties.getMaster());
     dataSources.put("master", master);
-    dataSourceProperties.getSlave().forEach((key, value) ->
+    dataSourceProperties.getSlaves().forEach((key, value) ->
         dataSources.put(key, createDataSource(value))
     );
-
 
     ReplicationRoutingDataSource replicationRoutingDataSource = new ReplicationRoutingDataSource();
     replicationRoutingDataSource.setDefaultTargetDataSource(dataSources.get("master"));
@@ -70,21 +67,21 @@ public class DataSourceConfig {
   }
 
 
-
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-    EntityManagerFactoryBuilder entityManagerFactoryBuilder = createEntityManagerFactoryBuilder(jpaProperties);
+    EntityManagerFactoryBuilder entityManagerFactoryBuilder = createEntityManagerFactoryBuilder(
+        jpaProperties);
     return entityManagerFactoryBuilder.dataSource(dataSource())
         .packages("com.spring.boot")
         .build();
   }
 
 
-  private EntityManagerFactoryBuilder createEntityManagerFactoryBuilder(JpaProperties jpaProperties) {
+  private EntityManagerFactoryBuilder createEntityManagerFactoryBuilder(
+      JpaProperties jpaProperties) {
     JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
     return new EntityManagerFactoryBuilder(vendorAdapter, jpaProperties.getProperties(), null);
   }
-
 
   @Bean
   public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {

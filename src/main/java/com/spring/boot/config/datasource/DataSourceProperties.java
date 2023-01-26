@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 public class DataSourceProperties {
 
-  private Map<String, DatasourceNode> slave = new HashMap<>();
+  private Map<String, DatasourceNode> slaves = new HashMap<>();
   private DatasourceNode master;
 
   @ToString
