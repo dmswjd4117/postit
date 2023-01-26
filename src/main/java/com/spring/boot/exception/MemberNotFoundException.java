@@ -1,10 +1,8 @@
 package com.spring.boot.exception;
 
-import com.spring.boot.member.domain.Member;
-
-public class MemberNotFoundException extends NotFoundException{
+public class MemberNotFoundException extends RuntimeException {
 
   public MemberNotFoundException(Long memberId) {
-    super(Member.class, "존재하지 않는 유저입니다.", "아이디:", memberId);
+    super("존재하지 않는 유저입니다 멤버아이디: " + memberId);
   }
 }

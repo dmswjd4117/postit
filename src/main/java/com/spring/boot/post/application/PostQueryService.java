@@ -1,6 +1,5 @@
 package com.spring.boot.post.application;
 
-import com.spring.boot.exception.NotFoundException;
 import com.spring.boot.exception.PostAccessDeniedException;
 import com.spring.boot.exception.PostNotFoundException;
 import com.spring.boot.connection.application.ConnectionService;
@@ -61,7 +60,7 @@ public class PostQueryService {
     }
     return PostResponseDto.from(
         postRepository.findByPostId(postId)
-            .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"))
+            .orElseThrow(() -> new PostNotFoundException(postId))
     );
   }
 
