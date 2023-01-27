@@ -4,13 +4,13 @@ spring:
 datasource:
   master:
     name: master
-    url: jdbc:mysql://34.64.119.222/sns?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+    url: ENC(qJLSZioXXUJMTsIRCo0Qpzhop4ef6SKSsXdxMeO0Bou9AEqkRvXfxBIO+STS5Qusgj+EY3FBzjQM5qcMTMLYdRs67v3gXs1a8WVa20wEYmWpyNy46TLNtKFyPUtqXipfir/mi/gkAE9b28SqrTVa6A+Gg6z154rgI6D8+OQ2kI6kqegXUHbEUQ==)
     username: root
     password: 1234
-  slave:
+  slaves:
     slave1:
       name: slave1
-      url: jdbc:mysql://127.0.0.1:1111/sns?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+      url: ENC(BWiEStrWu+JXVEX9XtySD/7NumspeHAh5YB6TugFogX/xWQVXaybiszpmhpCcT2gfhQkf2QxcVedTbqy/3msytMpAXKmAarDYFcEFR1MKMIniiuo4wgfjQ6nkHB4LB5IAaymYLj8yA5ngPb6LNjKwuuWwZZ7QNadZMM8tnE4S5zRNNHrItSxhA==)
       username: root
       password: 1234
 
