@@ -1,4 +1,4 @@
-package com.spring.boot.common.config;
+package com.spring.boot.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;

@@ -5,8 +5,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.spring.boot.common.exception.DuplicatedException;
-import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.exception.DuplicatedException;
+import com.spring.boot.exception.LikeNotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.like.application.LikeService;
 import com.spring.boot.like.application.dto.LikeMemberResponseDto;
@@ -116,7 +116,7 @@ class LikeServiceTest extends IntegrationTest {
       Member writer = saveMember("writer@email.com");
       Post post = postRepository.save(new Post.Builder("title", "content", writer).build());
 
-      assertThrows(NotFoundException.class, () -> {
+      assertThrows(LikeNotFoundException.class, () -> {
         likeService.unlike(member.getId(), post.getId());
       });
 

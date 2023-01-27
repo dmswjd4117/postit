@@ -1,5 +1,6 @@
 package com.spring.boot.comment.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
@@ -10,7 +11,7 @@ public class Comments {
 
   @OneToMany
   @BatchSize(size = 1000)
-  private List<Comment> comments;
+  private List<Comment> comments = new ArrayList<>();
 
   public int getSize() {
     return comments.size();

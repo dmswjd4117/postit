@@ -1,12 +1,10 @@
 package com.spring.boot.post.application;
 
-import com.spring.boot.common.exception.NotFoundException;
-import com.spring.boot.common.exception.PostAccessDeniedException;
-import com.spring.boot.common.exception.PostNotFoundException;
+import com.spring.boot.exception.PostAccessDeniedException;
+import com.spring.boot.exception.PostNotFoundException;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.domain.Member;
-import com.spring.boot.post.presentation.dto.response.HomeFeedPostResponse;
 import com.spring.boot.post.application.dto.response.PostResponseDto;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.post.infrastructure.PostRepository;
@@ -62,7 +60,7 @@ public class PostQueryService {
     }
     return PostResponseDto.from(
         postRepository.findByPostId(postId)
-            .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"))
+            .orElseThrow(() -> new PostNotFoundException(postId))
     );
   }
 
@@ -98,4 +96,6 @@ public class PostQueryService {
         .map(PostResponseDto::from)
         .collect(Collectors.toList());
   }
+
+
 }

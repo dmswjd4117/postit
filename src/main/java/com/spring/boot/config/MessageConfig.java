@@ -1,6 +1,6 @@
-package com.spring.boot.common.config;
+package com.spring.boot.config;
 
-import com.spring.boot.common.MessageUtils;
+import com.spring.boot.exception.MessageUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

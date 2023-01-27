@@ -8,9 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
-import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.common.mock.MockPost;
 import com.spring.boot.connection.application.ConnectionService;
+import com.spring.boot.exception.MemberNotFoundException;
+import com.spring.boot.exception.PostNotFoundException;
 import com.spring.boot.intergration.IntegrationTest;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.application.PostQueryService;
@@ -182,7 +183,7 @@ class PostServiceTest extends IntegrationTest {
           .tagNames(Collections.emptyList())
           .build();
 
-      assertThrows(NotFoundException.class, () -> {
+      assertThrows(MemberNotFoundException.class, () -> {
         postService.createPost(postCreateDto);
       });
     }

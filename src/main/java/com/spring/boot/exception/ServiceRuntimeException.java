@@ -1,4 +1,4 @@
-package com.spring.boot.common.exception;
+package com.spring.boot.exception;
 
 public abstract class ServiceRuntimeException extends RuntimeException{
 

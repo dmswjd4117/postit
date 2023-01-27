@@ -1,8 +1,8 @@
 package com.spring.boot.member.application;
 
-import com.spring.boot.common.exception.AuthenticationFailException;
-import com.spring.boot.common.exception.DuplicatedException;
-import com.spring.boot.common.exception.MemberNotFoundException;
+import com.spring.boot.exception.AuthenticationFailException;
+import com.spring.boot.exception.DuplicatedException;
+import com.spring.boot.exception.MemberNotFoundException;
 import com.spring.boot.member.application.dto.MemberAuthResponseDto;
 import com.spring.boot.member.application.dto.MemberResponseDto;
 import com.spring.boot.member.domain.Member;

@@ -1,8 +1,8 @@
 package com.spring.boot.connection.application;
 
-import com.spring.boot.common.exception.NotFoundException;
 import com.spring.boot.connection.domain.Connection;
 import com.spring.boot.connection.domain.ConnectionRepository;
+import com.spring.boot.exception.MemberNotFoundException;
 import com.spring.boot.member.application.dto.MemberResponseDto;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.member.domain.MemberRepository;
@@ -27,18 +27,17 @@ public class ConnectionService {
   public Connection follow(Long memberId, Long targetMemberId) {
 
     if (memberId.equals(targetMemberId)) {
-      throw new IllegalArgumentException("same memberId and targetMemberId error");
+      throw new IllegalArgumentException("소스멤버와 타겟멤버가 같습니다");
     }
 
     Member sourceMember = memberRepository.findById(memberId)
-        .orElseThrow(
-            () -> new NotFoundException(Member.class, "member doesn't exist with id", memberId));
+        .orElseThrow(() -> new MemberNotFoundException(memberId));
     Member targetMember = memberRepository.findById(targetMemberId)
-        .orElseThrow(() -> new NotFoundException(Member.class, "member doesn't exist with id",
-            targetMemberId));
+        .orElseThrow(() -> new MemberNotFoundException(targetMemberId));
 
     Connection connection = new Connection(sourceMember, targetMember);
     connectionRepository.save(connection);
+
     return connection;
   }
 
@@ -50,7 +49,7 @@ public class ConnectionService {
             .map(Connection::getTargetMember)
             .map(MemberResponseDto::from)
             .collect(Collectors.toList()))
-        .orElseThrow(() -> new NotFoundException(Member.class, memberId));
+        .orElseThrow(() -> new MemberNotFoundException(memberId));
   }
 
   @Transactional
@@ -61,15 +60,15 @@ public class ConnectionService {
             .map(Connection::getMember)
             .map(MemberResponseDto::from)
             .collect(Collectors.toList()))
-        .orElseThrow(() -> new NotFoundException(Member.class, memberId));
+        .orElseThrow(() -> new MemberNotFoundException(memberId));
   }
 
   @Transactional
   public boolean isMemberFollowTarget(Long memberId, Long targetMemberId) {
     Member targetMember = memberRepository.findById(targetMemberId)
-        .orElseThrow(() -> new NotFoundException(Member.class, targetMemberId));
+        .orElseThrow(() -> new MemberNotFoundException(targetMemberId));
     Member member = memberRepository.findById(memberId)
-        .orElseThrow(() -> new NotFoundException(Member.class, memberId));
+        .orElseThrow(() -> new MemberNotFoundException(memberId));
     return connectionRepository.findByMemberAndTargetMember(member, targetMember).isPresent();
   }
 

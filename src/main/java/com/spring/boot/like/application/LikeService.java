@@ -1,7 +1,8 @@
 package com.spring.boot.like.application;
 
-import com.spring.boot.common.exception.DuplicatedException;
-import com.spring.boot.common.exception.NotFoundException;
+import com.spring.boot.exception.DuplicatedException;
+import com.spring.boot.exception.LikeNotFoundException;
+import com.spring.boot.exception.PostNotFoundException;
 import com.spring.boot.like.application.dto.LikeResponseDto;
 import com.spring.boot.like.application.dto.LikeMemberResponseDto;
 import com.spring.boot.like.domain.Like;
@@ -34,7 +35,7 @@ public class LikeService {
   public LikeResponseDto like(Long memberId, Long postId) {
     Member member = memberService.findByMemberId(memberId);
     Post post = postRepository.findByPostId(postId)
-        .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"));
+        .orElseThrow(() -> new PostNotFoundException(postId));
 
     try {
       likeRepository.save(new Like(member, post));
@@ -50,10 +51,10 @@ public class LikeService {
   public LikeResponseDto unlike(Long memberId, Long postId) {
     Member member = memberService.findByMemberId(memberId);
     Post post = postRepository.findByPostId(postId)
-        .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"));
+        .orElseThrow(() -> new PostNotFoundException(postId));
 
     Like findLike = likeRepository.findByMemberAndPost(member, post)
-        .orElseThrow(() -> new NotFoundException(Like.class, "좋아요가 존재하지 않습니다"));
+        .orElseThrow(LikeNotFoundException::new);
 
     likeRepository.delete(findLike);
     post.unlike();
@@ -64,7 +65,7 @@ public class LikeService {
   @Transactional(readOnly = true)
   public List<LikeMemberResponseDto> getLikeMembers(Long postId) {
     Post post = postRepository.findByPostId(postId)
-        .orElseThrow(() -> new NotFoundException("존재하지 않는 게시물입니다"));
+        .orElseThrow(() -> new PostNotFoundException(postId));
     return likeRepository.findByPost(post).stream()
         .map(like -> LikeMemberResponseDto.from(like, like.getMember()))
         .collect(Collectors.toList());

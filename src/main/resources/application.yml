@@ -2,15 +2,31 @@ spring:
   profiles:
     active: local
 
+  #  sql:
+  #    init:
+  #      mode: always
+  #      platform: mysql
+
   jpa:
+    open-in-view: false
+    #    defer-datasource-initialization: true
+
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+
     properties:
       hibernate:
         use_sql_comments: true
+        format_sql: true
+        physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+
 
   redis:
     session:
-     host: localhost
-     port: 6379
+      host: localhost
+      port: 6379
+
 
 logging.level:
   org.hibernate.SQL: debug
@@ -20,4 +36,17 @@ logging.level:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+
+cloud:
+  aws:
+    s3:
+      bucketName: spring-sns
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ENC(CPGFdbn8A1EHA98Lx7TdIVXeKgSz0IWPsD1MO0eel7M=)
+      secretKey: ENC(VR/oy3lLoJeR/jufO2HVd044qzjb0wl4rImHz++LwOMUUtosR+JsLPVp128rcVY6Giq25eqKxlY=)
 

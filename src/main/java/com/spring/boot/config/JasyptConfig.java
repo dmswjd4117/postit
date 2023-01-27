@@ -1,4 +1,4 @@
-package com.spring.boot.common.config;
+package com.spring.boot.config;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
