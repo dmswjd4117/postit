@@ -1,6 +1,6 @@
 package com.spring.boot.connection.presentation;
 
-import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.common.presentation.response.ApiResult;
 import com.spring.boot.connection.application.ConnectionService;
 import com.spring.boot.connection.presentation.dto.ConnectionDto;
 import com.spring.boot.member.presentaion.dto.response.MemberResponse;

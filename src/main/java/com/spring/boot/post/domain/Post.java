@@ -2,7 +2,7 @@ package com.spring.boot.post.domain;
 
 import com.spring.boot.comment.domain.Comment;
 import com.spring.boot.comment.domain.Comments;
-import com.spring.boot.common.BaseTime;
+import com.spring.boot.common.domain.BaseTime;
 import com.spring.boot.member.domain.Member;
 import com.spring.boot.post.domain.image.PostImage;
 import com.spring.boot.post.domain.image.PostImages;

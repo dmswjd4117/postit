@@ -1,6 +1,6 @@
 package com.spring.boot.member.domain;
 
-import com.spring.boot.common.BaseTime;
+import com.spring.boot.common.domain.BaseTime;
 import com.spring.boot.connection.domain.Connection;
 import com.spring.boot.post.domain.Post;
 import com.spring.boot.role.domain.Role;

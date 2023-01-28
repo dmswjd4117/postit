@@ -1,6 +1,6 @@
 package com.spring.boot.post.domain.image;
 
-import com.spring.boot.common.BaseTime;
+import com.spring.boot.common.domain.BaseTime;
 import com.spring.boot.post.domain.Post;
 import javax.persistence.Column;
 import javax.persistence.Entity;

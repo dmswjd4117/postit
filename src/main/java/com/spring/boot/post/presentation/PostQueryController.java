@@ -1,12 +1,11 @@
 package com.spring.boot.post.presentation;
 
-import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.common.presentation.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.presentation.dto.response.HomeFeedPostResponse;
 import com.spring.boot.post.presentation.dto.request.PostSearchRequest;
 import com.spring.boot.post.presentation.dto.response.PostResponse;
 import com.spring.boot.security.FormAuthentication;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;

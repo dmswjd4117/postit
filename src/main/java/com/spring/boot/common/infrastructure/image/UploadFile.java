@@ -1,4 +1,4 @@
-package com.spring.boot.image.infrastructure;
+package com.spring.boot.common.infrastructure.image;
 
 import lombok.Builder;
 import org.apache.commons.io.FilenameUtils;

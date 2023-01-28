@@ -3,7 +3,7 @@ package com.spring.boot.post.presentation;
 import static com.spring.boot.post.presentation.dto.PostAssembler.toPostCreateDto;
 import static com.spring.boot.post.presentation.dto.PostAssembler.toPostUpdateDto;
 
-import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.common.presentation.response.ApiResult;
 import com.spring.boot.post.application.PostQueryService;
 import com.spring.boot.post.application.PostService;
 import com.spring.boot.post.presentation.dto.request.PostCreateRequest;

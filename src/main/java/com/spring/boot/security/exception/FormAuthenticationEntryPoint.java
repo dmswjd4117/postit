@@ -1,7 +1,7 @@
 package com.spring.boot.security.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.common.presentation.response.ApiResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

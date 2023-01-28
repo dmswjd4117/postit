@@ -4,10 +4,10 @@ package com.spring.boot.member.presentaion;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.common.presentation.response.ApiResult;
 import com.spring.boot.member.application.dto.MemberResponseDto;
-import com.spring.boot.image.domain.ImageUploader;
-import com.spring.boot.image.infrastructure.UploadFile;
+import com.spring.boot.common.infrastructure.image.ImageUploader;
+import com.spring.boot.common.infrastructure.image.UploadFile;
 import com.spring.boot.member.application.MemberService;
 import com.spring.boot.member.presentaion.dto.request.UserRegisterRequest;
 import com.spring.boot.member.presentaion.dto.response.MemberResponse;

@@ -3,7 +3,7 @@ package com.spring.boot.comment.presentation;
 import com.spring.boot.comment.application.CommentService;
 import com.spring.boot.comment.application.dto.CommentResponseDto;
 import com.spring.boot.comment.presentation.dto.CommentRequest;
-import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.common.presentation.response.ApiResult;
 import com.spring.boot.security.FormAuthentication;
 import javax.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

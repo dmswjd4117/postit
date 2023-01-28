@@ -1,6 +1,6 @@
 package com.spring.boot.like.presentation;
 
-import com.spring.boot.common.response.ApiResult;
+import com.spring.boot.common.presentation.response.ApiResult;
 import com.spring.boot.like.application.LikeService;
 import com.spring.boot.like.presentation.dto.LikeMemberResponse;
 import com.spring.boot.like.presentation.dto.LikeResponse;

@@ -1,4 +1,4 @@
-package com.spring.boot.common.response;
+package com.spring.boot.common.presentation.response;
 
 import org.springframework.http.HttpStatus;
 

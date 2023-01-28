@@ -1,7 +1,6 @@
-package com.spring.boot.image.domain;
+package com.spring.boot.common.infrastructure.image;
 
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.spring.boot.image.infrastructure.UploadFile;
 import java.io.InputStream;
 import java.util.Map;
 

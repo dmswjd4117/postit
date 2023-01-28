@@ -1,12 +1,12 @@
 package com.spring.boot.exception;
 
-import com.spring.boot.common.response.ApiResult;
-import org.springframework.validation.BindException;
+import com.spring.boot.common.presentation.response.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -41,8 +41,15 @@ public class GeneralExceptionHandler {
       BindException.class
   })
   private ResponseEntity<?> handleMethodArgumentNotValidException(BindException exception) {
-    log.debug("Bad request exception : {}", exception.getMessage());
+    log.debug("bind exception : {}", exception.getMessage());
     return newResponse(exception, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler({
+      MemberNotFoundException.class, PostNotFoundException.class, LikeNotFoundException.class
+  })
+  private ResponseEntity<?> handleNotFoundException(RuntimeException exception) {
+    log.debug("not found exception : {}", exception.getMessage());
+    return newResponse(exception, HttpStatus.NOT_FOUND);
+  }
 }
